@@ -2,11 +2,11 @@ import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 
-interface DeliverymanProps {
+export interface DeliverymanProps {
   name: string
   cpf: string
   hash_password: string
-  addressId: UniqueEntityID
+  addressId?: UniqueEntityID
   createdAt: Date
 }
 
@@ -28,7 +28,7 @@ export class Deliveryman extends Entity<DeliverymanProps> {
   }
 
   static create(
-    props: Optional<DeliverymanProps, 'createdAt'>,
+    props: Optional<DeliverymanProps, 'createdAt' | 'addressId'>,
     id?: UniqueEntityID,
   ) {
     const deliveryman = new Deliveryman(
