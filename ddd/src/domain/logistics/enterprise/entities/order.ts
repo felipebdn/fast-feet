@@ -5,12 +5,12 @@ import { Optional } from '@/core/types/optional'
 export interface OrderProps {
   recipientId: UniqueEntityID
   addressId: UniqueEntityID
+  deliveryId?: UniqueEntityID
   rotule: string
   weight: number
   bulk: number
   createdAt: Date
   withdrawal?: Date
-  delivery?: Date
   updatedAt?: Date
 }
 
@@ -21,6 +21,14 @@ export class Order extends Entity<OrderProps> {
 
   get addressId() {
     return this.props.addressId
+  }
+
+  get deliveryId() {
+    return this.props.deliveryId
+  }
+
+  set deliveryId(id: UniqueEntityID) {
+    this.props.deliveryId = id
   }
 
   get rotule() {
@@ -41,10 +49,6 @@ export class Order extends Entity<OrderProps> {
 
   get withdrawal() {
     return this.props.withdrawal
-  }
-
-  get delivery() {
-    return this.props.delivery
   }
 
   get updateAt() {
