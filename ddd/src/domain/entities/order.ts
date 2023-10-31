@@ -1,14 +1,16 @@
-import { Entity } from '../../core/entities/entity'
+import { Entity } from '@/core/entities/entity'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
 
 interface OrderProps {
-  recipientId: string
+  recipientId: UniqueEntityID
   rotule: string
   weight: number
   bulk: number
   createdAt: Date
   withdrawal?: Date
   delivery?: Date
-  updateAt?: Date
+  updatedAt?: Date
 }
 
 export class Order extends Entity<OrderProps> {
@@ -41,6 +43,21 @@ export class Order extends Entity<OrderProps> {
   }
 
   get updateAt() {
-    return this.props.updateAt
+    return this.props.updatedAt
+  }
+
+  private touch() {
+    this.props.updatedAt = new Date()
+  }
+
+  static create(props: Optional<OrderProps, 'createdAt'>, id?: UniqueEntityID) {
+    const order = new Order(
+      {
+        ...props,
+        createdAt: new Date(),
+      },
+      id,
+    )
+    return order
   }
 }

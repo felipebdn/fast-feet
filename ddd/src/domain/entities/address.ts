@@ -1,4 +1,6 @@
-import { Entity } from '../../core/entities/entity'
+import { Entity } from '@/core/entities/entity'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
 
 interface AddressProps {
   road: string
@@ -8,6 +10,8 @@ interface AddressProps {
   state: string
   sector: string
   number?: number
+  createdAt: Date
+  updatedAt?: Date
 }
 
 export class Address extends Entity<AddressProps> {
@@ -37,5 +41,23 @@ export class Address extends Entity<AddressProps> {
 
   get number() {
     return this.props.number
+  }
+
+  private touch() {
+    this.props.updatedAt = new Date()
+  }
+
+  static create(
+    props: Optional<AddressProps, 'createdAt'>,
+    id?: UniqueEntityID,
+  ) {
+    const address = new Address(
+      {
+        ...props,
+        createdAt: new Date(),
+      },
+      id,
+    )
+    return address
   }
 }
