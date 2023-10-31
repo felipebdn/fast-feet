@@ -1,0 +1,21 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Order, OrderProps } from '@/domain/logistics/enterprise/entities/order'
+import { faker } from '@faker-js/faker'
+
+export function makeOrder(
+  override: Partial<OrderProps> = {},
+  id?: UniqueEntityID,
+) {
+  const order = Order.create(
+    {
+      bulk: faker.number.float({ min: 0 }),
+      recipientId: new UniqueEntityID(),
+      rotule: faker.lorem.sentence(3),
+      weight: faker.number.float({ min: 0 }),
+      ...override,
+    },
+    id,
+  )
+
+  return order
+}
