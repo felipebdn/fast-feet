@@ -8,8 +8,9 @@ export function makeOrder(
 ) {
   const order = Order.create(
     {
-      bulk: faker.number.float({ min: 0 }),
+      addressId: new UniqueEntityID(),
       recipientId: new UniqueEntityID(),
+      bulk: faker.number.float({ min: 0 }),
       rotule: faker.lorem.sentence(3),
       weight: faker.number.float({ min: 0 }),
       ...override,

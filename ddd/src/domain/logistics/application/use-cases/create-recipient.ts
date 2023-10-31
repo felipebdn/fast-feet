@@ -1,5 +1,6 @@
 import { RecipientRepository } from '../repositories/recipient-repository'
 import { Recipient } from '../../enterprise/entities/recipient'
+import { AddressRepository } from '../repositories/address-repository'
 
 interface CreateRecipientUseCaseRequest {
   name: string
@@ -9,7 +10,10 @@ interface CreateRecipientUseCaseResponse {
 }
 
 export class CreateRecipientUseCase {
-  constructor(private recipientRepository: RecipientRepository) {}
+  constructor(
+    private recipientRepository: RecipientRepository,
+    private addressRepository: AddressRepository,
+  ) {}
 
   async execute({
     name,

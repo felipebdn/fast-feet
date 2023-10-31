@@ -4,6 +4,7 @@ import { Optional } from '@/core/types/optional'
 
 export interface OrderProps {
   recipientId: UniqueEntityID
+  addressId: UniqueEntityID
   rotule: string
   weight: number
   bulk: number
@@ -16,6 +17,10 @@ export interface OrderProps {
 export class Order extends Entity<OrderProps> {
   get recipientId() {
     return this.props.recipientId
+  }
+
+  get addressId() {
+    return this.props.addressId
   }
 
   get rotule() {
