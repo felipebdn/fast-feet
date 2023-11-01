@@ -27,9 +27,9 @@ describe('Create Order', () => {
         code: faker.location.zipCode(),
         complement: faker.location.secondaryAddress(),
         number: parseInt(faker.location.buildingNumber()),
-        sector: faker.location.county(),
+        county: faker.location.county(),
         state: faker.location.state(),
-        road: faker.location.street(),
+        street: faker.location.street(),
       },
       recipient: {
         name: faker.person.fullName(),

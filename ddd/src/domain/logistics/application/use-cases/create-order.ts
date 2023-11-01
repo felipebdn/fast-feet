@@ -15,12 +15,12 @@ interface CreateOrderUseCaseRequest {
     name: string
   }
   address: {
-    road: string
+    street: string
     complement: string
     code: string
     city: string
     state: string
-    sector: string
+    county: string
     number?: number
   }
 }

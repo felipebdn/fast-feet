@@ -1,17 +1,17 @@
 import { AddressRepository } from '../repositories/address-repository'
 
-interface EditAddressnUseCaseRequest {
+interface EditAddressUseCaseRequest {
   addressId: string
-  road: string
+  street: string
   complement: string
   code: string
   city: string
   state: string
-  sector: string
+  county: string
   number?: number
 }
 
-export class EditAddressnUseCase {
+export class EditAddressUseCase {
   constructor(private addressRepository: AddressRepository) {}
 
   async execute({
@@ -19,11 +19,11 @@ export class EditAddressnUseCase {
     city,
     code,
     complement,
-    road,
-    sector,
+    street,
+    county,
     state,
     number,
-  }: EditAddressnUseCaseRequest): Promise<void> {
+  }: EditAddressUseCaseRequest): Promise<void> {
     const address = await this.addressRepository.findById(addressId)
 
     if (!address) {
@@ -33,9 +33,14 @@ export class EditAddressnUseCase {
     address.city = city
     address.code = code
     address.complement = complement
-    address.road = road
-    address.sector = sector
+    address.street = street
+    address.county = county
     address.state = state
-    address.number = number
+    if (number) {
+      address.number = number
+    }
+    address.touch()
+
+    await this.addressRepository.save(address)
   }
 }

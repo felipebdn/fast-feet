@@ -3,20 +3,20 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 
 export interface AddressProps {
-  road: string
+  street: string
   complement: string
   code: string
   city: string
   state: string
-  sector: string
+  county: string
   number?: number
   createdAt: Date
   updatedAt?: Date
 }
 
 export class Address extends Entity<AddressProps> {
-  get road() {
-    return this.props.road
+  get street() {
+    return this.props.street
   }
 
   get complement() {
@@ -35,15 +35,43 @@ export class Address extends Entity<AddressProps> {
     return this.props.state
   }
 
-  get sector() {
-    return this.props.sector
+  get county() {
+    return this.props.county
   }
 
-  get number() {
+  get number(): number | undefined {
     return this.props.number
   }
 
-  private touch() {
+  set street(street: string) {
+    this.props.street = street
+  }
+
+  set complement(complement: string) {
+    this.props.complement = complement
+  }
+
+  set code(code: string) {
+    this.props.code = code
+  }
+
+  set city(city: string) {
+    this.props.city = city
+  }
+
+  set state(state: string) {
+    this.props.state = state
+  }
+
+  set county(county: string) {
+    this.props.county = county
+  }
+
+  set number(number: number) {
+    this.props.number = number
+  }
+
+  public touch() {
     this.props.updatedAt = new Date()
   }
 
