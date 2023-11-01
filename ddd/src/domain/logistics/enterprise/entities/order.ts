@@ -12,6 +12,7 @@ export interface OrderProps {
   bulk: number
   createdAt: Date
   availablePickup?: Date
+  returned?: Date
   delivered?: Date
   collected?: Date
   updatedAt?: Date
@@ -66,6 +67,10 @@ export class Order extends Entity<OrderProps> {
     return this.props.updatedAt
   }
 
+  get returned(): Date | undefined {
+    return this.props.returned
+  }
+
   set recipientId(id: UniqueEntityID) {
     this.props.recipientId = id
   }
@@ -93,6 +98,10 @@ export class Order extends Entity<OrderProps> {
 
   set delivered(date: Date) {
     this.props.delivered = date
+  }
+
+  set returned(date: Date) {
+    this.props.returned = date
   }
 
   private touch() {
