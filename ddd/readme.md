@@ -11,8 +11,8 @@ Desigh Dirigido a Dominio
 - [ ] Deve ser possível realizar o CRUD dos destinatários
 - [x] Deve ser possível marcar uma encomenda como aguardando (Disponível para retirada)
 - [ ] Deve ser possível retirar uma encomenda
-- [ ] Deve ser possível marcar uma encomenda como entregue
-- [ ] Deve ser possível marcar uma encomenda como devolvida
+- [x] Deve ser possível marcar uma encomenda como entregue
+- [x] Deve ser possível marcar uma encomenda como devolvida
 - [ ] Deve ser possível listar as encomendas com endereços de entrega próximo ao local do entregador
 - [ ] Deve ser possível alterar a senha de um usuário
 - [ ] Deve ser possível listar as entregas de um usuário
