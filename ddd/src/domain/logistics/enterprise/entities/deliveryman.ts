@@ -7,6 +7,7 @@ export interface DeliverymanProps {
   cpf: string
   hash_password: string
   createdAt: Date
+  updateAt?: Date
 }
 
 export class Deliveryman extends Entity<DeliverymanProps> {
@@ -20,6 +21,26 @@ export class Deliveryman extends Entity<DeliverymanProps> {
 
   get hash_password() {
     return this.props.hash_password
+  }
+
+  get updateAt() {
+    return this.props.hash_password
+  }
+
+  set name(name: string) {
+    this.props.name = name
+  }
+
+  set cpf(cpf: string) {
+    this.props.cpf = cpf
+  }
+
+  set hash_password(hash_password: string) {
+    this.props.hash_password = hash_password
+  }
+
+  public touch() {
+    this.props.updateAt = new Date()
   }
 
   static create(
