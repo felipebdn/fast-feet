@@ -1,4 +1,6 @@
+import { Either, left, right } from '@/core/either'
 import { AddressRepository } from '../repositories/address-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface EditAddressUseCaseRequest {
   addressId: string
@@ -10,6 +12,8 @@ interface EditAddressUseCaseRequest {
   county: string
   number?: number
 }
+
+type EditAddressUseCaseResponse = Either<ResourceNotFoundError, unknown>
 
 export class EditAddressUseCase {
   constructor(private addressRepository: AddressRepository) {}
@@ -23,11 +27,11 @@ export class EditAddressUseCase {
     county,
     state,
     number,
-  }: EditAddressUseCaseRequest): Promise<void> {
+  }: EditAddressUseCaseRequest): Promise<EditAddressUseCaseResponse> {
     const address = await this.addressRepository.findById(addressId)
 
     if (!address) {
-      throw new Error('Address not found.')
+      return left(new ResourceNotFoundError())
     }
 
     address.city = city
@@ -42,5 +46,7 @@ export class EditAddressUseCase {
     address.touch()
 
     await this.addressRepository.save(address)
+
+    return right({})
   }
 }

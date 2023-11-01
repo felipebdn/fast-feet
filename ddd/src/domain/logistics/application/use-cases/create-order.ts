@@ -4,12 +4,15 @@ import { RecipientRepository } from '../repositories/recipient-repository'
 import { AddressRepository } from '../repositories/address-repository'
 import { Recipient } from '../../enterprise/entities/recipient'
 import { Address } from '../../enterprise/entities/address'
+import { Either, left, right } from '@/core/either'
+import { ValueAlreadyExistsError } from './errors/value-already-exists-error'
 
 interface CreateOrderUseCaseRequest {
   order: {
     bulk: number
     rotule: string
     weight: number
+    code: string
   }
   recipient: {
     name: string
@@ -24,11 +27,7 @@ interface CreateOrderUseCaseRequest {
     number?: number
   }
 }
-interface CreateOrderUseCaseResponse {
-  order: Order
-  recipient: Recipient
-  address: Address
-}
+type CreateOrderUseCaseResponse = Either<ValueAlreadyExistsError, unknown>
 
 export class CreateOrderUseCase {
   constructor(
@@ -42,6 +41,14 @@ export class CreateOrderUseCase {
     order,
     recipient,
   }: CreateOrderUseCaseRequest): Promise<CreateOrderUseCaseResponse> {
+    const isCodeAlreadyExistsOnOrder = await this.orderRespository.findByCode(
+      order.code,
+    )
+
+    if (isCodeAlreadyExistsOnOrder) {
+      return left(new ValueAlreadyExistsError('code'))
+    }
+
     const createRecipient = Recipient.create(recipient)
     await this.recipientRepository.create(createRecipient)
 
@@ -49,6 +56,7 @@ export class CreateOrderUseCase {
     await this.addressRepository.create(createAddress)
 
     const createOrder = Order.create({
+      code: order.code,
       recipientId: createRecipient.id,
       addressId: createAddress.id,
       bulk: order.bulk,
@@ -58,10 +66,6 @@ export class CreateOrderUseCase {
 
     await this.orderRespository.create(createOrder)
 
-    return {
-      order: createOrder,
-      recipient: createRecipient,
-      address: createAddress,
-    }
+    return right({})
   }
 }

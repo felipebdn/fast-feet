@@ -62,7 +62,7 @@ describe('Edit Address', () => {
     )
     await inMemoryAddressRepository.create(address)
 
-    await sut.execute({
+    const result = await sut.execute({
       city: 'example city',
       code: '11111-11',
       complement: 'example complement',
@@ -72,6 +72,8 @@ describe('Edit Address', () => {
       addressId: 'address-01',
       number: 54321,
     })
+
+    expect(result.isRight()).toBe(true)
 
     expect(inMemoryAddressRepository.items[0]).toEqual(
       expect.objectContaining({

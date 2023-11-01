@@ -4,6 +4,14 @@ import { Order } from '@/domain/logistics/enterprise/entities/order'
 export class InMemoryOrderRepository implements OrderRespository {
   public items: Order[] = []
 
+  async findByCode(code: string) {
+    const order = this.items.find((item) => item.code === code)
+    if (!order) {
+      return null
+    }
+    return order
+  }
+
   async findById(id: string) {
     const order = this.items.find((item) => item.id.toString() === id)
     if (!order) {

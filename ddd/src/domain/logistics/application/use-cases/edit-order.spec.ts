@@ -49,7 +49,7 @@ describe('Edit Order', () => {
     )
     await inMemoryOrderRepository.create(order)
 
-    await sut.execute({
+    const result = await sut.execute({
       orderId: 'order-01',
       bulk: 4,
       rotule: 'example order',
@@ -58,6 +58,7 @@ describe('Edit Order', () => {
       recipientId: 'recipient-01',
     })
 
+    expect(result.isRight()).toBe(true)
     expect(inMemoryOrderRepository.items[0]).toEqual(
       expect.objectContaining({
         bulk: 4,

@@ -25,12 +25,13 @@ describe('List Orders Pendign By DeliveryId', () => {
       await inMemoryOrderRepository.create(order)
     }
 
-    const { orders } = await sut.execute({
+    const { value, isRight } = await sut.execute({
       deliverymanId: 'deliveryman-01',
     })
 
-    expect(orders).toHaveLength(2)
-    expect(orders).toEqual([
+    expect(isRight()).toBe(true)
+    expect(value?.orders).toHaveLength(2)
+    expect(value?.orders).toEqual([
       expect.objectContaining({
         id: new UniqueEntityID('order-0'),
       }),

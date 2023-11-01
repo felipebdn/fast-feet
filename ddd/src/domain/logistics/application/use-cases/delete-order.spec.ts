@@ -33,8 +33,9 @@ describe('Create Deliveryman', () => {
     })
     await inMemoryOrderRepository.create(order)
 
-    await sut.execute({ orderId: order.id.toString() })
+    const result = await sut.execute({ orderId: order.id.toString() })
 
     expect(inMemoryOrderRepository.items).toHaveLength(0)
+    expect(result.isRight()).toBe(true)
   })
 })

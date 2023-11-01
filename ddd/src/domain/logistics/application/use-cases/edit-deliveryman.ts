@@ -1,4 +1,6 @@
+import { Either, left, right } from '@/core/either'
 import { DeliverymanRepository } from '../repositories/deliveryman-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface EditDeliverymanUseCaseRequest {
   deliverymanId: string
@@ -6,6 +8,8 @@ interface EditDeliverymanUseCaseRequest {
   cpf: string
   hash_password: string
 }
+
+type EditDeliverymanUseCaseResponse = Either<ResourceNotFoundError, unknown>
 
 export class EditDeliverymanUseCase {
   constructor(private deliverymanRepository: DeliverymanRepository) {}
@@ -15,11 +19,11 @@ export class EditDeliverymanUseCase {
     cpf,
     hash_password,
     name,
-  }: EditDeliverymanUseCaseRequest): Promise<void> {
+  }: EditDeliverymanUseCaseRequest): Promise<EditDeliverymanUseCaseResponse> {
     const deliveryman = await this.deliverymanRepository.findById(deliverymanId)
 
     if (!deliveryman) {
-      throw new Error('Deliveryman not found.')
+      return left(new ResourceNotFoundError())
     }
 
     deliveryman.name = name
@@ -28,5 +32,7 @@ export class EditDeliverymanUseCase {
     deliveryman.touch()
 
     await this.deliverymanRepository.save(deliveryman)
+
+    return right({})
   }
 }

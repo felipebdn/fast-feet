@@ -18,10 +18,11 @@ describe('Mark Order As Waiting', () => {
     })
     await inMemoryOrderRepository.create(order)
 
-    await sut.execute({
+    const result = await sut.execute({
       orderId: order.id.toString(),
     })
 
+    expect(result.isRight()).toBe(true)
     expect(inMemoryOrderRepository.items[0].availablePickup).toEqual(
       expect.any(Date),
     )
@@ -31,10 +32,10 @@ describe('Mark Order As Waiting', () => {
     const order = makeOrder()
     await inMemoryOrderRepository.create(order)
 
-    expect(() => {
-      return sut.execute({
-        orderId: order.id.toString(),
-      })
-    }).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      orderId: order.id.toString(),
+    })
+
+    expect(result.isLeft()).toBe(true)
   })
 })

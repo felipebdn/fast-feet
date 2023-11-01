@@ -23,13 +23,14 @@ describe('Edit Deliveryman', () => {
 
     await inMemoryDeliverymanRepository.create(deliveryman)
 
-    await sut.execute({
+    const result = await sut.execute({
       deliverymanId: 'deliveryman-01',
       cpf: '111.111.111-11',
       hash_password: '654321',
       name: 'example name',
     })
 
+    expect(result.isRight()).toBe(true)
     expect(inMemoryDeliverymanRepository.items[0]).toEqual(
       expect.objectContaining({
         id: new UniqueEntityID('deliveryman-01'),

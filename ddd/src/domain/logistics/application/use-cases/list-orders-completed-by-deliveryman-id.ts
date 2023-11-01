@@ -1,13 +1,16 @@
+import { Either, right } from '@/core/either'
 import { Order } from '../../enterprise/entities/order'
 import { OrderRespository } from '../repositories/orders-repository'
 
 interface ListOrdersCompletedByDeliveryIdUseCaseRequest {
   deliverymanId: string
 }
-interface ListOrdersCompletedByDeliveryIdUseCaseResponse {
-  orders: Order[]
-}
-
+type ListOrdersCompletedByDeliveryIdUseCaseResponse = Either<
+  null,
+  {
+    orders: Order[]
+  }
+>
 export class ListOrdersCompletedByDeliveryIdUseCase {
   constructor(private orderRepository: OrderRespository) {}
 
@@ -16,6 +19,6 @@ export class ListOrdersCompletedByDeliveryIdUseCase {
   }: ListOrdersCompletedByDeliveryIdUseCaseRequest): Promise<ListOrdersCompletedByDeliveryIdUseCaseResponse> {
     const orders =
       await this.orderRepository.findManyCompletedById(deliverymanId)
-    return { orders }
+    return right({ orders })
   }
 }

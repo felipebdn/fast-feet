@@ -4,6 +4,14 @@ import { Deliveryman } from '@/domain/logistics/enterprise/entities/deliveryman'
 export class InMemoryDeliverymanRepository implements DeliverymanRepository {
   public items: Deliveryman[] = []
 
+  async findByCPF(cpf: string) {
+    const deliveryman = this.items.find((item) => item.cpf === cpf)
+    if (!deliveryman) {
+      return null
+    }
+    return deliveryman
+  }
+
   async findById(id: string) {
     const deliveryman = this.items.find((item) => item.id.toString() === id)
 

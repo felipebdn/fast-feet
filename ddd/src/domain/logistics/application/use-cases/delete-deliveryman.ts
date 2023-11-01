@@ -1,22 +1,26 @@
+import { Either, left, right } from '@/core/either'
 import { DeliverymanRepository } from '../repositories/deliveryman-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface DeleteDeliverymanUseCaseRequest {
   deliverymanId: string
 }
-// interface DeleteDeliverymanUseCaseResponse {}
+type DeleteDeliverymanUseCaseResponse = Either<ResourceNotFoundError, unknown>
 
 export class DeleteDeliverymanUseCase {
   constructor(private deliverymanRepository: DeliverymanRepository) {}
 
   async execute({
     deliverymanId,
-  }: DeleteDeliverymanUseCaseRequest): Promise<void> {
+  }: DeleteDeliverymanUseCaseRequest): Promise<DeleteDeliverymanUseCaseResponse> {
     const deliveryman = await this.deliverymanRepository.findById(deliverymanId)
 
     if (!deliveryman) {
-      throw new Error('Deliveryman not found.')
+      return left(new ResourceNotFoundError())
     }
 
     await this.deliverymanRepository.delete(deliverymanId)
+
+    return right({})
   }
 }

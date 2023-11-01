@@ -6,6 +6,7 @@ export interface OrderProps {
   recipientId: UniqueEntityID
   addressId: UniqueEntityID
   deliveryId?: UniqueEntityID
+  code: string
   rotule: string
   weight: number
   bulk: number
@@ -27,6 +28,10 @@ export class Order extends Entity<OrderProps> {
 
   get deliveryId(): UniqueEntityID | undefined {
     return this.props.deliveryId
+  }
+
+  get code() {
+    return this.props.code
   }
 
   get rotule() {

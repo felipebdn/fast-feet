@@ -11,6 +11,7 @@ export function makeOrder(
       addressId: new UniqueEntityID(),
       recipientId: new UniqueEntityID(),
       bulk: faker.number.float({ min: 0 }),
+      code: faker.lorem.sentence(2),
       rotule: faker.lorem.sentence(3),
       weight: faker.number.float({ min: 0 }),
       ...override,

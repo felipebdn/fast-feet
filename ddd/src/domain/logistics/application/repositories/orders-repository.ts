@@ -6,5 +6,6 @@ export interface OrderRespository {
   findManyPendingById(deliveryId: string): Promise<Order[]>
   findManyCompletedById(deliveryId: string): Promise<Order[]>
   findById(id: string): Promise<Order | null>
+  findByCode(code: string): Promise<Order | null>
   delete(id: string): Promise<void>
 }

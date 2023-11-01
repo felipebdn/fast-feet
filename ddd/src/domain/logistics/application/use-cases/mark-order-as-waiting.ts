@@ -1,12 +1,18 @@
+import { Either, left, right } from '@/core/either'
 import { Order } from '../../enterprise/entities/order'
 import { OrderRespository } from '../repositories/orders-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { OrderNotIsColectedError } from './errors/order-not-is-colected-error'
 
 interface MarkOrderAsWaitingUseCaseRequest {
   orderId: string
 }
-interface MarkOrderAsWaitingUseCaseResponse {
-  order: Order
-}
+type MarkOrderAsWaitingUseCaseResponse = Either<
+  ResourceNotFoundError | OrderNotIsColectedError,
+  {
+    order: Order
+  }
+>
 
 export class MarkOrderAsWaitingUseCase {
   constructor(private orderRepository: OrderRespository) {}
@@ -17,15 +23,15 @@ export class MarkOrderAsWaitingUseCase {
     const order = await this.orderRepository.findById(orderId)
 
     if (!order) {
-      throw new Error('Order not found.')
+      return left(new ResourceNotFoundError())
     }
 
     if (!order.deliveryId) {
-      throw new Error('Order not is colected.')
+      return left(new OrderNotIsColectedError())
     }
 
     order.availablePickup = new Date()
 
-    return { order }
+    return right({ order })
   }
 }

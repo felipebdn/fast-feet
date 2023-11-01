@@ -15,8 +15,9 @@ describe('Create Deliveryman', () => {
       cpf: '000.000.000-41',
     })
 
-    await sut.execute(deliveryman)
+    const result = await sut.execute(deliveryman)
 
+    expect(result.isRight()).toBe(true)
     expect(deliveryman.id).toBeTruthy()
     expect(inMemoryDeliverymanRepository.items[0].cpf).toEqual('000.000.000-41')
   })

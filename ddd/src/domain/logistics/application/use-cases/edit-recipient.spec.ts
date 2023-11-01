@@ -43,12 +43,13 @@ describe('Edit Recipient', () => {
     )
     await inMemoryRecipientRepository.create(recipient)
 
-    await sut.execute({
+    const result = await sut.execute({
       name: 'example name',
       recipientId: 'recipient-01',
       addressId: 'address-02',
     })
 
+    expect(result.isRight()).toBe(true)
     expect(inMemoryRecipientRepository.items[0]).toEqual(
       expect.objectContaining({
         name: 'example name',
