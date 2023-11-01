@@ -29,11 +29,6 @@ export class Order extends Entity<OrderProps> {
     return this.props.deliveryId
   }
 
-  set deliveryId(id: UniqueEntityID) {
-    this.props.deliveryId = id
-    this.props.collected = new Date()
-  }
-
   get rotule() {
     return this.props.rotule
   }
@@ -54,16 +49,8 @@ export class Order extends Entity<OrderProps> {
     return this.props.availablePickup
   }
 
-  set availablePickup(date: Date) {
-    this.props.availablePickup = date
-  }
-
   get delivered(): Date | undefined {
     return this.props.delivered
-  }
-
-  set delivered(date: Date) {
-    this.props.delivered = date
   }
 
   get collected() {
@@ -72,6 +59,35 @@ export class Order extends Entity<OrderProps> {
 
   get updateAt() {
     return this.props.updatedAt
+  }
+
+  set recipientId(id: UniqueEntityID) {
+    this.props.recipientId = id
+  }
+
+  set deliveryId(id: UniqueEntityID) {
+    this.props.deliveryId = id
+    this.props.collected = new Date()
+  }
+
+  set bulk(bulk: number) {
+    this.props.bulk = bulk
+  }
+
+  set weight(weight: number) {
+    this.props.weight = weight
+  }
+
+  set rotule(rotule: string) {
+    this.props.rotule = rotule
+  }
+
+  set availablePickup(date: Date) {
+    this.props.availablePickup = date
+  }
+
+  set delivered(date: Date) {
+    this.props.delivered = date
   }
 
   private touch() {
