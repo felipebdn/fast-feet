@@ -16,6 +16,11 @@ export class InMemoryRecipientRepository implements RecipientRepository {
     this.items.push(recipient)
   }
 
+  async save(recipient: Recipient) {
+    const findIndex = this.items.findIndex((item) => item.id === recipient.id)
+    this.items[findIndex] = recipient
+  }
+
   async delete(id: string) {
     const currentIndex = this.items.findIndex(
       (item) => item.id.toString() === id,

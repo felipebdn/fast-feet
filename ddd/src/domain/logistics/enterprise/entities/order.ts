@@ -57,7 +57,7 @@ export class Order extends Entity<OrderProps> {
     return this.props.collected
   }
 
-  get updateAt() {
+  get updatedAt() {
     return this.props.updatedAt
   }
 
