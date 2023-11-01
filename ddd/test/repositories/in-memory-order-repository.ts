@@ -17,8 +17,8 @@ export class InMemoryOrderRepository implements OrderRespository {
       .filter(
         (item) =>
           item.deliveryId?.toString() === deliveryId &&
-          !!item.withdrawal &&
-          !!item.availablePickup,
+          !!item.collected &&
+          !!item.delivered,
       )
       .sort((a, b) => b.createdAt.getDate() - a.createdAt.getDate())
 
@@ -30,8 +30,8 @@ export class InMemoryOrderRepository implements OrderRespository {
       .filter(
         (item) =>
           item.deliveryId?.toString() === deliveryId &&
-          !!item.withdrawal &&
-          !item.availablePickup,
+          !!item.collected &&
+          !item.delivered,
       )
       .sort((a, b) => b.createdAt.getDate() - a.createdAt.getDate())
 

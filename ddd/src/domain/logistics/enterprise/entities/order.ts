@@ -11,7 +11,8 @@ export interface OrderProps {
   bulk: number
   createdAt: Date
   availablePickup?: Date
-  withdrawal?: Date
+  delivered?: Date
+  collected?: Date
   updatedAt?: Date
 }
 
@@ -30,7 +31,7 @@ export class Order extends Entity<OrderProps> {
 
   set deliveryId(id: UniqueEntityID) {
     this.props.deliveryId = id
-    this.props.withdrawal = new Date()
+    this.props.collected = new Date()
   }
 
   get rotule() {
@@ -57,8 +58,16 @@ export class Order extends Entity<OrderProps> {
     this.props.availablePickup = date
   }
 
-  get withdrawal() {
-    return this.props.withdrawal
+  get delivered(): Date | undefined {
+    return this.props.delivered
+  }
+
+  set delivered(date: Date) {
+    this.props.delivered = date
+  }
+
+  get collected() {
+    return this.props.collected
   }
 
   get updateAt() {

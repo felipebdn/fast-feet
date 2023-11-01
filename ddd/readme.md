@@ -9,7 +9,7 @@ Desigh Dirigido a Dominio
 - [ ] Deve ser possível realizar o CRUD dos entregadores
 - [ ] Deve ser possível realizar o CRUD das encomendas
 - [ ] Deve ser possível realizar o CRUD dos destinatários
-- [ ] Deve ser possível marcar uma encomenda como aguardando (Disponível para retirada)
+- [x] Deve ser possível marcar uma encomenda como aguardando (Disponível para retirada)
 - [ ] Deve ser possível retirar uma encomenda
 - [ ] Deve ser possível marcar uma encomenda como entregue
 - [ ] Deve ser possível marcar uma encomenda como devolvida

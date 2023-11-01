@@ -6,18 +6,18 @@ import { ListOrdersCompletedByDeliveryIdUseCase } from './list-orders-completed-
 let inMemoryOrderRepository: InMemoryOrderRepository
 let sut: ListOrdersCompletedByDeliveryIdUseCase
 
-describe('List Orders By DeliveryId', () => {
+describe('List Orders Completed By DeliveryId', () => {
   beforeEach(() => {
     inMemoryOrderRepository = new InMemoryOrderRepository()
     sut = new ListOrdersCompletedByDeliveryIdUseCase(inMemoryOrderRepository)
   })
-  it('should be able to list orders by deliveryman id', async () => {
+  it('should be able to list orders completed by deliveryman id', async () => {
     for (let i = 0; i < 5; i++) {
       const order = makeOrder(
         {
           deliveryId: new UniqueEntityID('deliveryman-01'),
-          withdrawal: new Date(),
-          availablePickup: i > 1 ? new Date() : undefined,
+          collected: new Date(),
+          delivered: i > 1 ? new Date() : undefined,
         },
         new UniqueEntityID(`order-${i}`),
       )
