@@ -4,6 +4,13 @@ import { Address } from '@/domain/logistics/enterprise/entities/address'
 export class InMemoryAddressRepository implements AddressRepository {
   public items: Address[] = []
 
+  async findManyByCityAndState(city: string, state: string) {
+    const locals = this.items.filter(
+      (item) => item.city === city && item.state === state,
+    )
+    return locals
+  }
+
   async findById(id: string) {
     const address = this.items.find((item) => item.id.toString() === id)
     if (!address) {

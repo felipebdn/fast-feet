@@ -6,9 +6,9 @@ Desigh Dirigido a Dominio
 
 - [ ] A aplicação deve ter dois tipos de usuário, entregador e/ou admin
 - [ ] Deve ser possível realizar login com CPF e Senha
-- [ ] Deve ser possível realizar o CRUD dos entregadores
-- [ ] Deve ser possível realizar o CRUD das encomendas
-- [ ] Deve ser possível realizar o CRUD dos destinatários
+- [x] Deve ser possível realizar o CRUD dos entregadores
+- [x] Deve ser possível realizar o CRUD das encomendas
+- [x] Deve ser possível realizar o CRUD dos destinatários
 - [x] Deve ser possível marcar uma encomenda como aguardando (Disponível para retirada)
 - [ ] Deve ser possível retirar uma encomenda
 - [x] Deve ser possível marcar uma encomenda como entregue

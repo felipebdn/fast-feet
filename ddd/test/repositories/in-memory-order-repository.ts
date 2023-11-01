@@ -1,8 +1,34 @@
+import { PaginationParams } from '@/core/repositories/pagination-params'
+import { AddressRepository } from '@/domain/logistics/application/repositories/address-repository'
 import { OrderRespository } from '@/domain/logistics/application/repositories/orders-repository'
 import { Order } from '@/domain/logistics/enterprise/entities/order'
 
 export class InMemoryOrderRepository implements OrderRespository {
+  constructor(private addressRepository: AddressRepository) {}
+
   public items: Order[] = []
+
+  async findManyByCityAndState(
+    city: string,
+    state: string,
+    { amount, page }: PaginationParams,
+  ): Promise<Order[]> {
+    const addressSameCityAndState =
+      await this.addressRepository.findManyByCityAndState(city, state)
+
+    const addressIds = addressSameCityAndState.map((item) => item.id.toString())
+
+    const orders = this.items
+      .filter(
+        (item) =>
+          item.collected === undefined &&
+          addressIds.includes(item.addressId.toString()),
+      )
+      .sort((a, b) => b.createdAt.getDate() - a.createdAt.getDate())
+      .slice((page - 1) * amount, page * amount)
+
+    return orders
+  }
 
   async findByCode(code: string) {
     const order = this.items.find((item) => item.code === code)
