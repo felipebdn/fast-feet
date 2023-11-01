@@ -41,7 +41,7 @@ export class Recipient extends Entity<RecipientProps> {
     const recipient = new Recipient(
       {
         ...props,
-        createdAt: new Date(),
+        createdAt: props.createdAt ?? new Date(),
       },
       id,
     )

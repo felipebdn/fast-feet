@@ -50,7 +50,7 @@ export class Deliveryman extends Entity<DeliverymanProps> {
     const deliveryman = new Deliveryman(
       {
         ...props,
-        createdAt: new Date(),
+        createdAt: props.createdAt ?? new Date(),
       },
       id,
     )

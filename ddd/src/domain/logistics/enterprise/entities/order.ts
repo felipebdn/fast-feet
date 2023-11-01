@@ -98,7 +98,7 @@ export class Order extends Entity<OrderProps> {
     const order = new Order(
       {
         ...props,
-        createdAt: new Date(),
+        createdAt: props.createdAt ?? new Date(),
       },
       id,
     )

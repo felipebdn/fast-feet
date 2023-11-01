@@ -82,7 +82,7 @@ export class Address extends Entity<AddressProps> {
     const address = new Address(
       {
         ...props,
-        createdAt: new Date(),
+        createdAt: props.createdAt ?? new Date(),
       },
       id,
     )
