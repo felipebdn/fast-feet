@@ -15,4 +15,11 @@ export class InMemoryOrderRepository implements OrderRespository {
   async create(order: Order) {
     this.items.push(order)
   }
+
+  async delete(id: string) {
+    const currentIndex = this.items.findIndex(
+      (item) => item.id.toString() === id,
+    )
+    this.items.splice(currentIndex, 1)
+  }
 }

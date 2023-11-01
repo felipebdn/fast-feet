@@ -10,6 +10,7 @@ export interface OrderProps {
   weight: number
   bulk: number
   createdAt: Date
+  availablePickup?: Date
   withdrawal?: Date
   updatedAt?: Date
 }
@@ -23,12 +24,13 @@ export class Order extends Entity<OrderProps> {
     return this.props.addressId
   }
 
-  get deliveryId() {
+  get deliveryId(): UniqueEntityID | undefined {
     return this.props.deliveryId
   }
 
   set deliveryId(id: UniqueEntityID) {
     this.props.deliveryId = id
+    this.props.withdrawal = new Date()
   }
 
   get rotule() {
@@ -45,6 +47,14 @@ export class Order extends Entity<OrderProps> {
 
   get createdAt() {
     return this.props.createdAt
+  }
+
+  get availablePickup(): Date | undefined {
+    return this.props.availablePickup
+  }
+
+  set availablePickup(date: Date) {
+    this.props.availablePickup = date
   }
 
   get withdrawal() {

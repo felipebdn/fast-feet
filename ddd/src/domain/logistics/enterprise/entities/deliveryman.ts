@@ -6,7 +6,6 @@ export interface DeliverymanProps {
   name: string
   cpf: string
   hash_password: string
-  addressId?: UniqueEntityID
   createdAt: Date
 }
 
@@ -23,12 +22,8 @@ export class Deliveryman extends Entity<DeliverymanProps> {
     return this.props.hash_password
   }
 
-  get addressId() {
-    return this.props.addressId
-  }
-
   static create(
-    props: Optional<DeliverymanProps, 'createdAt' | 'addressId'>,
+    props: Optional<DeliverymanProps, 'createdAt'>,
     id?: UniqueEntityID,
   ) {
     const deliveryman = new Deliveryman(

@@ -1,3 +1,4 @@
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { OrderRespository } from '../repositories/orders-repository'
 
 interface OrderPuckupUseCaseRequest {
@@ -8,11 +9,17 @@ interface OrderPuckupUseCaseRequest {
 export class OrderPuckupUseCase {
   constructor(private orderRepository: OrderRespository) {}
 
-  execute({ deliverymanId, orderId }: OrderPuckupUseCaseRequest) {
-    const order = this.orderRepository.findById(orderId)
+  async execute({ deliverymanId, orderId }: OrderPuckupUseCaseRequest) {
+    const order = await this.orderRepository.findById(orderId)
 
     if (!order) {
       throw new Error('Order not found.')
     }
+
+    if (order.deliveryId) {
+      throw new Error('Object already has a responsible delivery person')
+    }
+
+    order.deliveryId = new UniqueEntityID(deliverymanId)
   }
 }
