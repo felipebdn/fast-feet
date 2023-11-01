@@ -1,3 +1,4 @@
+import { PaginationParams } from '@/core/repositories/pagination-params'
 import { OrderRespository } from '@/domain/logistics/application/repositories/orders-repository'
 import { Order } from '@/domain/logistics/enterprise/entities/order'
 
@@ -10,6 +11,18 @@ export class InMemoryOrderRepository implements OrderRespository {
       return null
     }
     return order
+  }
+
+  async findManyById(deliveryId: string, { amount, page }: PaginationParams) {
+    const orders = this.items
+      .filter(
+        (item) =>
+          item.deliveryId?.toString() === deliveryId && !!item.withdrawal,
+      )
+      .sort((a, b) => b.createdAt.getDate() - a.createdAt.getDate())
+      .slice((page - 1) * amount, page * amount)
+
+    return orders
   }
 
   async create(order: Order) {
