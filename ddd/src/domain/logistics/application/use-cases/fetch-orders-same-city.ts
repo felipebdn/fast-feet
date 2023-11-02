@@ -8,6 +8,7 @@ interface FetchOrderSameCityUseCaseRequest {
   amount: number
   page: number
 }
+
 type FetchOrderSameCityUseCaseResponse = Either<null, { orders: Order[] }>
 
 export class FetchOrderSameCityUseCase {
