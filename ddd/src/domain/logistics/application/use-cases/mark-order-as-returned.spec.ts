@@ -3,8 +3,8 @@ import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repos
 import { MarkOrderAsReturnedUseCase } from './mark-order-as-returned'
 import { makeOrder } from 'test/factories/make-order'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { OrderNotIsColectedError } from './errors/order-not-is-colected-error'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { OrderNotIsColectedError } from '../../../../core/errors/errors/order-not-is-colected-error'
+import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-not-found-error'
 import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 
 let inMemoryAddressRepository: InMemoryAddressRepository

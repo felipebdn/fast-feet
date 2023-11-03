@@ -1,7 +1,7 @@
 import { Either, left, right } from '@/core/either'
 import { Deliveryman } from '../../enterprise/entities/deliveryman'
 import { DeliverymanRepository } from '../repositories/deliveryman-repository'
-import { ValueAlreadyExistsError } from './errors/value-already-exists-error'
+import { ValueAlreadyExistsError } from '../../../../core/errors/errors/value-already-exists-error'
 
 interface CreateDeliverymanUseCaseRequest {
   name: string

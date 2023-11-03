@@ -1,8 +1,8 @@
 import { Either, left, right } from '@/core/either'
 import { Order } from '../../enterprise/entities/order'
 import { OrderRespository } from '../repositories/orders-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { OrderNotIsColectedError } from './errors/order-not-is-colected-error'
+import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-not-found-error'
+import { OrderNotIsColectedError } from '../../../../core/errors/errors/order-not-is-colected-error'
 
 interface MarkOrderAsWaitingUseCaseRequest {
   orderId: string

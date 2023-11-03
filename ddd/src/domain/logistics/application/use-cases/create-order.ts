@@ -5,7 +5,7 @@ import { AddressRepository } from '../repositories/address-repository'
 import { Recipient } from '../../enterprise/entities/recipient'
 import { Address } from '../../enterprise/entities/address'
 import { Either, left, right } from '@/core/either'
-import { ValueAlreadyExistsError } from './errors/value-already-exists-error'
+import { ValueAlreadyExistsError } from '../../../../core/errors/errors/value-already-exists-error'
 
 interface CreateOrderUseCaseRequest {
   order: {

@@ -4,7 +4,7 @@ import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipie
 import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 import { faker } from '@faker-js/faker'
 import { makeOrder } from 'test/factories/make-order'
-import { ValueAlreadyExistsError } from './errors/value-already-exists-error'
+import { ValueAlreadyExistsError } from '../../../../core/errors/errors/value-already-exists-error'
 
 let inMemoryOrderRepository: InMemoryOrderRepository
 let inMemoryRecipientRepository: InMemoryRecipientRepository

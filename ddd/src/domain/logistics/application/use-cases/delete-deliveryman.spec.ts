@@ -2,7 +2,7 @@ import { InMemoryDeliverymanRepository } from 'test/repositories/in-memeory-deli
 import { makeDeliveryman } from 'test/factories/make-deliveryman'
 import { DeleteDeliverymanUseCase } from './delete-deliveryman'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-not-found-error'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository
 let sut: DeleteDeliverymanUseCase
