@@ -2,13 +2,18 @@ import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repos
 import { ListOrdersPendingByDeliveryIdUseCase } from './list-orders-pending-by-deliveryman-id'
 import { makeOrder } from 'test/factories/make-order'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 
+let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository
 let sut: ListOrdersPendingByDeliveryIdUseCase
 
 describe('List Orders Pendign By DeliveryId', () => {
   beforeEach(() => {
-    inMemoryOrderRepository = new InMemoryOrderRepository()
+    inMemoryAddressRepository = new InMemoryAddressRepository()
+    inMemoryOrderRepository = new InMemoryOrderRepository(
+      inMemoryAddressRepository,
+    )
     sut = new ListOrdersPendingByDeliveryIdUseCase(inMemoryOrderRepository)
   })
   it('should be able to list orders pending by deliveryman id', async () => {

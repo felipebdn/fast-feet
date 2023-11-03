@@ -1,14 +1,19 @@
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { makeOrder } from 'test/factories/make-order'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { makeOrder } from 'test/factories/make-order'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
 import { ListOrdersCompletedByDeliveryIdUseCase } from './list-orders-completed-by-deliveryman-id'
 
+let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository
 let sut: ListOrdersCompletedByDeliveryIdUseCase
 
 describe('List Orders Completed By DeliveryId', () => {
   beforeEach(() => {
-    inMemoryOrderRepository = new InMemoryOrderRepository()
+    inMemoryAddressRepository = new InMemoryAddressRepository()
+    inMemoryOrderRepository = new InMemoryOrderRepository(
+      inMemoryAddressRepository,
+    )
     sut = new ListOrdersCompletedByDeliveryIdUseCase(inMemoryOrderRepository)
   })
   it('should be able to list orders completed by deliveryman id', async () => {

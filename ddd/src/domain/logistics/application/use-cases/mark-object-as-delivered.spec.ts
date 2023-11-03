@@ -2,13 +2,18 @@ import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repos
 import { MarkObjectAsDeliveredUseCase } from './mark-object-as-delivered'
 import { makeOrder } from 'test/factories/make-order'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 
+let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository
 let sut: MarkObjectAsDeliveredUseCase
 
 describe('Create Deliveryman', () => {
   beforeEach(() => {
-    inMemoryOrderRepository = new InMemoryOrderRepository()
+    inMemoryAddressRepository = new InMemoryAddressRepository()
+    inMemoryOrderRepository = new InMemoryOrderRepository(
+      inMemoryAddressRepository,
+    )
     sut = new MarkObjectAsDeliveredUseCase(inMemoryOrderRepository)
   })
   it('should be able to create a new deliveryman', async () => {

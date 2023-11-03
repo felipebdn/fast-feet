@@ -13,8 +13,10 @@ let sut: DeleteOrderUseCase
 
 describe('Create Deliveryman', () => {
   beforeEach(() => {
-    inMemoryOrderRepository = new InMemoryOrderRepository()
     inMemoryAddressRepository = new InMemoryAddressRepository()
+    inMemoryOrderRepository = new InMemoryOrderRepository(
+      inMemoryAddressRepository,
+    )
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
     sut = new DeleteOrderUseCase(
       inMemoryOrderRepository,

@@ -5,13 +5,18 @@ import { makeOrder } from 'test/factories/make-order'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { OrderNotIsColectedError } from './errors/order-not-is-colected-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 
+let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository
 let sut: MarkOrderAsReturnedUseCase
 
 describe('Mark Order As Returned', () => {
   beforeEach(() => {
-    inMemoryOrderRepository = new InMemoryOrderRepository()
+    inMemoryAddressRepository = new InMemoryAddressRepository()
+    inMemoryOrderRepository = new InMemoryOrderRepository(
+      inMemoryAddressRepository,
+    )
     sut = new MarkOrderAsReturnedUseCase(inMemoryOrderRepository)
   })
   it('should be able to mark order as returned', async () => {

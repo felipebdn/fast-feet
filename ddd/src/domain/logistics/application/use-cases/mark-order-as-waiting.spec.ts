@@ -2,13 +2,18 @@ import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repos
 import { makeOrder } from 'test/factories/make-order'
 import { MarkOrderAsWaitingUseCase } from './mark-order-as-waiting'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 
+let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository
 let sut: MarkOrderAsWaitingUseCase
 
 describe('Mark Order As Waiting', () => {
   beforeEach(() => {
-    inMemoryOrderRepository = new InMemoryOrderRepository()
+    inMemoryAddressRepository = new InMemoryAddressRepository()
+    inMemoryOrderRepository = new InMemoryOrderRepository(
+      inMemoryAddressRepository,
+    )
     sut = new MarkOrderAsWaitingUseCase(inMemoryOrderRepository)
   })
   it('should be able to mark order as waiting', async () => {

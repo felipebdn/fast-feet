@@ -4,13 +4,18 @@ import { makeOrder } from 'test/factories/make-order'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ObjectAlreadyResponsibleDeliveryman } from './errors/object-already-responsible-deliveryman-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 
+let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository
 let sut: OrderPuckupUseCase
 
 describe('Order Pickup', () => {
   beforeEach(() => {
-    inMemoryOrderRepository = new InMemoryOrderRepository()
+    inMemoryAddressRepository = new InMemoryAddressRepository()
+    inMemoryOrderRepository = new InMemoryOrderRepository(
+      inMemoryAddressRepository,
+    )
     sut = new OrderPuckupUseCase(inMemoryOrderRepository)
   })
   it('should be able to collect a delivery', async () => {

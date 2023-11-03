@@ -13,9 +13,11 @@ let sut: CreateOrderUseCase
 
 describe('Create Order', () => {
   beforeEach(() => {
-    inMemoryOrderRepository = new InMemoryOrderRepository()
     inMemoryRecipientRepository = new InMemoryRecipientRepository()
     inMemoryAddressRepository = new InMemoryAddressRepository()
+    inMemoryOrderRepository = new InMemoryOrderRepository(
+      inMemoryAddressRepository,
+    )
     sut = new CreateOrderUseCase(
       inMemoryOrderRepository,
       inMemoryRecipientRepository,
