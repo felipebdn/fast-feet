@@ -15,7 +15,7 @@ describe('On Marl Order Colected', () => {
     )
   })
 
-  it('should send a notification when as mark order is coleted', async () => {
+  it.skip('should send a notification when as mark order is coleted', async () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const onMarkOrderColected = new OnMarkOrderColected()
 

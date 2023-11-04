@@ -14,6 +14,7 @@ export function makeDeliveryman(
       cpf: faker.phone.number(),
       hash_password: faker.person.lastName(),
       name: faker.person.fullName(),
+      updatedAt: undefined,
       ...override,
     },
     id,

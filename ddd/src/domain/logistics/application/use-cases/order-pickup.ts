@@ -27,7 +27,7 @@ export class OrderPuckupUseCase {
       return left(new ResourceNotFoundError())
     }
 
-    if (order.deliveryId) {
+    if (order.deliveryId && !order.collected) {
       return left(new ObjectAlreadyResponsibleDeliveryman())
     }
 

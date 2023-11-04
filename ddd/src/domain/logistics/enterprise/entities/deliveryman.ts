@@ -23,8 +23,8 @@ export class Deliveryman extends Entity<DeliverymanProps> {
     return this.props.hash_password
   }
 
-  get updatedAt() {
-    return this.props.hash_password
+  get updatedAt(): Date | undefined {
+    return this.props.updatedAt
   }
 
   set name(name: string) {
@@ -37,6 +37,10 @@ export class Deliveryman extends Entity<DeliverymanProps> {
 
   set hash_password(hash_password: string) {
     this.props.hash_password = hash_password
+  }
+
+  set updatedAt(date: Date) {
+    this.props.updatedAt = date
   }
 
   public touch() {
