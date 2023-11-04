@@ -1,3 +1,4 @@
+import { DomainEvents } from '@/core/events/domain-events'
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { AddressRepository } from '@/domain/logistics/application/repositories/address-repository'
 import { OrderRespository } from '@/domain/logistics/application/repositories/orders-repository'
@@ -74,10 +75,19 @@ export class InMemoryOrderRepository implements OrderRespository {
 
   async create(order: Order) {
     this.items.push(order)
+    // console.log('criando', this.items[0].collected)
   }
 
   async save(order: Order) {
+    // console.log(this.items[0].collected)
+
     const findIndex = this.items.findIndex((item) => item.id === order.id)
+    // console.log('antes', this.items[findIndex].collected, !!order.collected)
+    // console.log('depois', order.collected, !!order.collected)
+
+    // if (!this.items[findIndex].collected && !!order.collected) {
+    DomainEvents.dispatchEventsForEntity(order.id)
+    // }
     this.items[findIndex] = order
   }
 
