@@ -23,11 +23,11 @@ export class MarkObjectAsDeliveredUseCase {
       return left(new ResourceNotFoundError())
     }
 
-    if (!order.collected || !order.deliveryId) {
+    if (order.state !== 'collected' || !order.deliveryId) {
       return left(new OrderNotIsColectedError())
     }
 
-    order.delivered = new Date()
+    order.isDelivered()
 
     await this.orderRepository.save(order)
 

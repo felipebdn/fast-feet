@@ -21,19 +21,19 @@ describe('Mark Order As Returned', () => {
   })
   it('should be able to mark order as returned', async () => {
     const order = makeOrder({
-      collected: new Date(),
+      state: 'collected',
       deliveryId: new UniqueEntityID(),
     })
     await inMemoryOrderRepository.create(order)
 
-    expect(inMemoryOrderRepository.items[0].returned).toBe(undefined)
+    expect(inMemoryOrderRepository.items[0].state).toBe('collected')
 
     const result = await sut.execute({
       orderId: order.id.toString(),
     })
 
     expect(result.isRight()).toBe(true)
-    expect(inMemoryOrderRepository.items[0].returned).toEqual(expect.any(Date))
+    expect(inMemoryOrderRepository.items[0].state).toBe('returned')
   })
 
   it('should not be able to mark order as returned because order not exists', async () => {
@@ -49,7 +49,7 @@ describe('Mark Order As Returned', () => {
     const order = makeOrder()
     await inMemoryOrderRepository.create(order)
 
-    expect(inMemoryOrderRepository.items[0].returned).toBe(undefined)
+    expect(inMemoryOrderRepository.items[0].state).toBe('waiting')
 
     const result = await sut.execute({
       orderId: order.id.toString(),

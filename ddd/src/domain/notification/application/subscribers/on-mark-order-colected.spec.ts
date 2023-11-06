@@ -12,9 +12,6 @@ import { SpyInstance } from 'vitest'
 import { waitFor } from 'test/utils/wait-for'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { makeDeliveryman } from 'test/factories/make-deliveryman'
-import { Deliveryman } from '@/domain/logistics/enterprise/entities/deliveryman'
-import console from 'console'
-import { Order } from '@/domain/logistics/enterprise/entities/order'
 
 let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository
@@ -51,8 +48,7 @@ describe('On Marl Order Colected', () => {
 
     inMemoryOrderRepository.create(order)
 
-    order.deliveryId = deliveryman.id
-    order.collected = deliveryman.id
+    order.isCollected(deliveryman.id)
 
     inMemoryOrderRepository.save(order)
 
