@@ -119,6 +119,7 @@ export class Order extends Entity<OrderProps> {
   public markAsCollected(deliveryId: UniqueEntityID) {
     this.props.deliveryId = deliveryId
     this.props.collected = new Date()
+
     this.addDomainEvent(new MarkOrderIsColectedEvent(this))
   }
 

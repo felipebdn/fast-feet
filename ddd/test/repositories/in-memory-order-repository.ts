@@ -82,8 +82,8 @@ export class InMemoryOrderRepository implements OrderRespository {
     // console.log(this.items[0].collected)
 
     const findIndex = this.items.findIndex((item) => item.id === order.id)
-    // console.log('antes', this.items[findIndex].collected, !!order.collected)
-    // console.log('depois', order.collected, !!order.collected)
+    console.log('antes', this.items[0].deliveryId)
+    console.log('depois', order.deliveryId)
 
     // if (!this.items[findIndex].collected && !!order.collected) {
     DomainEvents.dispatchEventsForEntity(order.id)
