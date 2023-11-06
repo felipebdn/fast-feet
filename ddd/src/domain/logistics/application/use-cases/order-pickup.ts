@@ -31,7 +31,8 @@ export class OrderPuckupUseCase {
       return left(new ObjectAlreadyResponsibleDeliveryman())
     }
 
-    order.markAsCollected(new UniqueEntityID(deliverymanId))
+    order.deliveryId = new UniqueEntityID(deliverymanId)
+    order.collected = new UniqueEntityID(deliverymanId)
 
     await this.orderRepository.save(order)
 

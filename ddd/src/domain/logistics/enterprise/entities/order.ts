@@ -107,6 +107,15 @@ export class Order extends Entity<OrderProps> {
     this.touch()
   }
 
+  set collected(id: UniqueEntityID) {
+    const valueCollected = this.props.collected
+    this.props.collected = new Date()
+    if (!valueCollected && id) {
+      this.addDomainEvent(new MarkOrderIsColectedEvent(this))
+    }
+    this.touch()
+  }
+
   set returned(date: Date) {
     this.props.returned = date
     this.touch()
@@ -114,13 +123,6 @@ export class Order extends Entity<OrderProps> {
 
   private touch() {
     this.props.updatedAt = new Date()
-  }
-
-  public markAsCollected(deliveryId: UniqueEntityID) {
-    this.props.deliveryId = deliveryId
-    this.props.collected = new Date()
-
-    this.addDomainEvent(new MarkOrderIsColectedEvent(this))
   }
 
   static create(props: Optional<OrderProps, 'createdAt'>, id?: UniqueEntityID) {

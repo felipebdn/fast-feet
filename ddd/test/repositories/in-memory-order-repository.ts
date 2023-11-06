@@ -79,16 +79,12 @@ export class InMemoryOrderRepository implements OrderRespository {
   }
 
   async save(order: Order) {
-    // console.log(this.items[0].collected)
-
-    const findIndex = this.items.findIndex((item) => item.id === order.id)
-    console.log('antes', this.items[0].deliveryId)
-    console.log('depois', order.deliveryId)
-
-    // if (!this.items[findIndex].collected && !!order.collected) {
-    DomainEvents.dispatchEventsForEntity(order.id)
-    // }
+    const findIndex = this.items.findIndex(
+      (item) => item.id.toValue() === order.id.toValue(),
+    )
     this.items[findIndex] = order
+
+    DomainEvents.dispatchEventsForEntity(order.id)
   }
 
   async delete(id: string) {

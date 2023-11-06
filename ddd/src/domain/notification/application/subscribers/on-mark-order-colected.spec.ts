@@ -44,15 +44,17 @@ describe('On Marl Order Colected', () => {
 
   it('should send a notification when as mark order is coleted', async () => {
     const deliveryman = makeDeliveryman()
-    const order = makeOrder({ deliveryId: undefined })
+    const order = makeOrder(
+      { deliveryId: undefined },
+      new UniqueEntityID('order-01'),
+    )
 
-    const orderCopy = JSON.parse(JSON.stringify(order))
+    inMemoryOrderRepository.create(order)
 
-    inMemoryOrderRepository.items.push(orderCopy)
+    order.deliveryId = deliveryman.id
+    order.collected = deliveryman.id
 
-    order.markAsCollected(deliveryman.id)
-
-    await inMemoryOrderRepository.save(order)
+    inMemoryOrderRepository.save(order)
 
     await waitFor(() => {
       expect(sendNotificationExecuteSpy).toHaveBeenCalled()
