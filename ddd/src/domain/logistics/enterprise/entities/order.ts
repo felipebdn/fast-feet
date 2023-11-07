@@ -1,7 +1,7 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
-import { MarkOrderIsColectedEvent } from '../events/mark-order-colected-event'
+import { UpdateStateOrderEvent } from '../events/mark-order-colected-event'
 
 export interface OrderProps {
   recipientId: UniqueEntityID
@@ -113,7 +113,7 @@ export class Order extends Entity<OrderProps> {
     if (this.props.state === 'waiting' && !this.props.deliveryId) {
       this.props.deliveryId = deliveryId
       this.props.state = 'collected'
-      this.addDomainEvent(new MarkOrderIsColectedEvent(this))
+      this.addDomainEvent(new UpdateStateOrderEvent(this))
       this.updateDateState()
     }
   }
@@ -122,7 +122,7 @@ export class Order extends Entity<OrderProps> {
     if (this.props.state === 'collected') {
       this.props.state = 'delivered'
       this.updateDateState()
-      // this.addDomainEvent(new MarkOrderIsColectedEvent(this))
+      this.addDomainEvent(new UpdateStateOrderEvent(this))
     }
   }
 
@@ -130,7 +130,7 @@ export class Order extends Entity<OrderProps> {
     if (this.props.state !== 'delivered' && this.props.state === 'collected') {
       this.props.state = 'returned'
       this.updateDateState()
-      // this.addDomainEvent(new MarkOrderIsColectedEvent(this))
+      this.addDomainEvent(new UpdateStateOrderEvent(this))
     }
   }
 
@@ -138,7 +138,7 @@ export class Order extends Entity<OrderProps> {
     if (this.props.state !== 'delivered' && this.props.state === 'returned') {
       this.props.state = 'availablePickup'
       this.updateDateState()
-      // this.addDomainEvent(new MarkOrderIsColectedEvent(this))
+      this.addDomainEvent(new UpdateStateOrderEvent(this))
     }
   }
 
