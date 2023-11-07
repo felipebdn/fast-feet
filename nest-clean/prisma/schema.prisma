@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum State {
+  waiting
+  collected
+  delivered
+  returned
+  availablePickup
+}
+
+model Deliveryman {
+  id            String   @id @default(uuid())
+  name          String
+  cpf           String   @unique
+  password_hash String
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt
+
+  @@map("delivery_men")
+}
+
+// model Recipient {
+// }
+
+model Order {
+  id             String   @id @default(uuid())
+  code           String   @unique
+  rotule         String
+  weight         Float
+  bulk           Float
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt
+  state          State
+  updateAtStatus DateTime
+
+  @@map("orders")
+}
