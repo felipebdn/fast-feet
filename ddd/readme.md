@@ -16,7 +16,7 @@ Desigh Dirigido a Dominio
 - [x] Deve ser possível listar as encomendas com endereços de entrega próximo ao local do entregador
 - [ ] Deve ser possível alterar a senha de um usuário
 - [x] Deve ser possível listar as entregas de um usuário
-- [ ] Deve ser possível notificar o destinatário a cada alteração no status da encomenda
+- [x] Deve ser possível notificar o destinatário a cada alteração no status da encomenda
 
 ### Regras de negócio
 
