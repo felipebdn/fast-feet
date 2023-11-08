@@ -12,6 +12,7 @@ export function makeDeliveryman(
   const deliveryman = Deliveryman.create(
     {
       cpf: faker.phone.number(),
+      addressId: new UniqueEntityID(),
       hash_password: faker.person.lastName(),
       name: faker.person.fullName(),
       updatedAt: undefined,

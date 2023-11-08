@@ -2,8 +2,10 @@ import { Either, left, right } from '@/core/either'
 import { Deliveryman } from '../../enterprise/entities/deliveryman'
 import { DeliverymanRepository } from '../repositories/deliveryman-repository'
 import { ValueAlreadyExistsError } from '../../../../core/errors/errors/value-already-exists-error'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 interface CreateDeliverymanUseCaseRequest {
+  addressId: string
   name: string
   cpf: string
   hash_password: string
@@ -14,6 +16,7 @@ export class CreateDeliverymanUseCase {
   constructor(private deliverymanRepository: DeliverymanRepository) {}
 
   async execute({
+    addressId,
     cpf,
     hash_password,
     name,
@@ -25,6 +28,7 @@ export class CreateDeliverymanUseCase {
     }
 
     const deliveryman = Deliveryman.create({
+      addressId: new UniqueEntityID(addressId),
       cpf,
       hash_password,
       name,
