@@ -12,7 +12,7 @@ enum Role {
   ADMIN
 }
 
-enum State {
+enum Status {
   waiting
   collected
   delivered
@@ -21,38 +21,69 @@ enum State {
 }
 
 model Deliveryman {
-  id            String   @id @default(uuid())
+  id            String    @id @default(uuid())
   name          String
-  cpf           String   @unique
+  cpf           String    @unique
   password_hash String
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime? @updatedAt
 
-  @@map("delivery_men")
+  address   Address @relation(fields: [addressId], references: [id])
+  addressId String  @unique @map("address_id")
+  Order     Order[]
+
+  @@map("delivery_mens")
 }
 
 model Recipient {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt
-  // addressId
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt
+
+  address   Address @relation(fields: [addressId], references: [id])
+  addressId String  @unique @map("address_id")
+  order     Order[]
+
+  @@map("recipients")
 }
 
 model Order {
-  id             String   @id @default(uuid())
-  code           String   @unique
+  id             String    @id @default(uuid())
+  code           String    @unique
   rotule         String
   weight         Float
   bulk           Float
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt
-  state          State
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime? @updatedAt
+  status         Status
   updateAtStatus DateTime
 
-  // recipientId
-  // addressId
-  // deliveryId
+  recipient     Recipient   @relation(fields: [recipientId], references: [id])
+  recipientId   String      @unique @map("recipient_id")
+  address       Address     @relation(fields: [addressId], references: [id])
+  addressId     String      @unique @map("address_id")
+  delivery      Deliveryman @relation(fields: [deliverymanId], references: [id])
+  deliverymanId String      @unique @map("delivery_id")
 
   @@map("orders")
+}
+
+model Address {
+  id         String    @id @default(uuid())
+  street     String
+  complement String
+  code       String
+  city       String
+  state      String
+  county     String
+  number     Int
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt
+
+  deliveryman Deliveryman?
+  recipient   Recipient?
+  order       Order[]
+
+  @@map("addresses")
 }
