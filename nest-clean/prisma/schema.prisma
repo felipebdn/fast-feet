@@ -31,8 +31,13 @@ model Deliveryman {
   @@map("delivery_men")
 }
 
-// model Recipient {
-// }
+model Recipient {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt
+  // addressId
+}
 
 model Order {
   id             String   @id @default(uuid())
@@ -44,6 +49,10 @@ model Order {
   updatedAt      DateTime @updatedAt
   state          State
   updateAtStatus DateTime
+
+  // recipientId
+  // addressId
+  // deliveryId
 
   @@map("orders")
 }
