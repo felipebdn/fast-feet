@@ -6,7 +6,7 @@ POST {{baseUrl}}/sessions/login
 Content-Type: application/json
 
 {
-  "cpf": "12345678",
+  "cpf": "00000000002",
   "password": "123456"
 }
 
@@ -20,7 +20,7 @@ Authorization: Bearer {{authToken}}
 {
   "addressId": "address-01",
   "name": "John Doe",
-  "cpf": "00000000000",
+  "cpf": "00000000002",
   "password": "123456",
   "city": "city example",
   "code": "12345678",
@@ -30,3 +30,14 @@ Authorization: Bearer {{authToken}}
   "street": "street example",
   "number": ""
 }
+
+###
+
+# @name fetch_orders_from_location
+GET  {{baseUrl}}/orders
+  ?city=city example
+  &state=state example
+  &amount=3
+  &page=1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config'
 import { envSchema } from './env'
 import { AuthModule } from './auth/auth.module'
 import { AuthenticateController } from './controllers/authenticate.controler'
+import { FetchOrdersFromLocationController } from './controllers/fetch-recent-order.controller'
 
 @Module({
   imports: [
@@ -14,7 +15,11 @@ import { AuthenticateController } from './controllers/authenticate.controler'
     }),
     AuthModule,
   ],
-  controllers: [CreateDeliverymanController, AuthenticateController],
+  controllers: [
+    CreateDeliverymanController,
+    AuthenticateController,
+    FetchOrdersFromLocationController,
+  ],
   providers: [PrismaService],
 })
 export class AppModule {}
