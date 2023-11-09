@@ -4,8 +4,10 @@ import {
   Controller,
   HttpCode,
   Post,
+  UsePipes,
 } from '@nestjs/common'
 import { hash } from 'bcryptjs'
+import { ZodValidationPipe } from 'src/pipes/zod-validation-pipe'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { z } from 'zod'
 
@@ -24,6 +26,7 @@ export class CreateDeliverymanController {
 
   @Post()
   @HttpCode(201)
+  @UsePipes(new ZodValidationPipe(createDeliverymanBodySchema))
   async handle(@Body() body: CreateDeliverymanBodyType) {
     const { addressId, name, cpf, password } =
       createDeliverymanBodySchema.parse(body)
@@ -45,7 +48,7 @@ export class CreateDeliverymanController {
         cpf,
         name,
         password_hash: hashPassword,
-        address: addressId,
+        addressId,
       },
     })
   }

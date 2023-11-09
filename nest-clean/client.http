@@ -1,0 +1,24 @@
+@baseUrl = http://localhost:3333
+
+# @name create_deliveryman
+POST {{baseUrl}}/accounts/deliveryman
+Content-Type: application/json
+
+{
+  "addressId": "address-01",
+  "name": "John Doe",
+  "cpf": "00000000000",
+  "password": "123456"
+}
+
+###
+
+# @name authenticate
+POST {{baseUrl}}/sessions/login
+Content-Type: application/json
+
+{
+  "cpf": "12345678",
+  "password": "123456"
+}
+
