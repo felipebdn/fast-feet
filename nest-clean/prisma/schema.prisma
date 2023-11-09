@@ -72,12 +72,12 @@ model Order {
 model Address {
   id         String    @id @default(uuid())
   street     String
-  complement String
+  complement String?
   code       String
   city       String
   state      String
   county     String
-  number     Int
+  number     Int?
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime? @updatedAt
 

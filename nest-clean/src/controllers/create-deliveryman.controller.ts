@@ -14,10 +14,16 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import { z } from 'zod'
 
 const createDeliverymanBodySchema = z.object({
-  addressId: z.string(),
   name: z.string(),
   cpf: z.string(),
   password: z.string(),
+  city: z.string(),
+  code: z.string(),
+  complement: z.string().optional(),
+  county: z.string(),
+  state: z.string(),
+  street: z.string(),
+  number: z.coerce.number().optional(),
 })
 
 type CreateDeliverymanBodyType = z.infer<typeof createDeliverymanBodySchema>
@@ -31,8 +37,18 @@ export class CreateDeliverymanController {
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createDeliverymanBodySchema))
   async handle(@Body() body: CreateDeliverymanBodyType) {
-    const { addressId, name, cpf, password } =
-      createDeliverymanBodySchema.parse(body)
+    const {
+      name,
+      cpf,
+      password,
+      city,
+      code,
+      complement,
+      county,
+      state,
+      street,
+      number,
+    } = createDeliverymanBodySchema.parse(body)
 
     const deliverymanWithSameCpf = await this.prisma.deliveryman.findUnique({
       where: {
@@ -51,7 +67,17 @@ export class CreateDeliverymanController {
         cpf,
         name,
         password_hash: hashPassword,
-        addressId,
+        address: {
+          create: {
+            city,
+            code,
+            complement,
+            county,
+            state,
+            street,
+            number,
+          },
+        },
       },
     })
   }
