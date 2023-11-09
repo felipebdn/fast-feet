@@ -1,8 +1,10 @@
 @baseUrl = http://localhost:3333
+@authToken = {{authenticate.response.body.access_token}}
 
 # @name create_deliveryman
 POST {{baseUrl}}/accounts/deliveryman
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
   "addressId": "address-01",

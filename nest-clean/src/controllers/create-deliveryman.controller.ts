@@ -4,8 +4,10 @@ import {
   Controller,
   HttpCode,
   Post,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
 import { hash } from 'bcryptjs'
 import { ZodValidationPipe } from 'src/pipes/zod-validation-pipe'
 import { PrismaService } from 'src/prisma/prisma.service'
@@ -21,6 +23,7 @@ const createDeliverymanBodySchema = z.object({
 type CreateDeliverymanBodyType = z.infer<typeof createDeliverymanBodySchema>
 
 @Controller('/accounts/deliveryman')
+@UseGuards(AuthGuard('jwt'))
 export class CreateDeliverymanController {
   constructor(private prisma: PrismaService) {}
 
