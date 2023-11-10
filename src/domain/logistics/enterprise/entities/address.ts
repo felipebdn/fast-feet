@@ -4,14 +4,14 @@ import { Optional } from '@/core/types/optional'
 
 export interface AddressProps {
   street: string
-  complement: string
+  complement?: string | null
   code: string
   city: string
   state: string
   county: string
-  number?: number
+  number?: number | null
   createdAt: Date
-  updatedAt?: Date
+  updatedAt?: Date | null
 }
 
 export class Address extends Entity<AddressProps> {
@@ -19,7 +19,7 @@ export class Address extends Entity<AddressProps> {
     return this.props.street
   }
 
-  get complement() {
+  get complement(): string | undefined | null {
     return this.props.complement
   }
 
@@ -39,7 +39,7 @@ export class Address extends Entity<AddressProps> {
     return this.props.county
   }
 
-  get number(): number | undefined {
+  get number(): number | undefined | null {
     return this.props.number
   }
 

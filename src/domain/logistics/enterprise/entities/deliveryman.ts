@@ -8,7 +8,7 @@ export interface DeliverymanProps {
   cpf: string
   hash_password: string
   createdAt: Date
-  updatedAt?: Date
+  updatedAt?: Date | null
 }
 
 export class Deliveryman extends Entity<DeliverymanProps> {
@@ -28,7 +28,7 @@ export class Deliveryman extends Entity<DeliverymanProps> {
     return this.props.hash_password
   }
 
-  get updatedAt(): Date | undefined {
+  get updatedAt(): Date | undefined | null {
     return this.props.updatedAt
   }
 
