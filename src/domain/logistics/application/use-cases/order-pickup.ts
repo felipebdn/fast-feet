@@ -29,7 +29,7 @@ export class OrderPuckupUseCase {
 
     if (
       order.deliveryId?.toString() !== deliverymanId &&
-      order.state === 'collected'
+      order.status === 'collected'
     ) {
       return left(new ObjectAlreadyResponsibleDeliveryman())
     }

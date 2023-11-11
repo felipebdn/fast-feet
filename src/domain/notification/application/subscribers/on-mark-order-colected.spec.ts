@@ -23,7 +23,7 @@ let sendNotificationExecuteSpy: SpyInstance<
   Promise<SendNotificationUseCaseResponse>
 >
 
-describe('On Marl Order Colected', () => {
+describe('On Marl Order Colected Event', () => {
   beforeEach(() => {
     notificationsRepository = new InMemoryNotificationsRepository()
     sendNotificationUseCase = new SendNotificationUseCase(

@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common'
 import { AuthenticateController } from './controllers/authenticate.controler'
 import { CreateDeliverymanController } from './controllers/create-deliveryman.controller'
 import { FetchOrdersFromLocationController } from './controllers/fetch-recent-order.controller'
-import { PrismaService } from '../database/prisma/prisma.service'
 import { DatabaseModule } from '../database/database.module'
+import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cases/create-deliveryman'
 
 @Module({
   imports: [DatabaseModule],
@@ -12,6 +12,6 @@ import { DatabaseModule } from '../database/database.module'
     AuthenticateController,
     FetchOrdersFromLocationController,
   ],
-  providers: [PrismaService],
+  providers: [CreateDeliverymanUseCase],
 })
 export class HttpModule {}

@@ -35,7 +35,7 @@ describe('Order Pickup', () => {
   it('should be not able to collect a delivery another deliveryId', async () => {
     const order = makeOrder({
       deliveryId: new UniqueEntityID('deliveryman-01'),
-      state: 'collected',
+      status: 'collected',
     })
     inMemoryOrderRepository.items.push(order)
 

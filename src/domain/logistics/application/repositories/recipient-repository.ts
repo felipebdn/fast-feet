@@ -1,8 +1,8 @@
 import { Recipient } from '../../enterprise/entities/recipient'
 
-export interface RecipientRepository {
-  findById(id: string): Promise<Recipient | null>
-  create(recipient: Recipient): Promise<void>
-  save(recipient: Recipient): Promise<void>
-  delete(id: string): Promise<void>
+export abstract class RecipientRepository {
+  abstract findById(id: string): Promise<Recipient | null>
+  abstract create(recipient: Recipient): Promise<void>
+  abstract save(recipient: Recipient): Promise<void>
+  abstract delete(id: string): Promise<void>
 }

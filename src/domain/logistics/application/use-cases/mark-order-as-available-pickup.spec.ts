@@ -19,7 +19,7 @@ describe('Mark Order As Available Pickup', () => {
   })
   it('should be able to mark order as available pickup', async () => {
     const order = makeOrder({
-      state: 'returned',
+      status: 'returned',
       deliveryId: new UniqueEntityID(),
     })
     await inMemoryOrderRepository.create(order)
@@ -29,7 +29,7 @@ describe('Mark Order As Available Pickup', () => {
     })
 
     expect(result.isRight()).toBe(true)
-    expect(inMemoryOrderRepository.items[0].state).toEqual('availablePickup')
+    expect(inMemoryOrderRepository.items[0].status).toEqual('availablePickup')
   })
 
   it('should not be able to mark order on hold because it has not been returned', async () => {

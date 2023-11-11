@@ -23,7 +23,7 @@ export class MarkOrderAsReturnedUseCase {
       return left(new ResourceNotFoundError())
     }
 
-    if (order.state !== 'collected' || !order.deliveryId) {
+    if (order.status !== 'collected' || !order.deliveryId) {
       return left(new OrderNotIsColectedError())
     }
 

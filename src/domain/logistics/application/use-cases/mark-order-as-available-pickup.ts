@@ -26,7 +26,7 @@ export class MarkOrderIsAvailablePickupUseCase {
       return left(new ResourceNotFoundError())
     }
 
-    if (order.state !== 'returned') {
+    if (order.status !== 'returned') {
       return left(new OrderNotIsReturnedError())
     }
 

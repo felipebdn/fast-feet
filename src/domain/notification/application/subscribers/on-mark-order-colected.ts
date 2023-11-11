@@ -18,7 +18,7 @@ export class OnMarkOrderColected implements EventHandler {
   private async sendMarkOrderColectedNotification({
     order,
   }: UpdateStateOrderEvent) {
-    switch (order.state) {
+    switch (order.status) {
       case 'collected':
         await this.sendNotificationUseCase.execute({
           recipientId: order.recipientId.toString(),

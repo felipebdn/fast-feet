@@ -1,6 +1,5 @@
 import {
   Body,
-  ConflictException,
   Controller,
   HttpCode,
   Post,
@@ -10,8 +9,8 @@ import {
 import { hash } from 'bcryptjs'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { z } from 'zod'
+import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cases/create-deliveryman'
 
 const createDeliverymanBodySchema = z.object({
   name: z.string(),
@@ -31,54 +30,21 @@ type CreateDeliverymanBodyType = z.infer<typeof createDeliverymanBodySchema>
 @Controller('/accounts/deliveryman')
 @UseGuards(JwtAuthGuard)
 export class CreateDeliverymanController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private createDeliveryman: CreateDeliverymanUseCase) {}
 
   @Post()
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createDeliverymanBodySchema))
   async handle(@Body() body: CreateDeliverymanBodyType) {
-    const {
-      name,
-      cpf,
-      password,
-      city,
-      code,
-      complement,
-      county,
-      state,
-      street,
-      number,
-    } = createDeliverymanBodySchema.parse(body)
-
-    const deliverymanWithSameCpf = await this.prisma.deliveryman.findUnique({
-      where: {
-        cpf,
-      },
-    })
-
-    if (deliverymanWithSameCpf) {
-      throw new ConflictException('Deliveryman with same CPF already existis.')
-    }
+    const { name, cpf, password } = createDeliverymanBodySchema.parse(body)
 
     const hashPassword = await hash(password, 8)
 
-    await this.prisma.deliveryman.create({
-      data: {
-        cpf,
-        name,
-        password_hash: hashPassword,
-        address: {
-          create: {
-            city,
-            code,
-            complement,
-            county,
-            state,
-            street,
-            number,
-          },
-        },
-      },
+    await this.createDeliveryman.execute({
+      addressId: 'teste-1',
+      cpf,
+      hash_password: hashPassword,
+      name,
     })
   }
 }

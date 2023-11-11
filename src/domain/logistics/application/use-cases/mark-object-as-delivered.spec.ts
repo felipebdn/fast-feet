@@ -21,18 +21,18 @@ describe('Create Deliveryman', () => {
   it('should be able to create a new deliveryman', async () => {
     const order = makeOrder({
       deliveryId: new UniqueEntityID(),
-      state: 'collected',
+      status: 'collected',
     })
     await inMemoryOrderRepository.create(order)
 
-    expect(inMemoryOrderRepository.items[0].state).toBe('collected')
+    expect(inMemoryOrderRepository.items[0].status).toBe('collected')
 
     const result = await sut.execute({
       orderId: order.id.toString(),
     })
 
     expect(result.isRight()).toBe(true)
-    expect(inMemoryOrderRepository.items[0].state).toBe('delivered')
+    expect(inMemoryOrderRepository.items[0].status).toBe('delivered')
   })
 
   it('should not be able to mark order as deliverid because order not exists', async () => {
@@ -48,7 +48,7 @@ describe('Create Deliveryman', () => {
     const order = makeOrder()
     await inMemoryOrderRepository.create(order)
 
-    expect(inMemoryOrderRepository.items[0].state).toBe('waiting')
+    expect(inMemoryOrderRepository.items[0].status).toBe('waiting')
 
     const result = await sut.execute({
       orderId: order.id.toString(),

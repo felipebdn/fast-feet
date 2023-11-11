@@ -21,7 +21,7 @@ describe('List Orders Completed By DeliveryId', () => {
       const order = makeOrder(
         {
           deliveryId: new UniqueEntityID('deliveryman-01'),
-          state: i > 1 ? 'delivered' : 'collected',
+          status: i > 1 ? 'delivered' : 'collected',
         },
         new UniqueEntityID(`order-${i}`),
       )

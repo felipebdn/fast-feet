@@ -3,6 +3,7 @@ import { Deliveryman } from '../../enterprise/entities/deliveryman'
 import { DeliverymanRepository } from '../repositories/deliveryman-repository'
 import { ValueAlreadyExistsError } from '../../../../core/errors/errors/value-already-exists-error'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Injectable } from '@nestjs/common'
 
 interface CreateDeliverymanUseCaseRequest {
   addressId: string
@@ -12,6 +13,7 @@ interface CreateDeliverymanUseCaseRequest {
 }
 type CreateDeliverymanUseCaseResponse = Either<ValueAlreadyExistsError, unknown>
 
+@Injectable()
 export class CreateDeliverymanUseCase {
   constructor(private deliverymanRepository: DeliverymanRepository) {}
 

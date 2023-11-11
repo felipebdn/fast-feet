@@ -4,12 +4,20 @@ import { PrismaAddressRepository } from './prisma/repositories/prisma-address-re
 import { PrismaDeliverymanRepository } from './prisma/repositories/prisma-deliveryman-repository'
 import { PrismaOrdersRepository } from './prisma/repositories/prisma-orders-repository'
 import { PrismaRecipientRepository } from './prisma/repositories/prisma-recipient-repository'
+import { AddressRepository } from '@/domain/logistics/application/repositories/address-repository'
+import { DeliverymanRepository } from '@/domain/logistics/application/repositories/deliveryman-repository'
 
 @Module({
   providers: [
     PrismaService,
-    PrismaAddressRepository,
-    PrismaDeliverymanRepository,
+    {
+      provide: AddressRepository,
+      useClass: PrismaAddressRepository,
+    },
+    {
+      provide: DeliverymanRepository,
+      useClass: PrismaDeliverymanRepository,
+    },
     PrismaOrdersRepository,
     PrismaRecipientRepository,
   ],

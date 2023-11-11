@@ -1,9 +1,9 @@
 import { Deliveryman } from '../../enterprise/entities/deliveryman'
 
-export interface DeliverymanRepository {
-  findById(id: string): Promise<Deliveryman | null>
-  findByCPF(cpf: string): Promise<Deliveryman | null>
-  create(deliveryman: Deliveryman): Promise<void>
-  save(deliveryman: Deliveryman): Promise<void>
-  delete(id: string): Promise<void>
+export abstract class DeliverymanRepository {
+  abstract findById(id: string): Promise<Deliveryman | null>
+  abstract findByCPF(cpf: string): Promise<Deliveryman | null>
+  abstract create(deliveryman: Deliveryman): Promise<void>
+  abstract save(deliveryman: Deliveryman): Promise<void>
+  abstract delete(id: string): Promise<void>
 }
