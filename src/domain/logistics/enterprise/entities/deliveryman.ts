@@ -32,6 +32,10 @@ export class Deliveryman extends Entity<DeliverymanProps> {
     return this.props.updatedAt
   }
 
+  get createdAt(): Date {
+    return this.props.createdAt
+  }
+
   set addressId(id: UniqueEntityID) {
     this.props.addressId = id
   }

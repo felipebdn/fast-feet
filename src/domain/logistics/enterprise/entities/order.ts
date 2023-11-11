@@ -6,15 +6,15 @@ import { UpdateStateOrderEvent } from '../events/mark-order-colected-event'
 export interface OrderProps {
   recipientId: UniqueEntityID
   addressId: UniqueEntityID
-  deliveryId?: UniqueEntityID
+  deliveryId?: UniqueEntityID | null
   code: string
   rotule: string
   weight: number
   bulk: number
   createdAt: Date
-  updatedAt?: Date
-  state: 'waiting' | 'collected' | 'delivered' | 'returned' | 'availablePickup'
-  updateAtStatus?: Date
+  updatedAt?: Date | null
+  status: 'waiting' | 'collected' | 'delivered' | 'returned' | 'availablePickup'
+  updateAtStatus?: Date | null
 }
 
 export class Order extends Entity<OrderProps> {
@@ -27,7 +27,7 @@ export class Order extends Entity<OrderProps> {
     return this.props.addressId
   }
 
-  get deliveryId(): UniqueEntityID | undefined {
+  get deliveryId(): UniqueEntityID | undefined | null {
     return this.props.deliveryId
   }
 
@@ -51,12 +51,12 @@ export class Order extends Entity<OrderProps> {
     return this.props.createdAt
   }
 
-  get updatedAt(): Date | undefined {
+  get updatedAt(): Date | undefined | null {
     return this.props.updatedAt
   }
 
-  get state() {
-    return this.props.state
+  get status() {
+    return this.props.status
   }
 
   get updateAtStatus() {
@@ -110,33 +110,36 @@ export class Order extends Entity<OrderProps> {
   // METHODS
 
   public isCollected(deliveryId: UniqueEntityID) {
-    if (this.props.state === 'waiting' && !this.props.deliveryId) {
+    if (this.props.status === 'waiting' && !this.props.deliveryId) {
       this.props.deliveryId = deliveryId
-      this.props.state = 'collected'
+      this.props.status = 'collected'
       this.addDomainEvent(new UpdateStateOrderEvent(this))
       this.updateDateState()
     }
   }
 
   public isDelivered() {
-    if (this.props.state === 'collected') {
-      this.props.state = 'delivered'
+    if (this.props.status === 'collected') {
+      this.props.status = 'delivered'
       this.updateDateState()
       this.addDomainEvent(new UpdateStateOrderEvent(this))
     }
   }
 
   public isReturned() {
-    if (this.props.state !== 'delivered' && this.props.state === 'collected') {
-      this.props.state = 'returned'
+    if (
+      this.props.status !== 'delivered' &&
+      this.props.status === 'collected'
+    ) {
+      this.props.status = 'returned'
       this.updateDateState()
       this.addDomainEvent(new UpdateStateOrderEvent(this))
     }
   }
 
   public availablePickup() {
-    if (this.props.state !== 'delivered' && this.props.state === 'returned') {
-      this.props.state = 'availablePickup'
+    if (this.props.status !== 'delivered' && this.props.status === 'returned') {
+      this.props.status = 'availablePickup'
       this.updateDateState()
       this.addDomainEvent(new UpdateStateOrderEvent(this))
     }
@@ -151,14 +154,14 @@ export class Order extends Entity<OrderProps> {
   }
 
   static create(
-    props: Optional<OrderProps, 'createdAt' | 'state'>,
+    props: Optional<OrderProps, 'createdAt' | 'status'>,
     id?: UniqueEntityID,
   ) {
     const order = new Order(
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
-        state: props.state ?? 'waiting',
+        status: props.status ?? 'waiting',
       },
       id,
     )

@@ -7,6 +7,42 @@ import { PrismaAddressMapper } from '../mappers/prisma-address-mapper'
 @Injectable()
 export class PrismaAddressRepository implements AddressRepository {
   constructor(private prisma: PrismaService) {}
+  async create(address: Address) {
+    await this.prisma.address.create({
+      data: PrismaAddressMapper.toPrisma(address),
+    })
+  }
+
+  async findManyByCityAndState(
+    city: string,
+    state: string,
+  ): Promise<Address[]> {
+    const locals = await this.prisma.address.findMany({
+      where: {
+        city,
+        state,
+      },
+    })
+    return locals.map(PrismaAddressMapper.toDomain)
+  }
+
+  async save(address: Address): Promise<void> {
+    const data = PrismaAddressMapper.toPrisma(address)
+    await this.prisma.address.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.address.delete({
+      where: {
+        id,
+      },
+    })
+  }
 
   async findById(id: string) {
     const address = await this.prisma.address.findUnique({
@@ -18,21 +54,5 @@ export class PrismaAddressRepository implements AddressRepository {
       return null
     }
     return PrismaAddressMapper.toDomain(address)
-  }
-
-  async create(address: Address) {
-    throw new Error('Method not implemented.')
-  }
-
-  async findManyByCityAndState(city: string, state: string) {
-    throw new Error('Method not implemented.')
-  }
-
-  async save(address: Address) {
-    throw new Error('Method not implemented.')
-  }
-
-  async delete(id: string) {
-    throw new Error('Method not implemented.')
   }
 }

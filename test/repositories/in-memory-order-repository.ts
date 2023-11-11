@@ -22,7 +22,7 @@ export class InMemoryOrderRepository implements OrderRespository {
     const orders = this.items
       .filter(
         (item) =>
-          item.state === 'waiting' &&
+          item.status === 'waiting' &&
           addressIds.includes(item.addressId.toString()),
       )
       .sort((a, b) => b.createdAt.getDate() - a.createdAt.getDate())
@@ -52,7 +52,7 @@ export class InMemoryOrderRepository implements OrderRespository {
       .filter(
         (item) =>
           item.deliveryId?.toString() === deliveryId &&
-          item.state === 'delivered',
+          item.status === 'delivered',
       )
       .sort((a, b) => b.createdAt.getDate() - a.createdAt.getDate())
 
@@ -64,7 +64,7 @@ export class InMemoryOrderRepository implements OrderRespository {
       .filter(
         (item) =>
           item.deliveryId?.toString() === deliveryId &&
-          item.state === 'collected',
+          item.status === 'collected',
       )
       .sort((a, b) => b.createdAt.getDate() - a.createdAt.getDate())
 

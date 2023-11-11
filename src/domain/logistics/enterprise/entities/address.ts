@@ -43,6 +43,14 @@ export class Address extends Entity<AddressProps> {
     return this.props.number
   }
 
+  get createdAt(): Date {
+    return this.props.createdAt
+  }
+
+  get updatedAt(): Date | null | undefined {
+    return this.props.updatedAt
+  }
+
   set street(street: string) {
     this.props.street = street
   }

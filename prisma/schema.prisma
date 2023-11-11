@@ -57,14 +57,14 @@ model Order {
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime? @updatedAt
   status         Status
-  updateAtStatus DateTime
+  updateAtStatus DateTime?
 
-  recipient     Recipient   @relation(fields: [recipientId], references: [id])
-  recipientId   String      @unique @map("recipient_id")
-  address       Address     @relation(fields: [addressId], references: [id])
-  addressId     String      @unique @map("address_id")
-  delivery      Deliveryman @relation(fields: [deliverymanId], references: [id])
-  deliverymanId String      @unique @map("delivery_id")
+  recipient     Recipient    @relation(fields: [recipientId], references: [id])
+  recipientId   String       @unique @map("recipient_id")
+  address       Address      @relation(fields: [addressId], references: [id])
+  addressId     String       @unique @map("address_id")
+  delivery      Deliveryman? @relation(fields: [deliverymanId], references: [id])
+  deliverymanId String?      @unique @map("delivery_id")
 
   @@map("orders")
 }

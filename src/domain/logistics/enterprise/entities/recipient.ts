@@ -4,9 +4,9 @@ import { Optional } from '@/core/types/optional'
 
 export interface RecipientProps {
   name: string
-  addressId?: UniqueEntityID
+  addressId: UniqueEntityID
   createdAt: Date
-  updatedAt?: Date
+  updatedAt?: Date | null
 }
 
 export class Recipient extends Entity<RecipientProps> {
@@ -14,12 +14,16 @@ export class Recipient extends Entity<RecipientProps> {
     return this.props.name
   }
 
-  get addressId(): UniqueEntityID | undefined {
+  get addressId(): UniqueEntityID {
     return this.props.addressId
   }
 
   get updatedAt() {
     return this.props.updatedAt
+  }
+
+  get createdAt() {
+    return this.props.createdAt
   }
 
   set name(name: string) {

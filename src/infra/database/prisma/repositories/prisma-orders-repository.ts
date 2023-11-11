@@ -1,41 +1,100 @@
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { OrderRespository } from '@/domain/logistics/application/repositories/orders-repository'
 import { Order } from '@/domain/logistics/enterprise/entities/order'
+import { PrismaOrderMapper } from '../mappers/prisma-order-mapper'
+import { PrismaService } from '../prisma.service'
 
 export class PrismaOrdersRepository implements OrderRespository {
-  create(order: Order): Promise<void> {
-    throw new Error('Method not implemented.')
+  constructor(private prisma: PrismaService) {}
+
+  async create(order: Order) {
+    const data = PrismaOrderMapper.toPrisma(order)
+    await this.prisma.order.create({
+      data,
+    })
   }
 
-  save(order: Order): Promise<void> {
-    throw new Error('Method not implemented.')
+  async save(order: Order) {
+    const data = PrismaOrderMapper.toPrisma(order)
+    await this.prisma.order.update({
+      data,
+      where: {
+        id: data.id,
+      },
+    })
   }
 
-  findManyByCityAndState(
+  async findManyByCityAndState(
     city: string,
     state: string,
-    props: PaginationParams,
+    { amount, page }: PaginationParams,
   ): Promise<Order[]> {
-    throw new Error('Method not implemented.')
+    const orders = await this.prisma.order.findMany({
+      where: {
+        address: {
+          city,
+          state,
+        },
+      },
+      take: amount,
+      skip: (page - 1) * amount,
+      orderBy: {
+        createdAt: 'asc',
+      },
+    })
+
+    return orders.map(PrismaOrderMapper.toDomain)
   }
 
-  findManyPendingById(deliveryId: string): Promise<Order[]> {
-    throw new Error('Method not implemented.')
+  async findManyPendingById(deliveryId: string): Promise<Order[]> {
+    const orders = await this.prisma.order.findMany({
+      where: {
+        deliverymanId: deliveryId,
+        status: 'collected',
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+    return orders.map(PrismaOrderMapper.toDomain)
   }
 
-  findManyCompletedById(deliveryId: string): Promise<Order[]> {
-    throw new Error('Method not implemented.')
+  async findManyCompletedById(deliveryId: string): Promise<Order[]> {
+    const orders = await this.prisma.order.findMany({
+      where: {
+        deliverymanId: deliveryId,
+        status: 'delivered',
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+    return orders.map(PrismaOrderMapper.toDomain)
   }
 
-  findById(id: string): Promise<Order | null> {
-    throw new Error('Method not implemented.')
+  async findById(id: string): Promise<Order | null> {
+    const order = await this.prisma.order.findUnique({
+      where: { id },
+    })
+    if (!order) {
+      return null
+    }
+    return PrismaOrderMapper.toDomain(order)
   }
 
-  findByCode(code: string): Promise<Order | null> {
-    throw new Error('Method not implemented.')
+  async findByCode(code: string): Promise<Order | null> {
+    const order = await this.prisma.order.findUnique({
+      where: { code },
+    })
+    if (!order) {
+      return null
+    }
+    return PrismaOrderMapper.toDomain(order)
   }
 
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async delete(id: string): Promise<void> {
+    await this.prisma.order.delete({
+      where: { id },
+    })
   }
 }
