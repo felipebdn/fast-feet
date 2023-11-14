@@ -3,6 +3,7 @@
   "rules": {
     "no-useless-constructor":"off",
     "@typescript-eslint/adjacent-overload-signatures": "off",
-    "no-new":"off"
+    "no-new":"off",
+    "camelcase":"off"
   }
 }
