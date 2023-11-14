@@ -8,8 +8,9 @@ import {
 } from '@nestjs/common'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { z } from 'zod'
+import { FetchOrderSameCityUseCase } from '@/domain/logistics/application/use-cases/fetch-orders-same-city'
+import { HTTPOrderPresenter } from '../presenters/http-order-presenter'
 
 const fetchOrdersQuerySchema = z.object({
   city: z.string(),
@@ -23,27 +24,24 @@ type FetchOrdersQueryType = z.infer<typeof fetchOrdersQuerySchema>
 @Controller('/orders')
 @UseGuards(JwtAuthGuard)
 export class FetchOrdersFromLocationController {
-  constructor(private prisma: PrismaService) {}
+  constructor(private useCase: FetchOrderSameCityUseCase) {}
 
   @Get()
-  @HttpCode(201)
+  @HttpCode(200)
   @UsePipes(new ZodValidationPipe(fetchOrdersQuerySchema))
   async handle(@Query() query: FetchOrdersQueryType) {
     const { amount, city, page, state } = fetchOrdersQuerySchema.parse(query)
 
-    const orders = await this.prisma.order.findMany({
-      where: {
-        address: {
-          city,
-          state,
-        },
-      },
-      take: amount,
-      skip: (page - 1) * amount,
-    })
+    const result = await this.useCase.execute({ amount, city, page, state })
+
+    if (result.isLeft()) {
+      throw new Error()
+    }
+
+    const orders = result.value.orders
 
     return {
-      orders,
+      orders: orders.map(HTTPOrderPresenter.toHTTP),
     }
   }
 }

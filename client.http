@@ -6,7 +6,7 @@ POST {{baseUrl}}/sessions/login
 Content-Type: application/json
 
 {
-  "cpf": "00000000002",
+  "cpf": "04547808260",
   "password": "123456"
 }
 
@@ -35,8 +35,8 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_orders_from_location
 GET  {{baseUrl}}/orders
-  ?city=city example
-  &state=state example
+  ?city=redenção
+  &state=pará
   &amount=3
   &page=1
 Content-Type: application/json

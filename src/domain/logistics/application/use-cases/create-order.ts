@@ -49,11 +49,14 @@ export class CreateOrderUseCase {
       return left(new ValueAlreadyExistsError('code'))
     }
 
-    const createRecipient = Recipient.create(recipient)
-    await this.recipientRepository.create(createRecipient)
-
     const createAddress = Address.create(address)
     await this.addressRepository.create(createAddress)
+
+    const createRecipient = Recipient.create({
+      addressId: createAddress.id,
+      name: recipient.name,
+    })
+    await this.recipientRepository.create(createRecipient)
 
     const createOrder = Order.create({
       code: order.code,

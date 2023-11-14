@@ -12,6 +12,7 @@ export function makeRecipient(
   const recipient = Recipient.create(
     {
       name: faker.person.fullName(),
+      addressId: new UniqueEntityID(),
       ...override,
     },
     id,

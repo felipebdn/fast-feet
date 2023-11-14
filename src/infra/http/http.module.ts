@@ -4,6 +4,7 @@ import { CreateDeliverymanController } from './controllers/create-deliveryman.co
 import { FetchOrdersFromLocationController } from './controllers/fetch-recent-order.controller'
 import { DatabaseModule } from '../database/database.module'
 import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cases/create-deliveryman'
+import { FetchOrderSameCityUseCase } from '@/domain/logistics/application/use-cases/fetch-orders-same-city'
 
 @Module({
   imports: [DatabaseModule],
@@ -12,6 +13,6 @@ import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cas
     AuthenticateController,
     FetchOrdersFromLocationController,
   ],
-  providers: [CreateDeliverymanUseCase],
+  providers: [CreateDeliverymanUseCase, FetchOrderSameCityUseCase],
 })
 export class HttpModule {}

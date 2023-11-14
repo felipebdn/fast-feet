@@ -3,7 +3,9 @@ import { OrderRespository } from '@/domain/logistics/application/repositories/or
 import { Order } from '@/domain/logistics/enterprise/entities/order'
 import { PrismaOrderMapper } from '../mappers/prisma-order-mapper'
 import { PrismaService } from '../prisma.service'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class PrismaOrdersRepository implements OrderRespository {
   constructor(private prisma: PrismaService) {}
 

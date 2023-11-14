@@ -2,7 +2,9 @@ import { DeliverymanRepository } from '@/domain/logistics/application/repositori
 import { Deliveryman } from '@/domain/logistics/enterprise/entities/deliveryman'
 import { PrismaService } from '../prisma.service'
 import { PrismaDeliverymanMapper } from '../mappers/prisma-deliveryman-mapper'
+import { Injectable } from '@nestjs/common'
 
+@Injectable()
 export class PrismaDeliverymanRepository implements DeliverymanRepository {
   constructor(private prisma: PrismaService) {}
 
