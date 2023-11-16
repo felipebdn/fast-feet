@@ -8,7 +8,7 @@ datasource db {
 }
 
 enum Role {
-  USER
+  MEMBER
   ADMIN
 }
 
@@ -25,6 +25,7 @@ model Deliveryman {
   name          String
   cpf           String    @unique
   password_hash String
+  role          Role
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime? @updatedAt
   Order         Order[]

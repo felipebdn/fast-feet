@@ -26,7 +26,7 @@ const createDeliverymanBodySchema = z.object({
 
 type CreateDeliverymanBodyType = z.infer<typeof createDeliverymanBodySchema>
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('/accounts/deliveryman')
 export class CreateDeliverymanController {
   constructor(private createDeliveryman: CreateDeliverymanUseCase) {}

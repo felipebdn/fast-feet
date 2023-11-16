@@ -8,6 +8,7 @@ export interface DeliverymanProps {
   hash_password: string
   createdAt: Date
   updatedAt?: Date | null
+  role: 'MEMBER' | 'ADMIN'
 }
 
 export class Deliveryman extends Entity<DeliverymanProps> {
@@ -31,12 +32,20 @@ export class Deliveryman extends Entity<DeliverymanProps> {
     return this.props.createdAt
   }
 
+  get role() {
+    return this.props.role
+  }
+
   set name(name: string) {
     this.props.name = name
   }
 
   set cpf(cpf: string) {
     this.props.cpf = cpf
+  }
+
+  set role(role: 'MEMBER' | 'ADMIN') {
+    this.props.role = role
   }
 
   set hash_password(hashPassword: string) {
@@ -52,13 +61,14 @@ export class Deliveryman extends Entity<DeliverymanProps> {
   }
 
   static create(
-    props: Optional<DeliverymanProps, 'createdAt'>,
+    props: Optional<DeliverymanProps, 'createdAt' | 'role'>,
     id?: UniqueEntityID,
   ) {
     const deliveryman = new Deliveryman(
       {
         ...props,
         createdAt: props.createdAt ?? new Date(),
+        role: props.role ?? 'MEMBER',
       },
       id,
     )

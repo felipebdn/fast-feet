@@ -9,6 +9,7 @@ interface CreateDeliverymanUseCaseRequest {
   name: string
   cpf: string
   password: string
+  role?: 'MEMBER' | 'ADMIN'
 }
 type CreateDeliverymanUseCaseResponse = Either<ValueAlreadyExistsError, unknown>
 
@@ -23,6 +24,7 @@ export class CreateDeliverymanUseCase {
     cpf,
     password,
     name,
+    role,
   }: CreateDeliverymanUseCaseRequest): Promise<CreateDeliverymanUseCaseResponse> {
     const isCPFAlreadExists = await this.deliverymanRepository.findByCPF(cpf)
 
@@ -36,6 +38,7 @@ export class CreateDeliverymanUseCase {
       cpf,
       hash_password,
       name,
+      role,
     })
 
     await this.deliverymanRepository.create(deliveryman)

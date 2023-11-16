@@ -7,6 +7,7 @@ interface EditDeliverymanUseCaseRequest {
   name: string
   cpf: string
   hash_password: string
+  role: 'MEMBER' | 'ADMIN'
 }
 
 type EditDeliverymanUseCaseResponse = Either<ResourceNotFoundError, unknown>
@@ -17,8 +18,9 @@ export class EditDeliverymanUseCase {
   async execute({
     deliverymanId,
     cpf,
-    hash_password: hashPassword,
+    hash_password,
     name,
+    role,
   }: EditDeliverymanUseCaseRequest): Promise<EditDeliverymanUseCaseResponse> {
     const deliveryman = await this.deliverymanRepository.findById(deliverymanId)
 
@@ -28,7 +30,8 @@ export class EditDeliverymanUseCase {
 
     deliveryman.name = name
     deliveryman.cpf = cpf
-    deliveryman.hash_password = hashPassword
+    deliveryman.hash_password = hash_password
+    deliveryman.role = role
     deliveryman.touch()
 
     await this.deliverymanRepository.save(deliveryman)

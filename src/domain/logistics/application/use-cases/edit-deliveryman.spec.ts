@@ -25,6 +25,7 @@ describe('Edit Deliveryman', () => {
 
     const result = await sut.execute({
       deliverymanId: 'deliveryman-01',
+      role: 'ADMIN',
       cpf: '111.111.111-11',
       hash_password: '654321',
       name: 'example name',
@@ -34,6 +35,7 @@ describe('Edit Deliveryman', () => {
     expect(inMemoryDeliverymanRepository.items[0]).toEqual(
       expect.objectContaining({
         id: new UniqueEntityID('deliveryman-01'),
+        role: 'ADMIN',
         cpf: '111.111.111-11',
         hash_password: '654321',
         name: 'example name',
