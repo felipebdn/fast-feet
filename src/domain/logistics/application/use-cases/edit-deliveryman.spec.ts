@@ -14,7 +14,6 @@ describe('Edit Deliveryman', () => {
   it('should be able to edit deliveryman', async () => {
     const deliveryman = makeDeliveryman(
       {
-        addressId: new UniqueEntityID('address-01'),
         cpf: '000.000.000-00',
         name: 'name example',
         hash_password: '123456',
@@ -25,7 +24,6 @@ describe('Edit Deliveryman', () => {
     await inMemoryDeliverymanRepository.create(deliveryman)
 
     const result = await sut.execute({
-      addressId: 'address-01',
       deliverymanId: 'deliveryman-01',
       cpf: '111.111.111-11',
       hash_password: '654321',

@@ -18,7 +18,6 @@ describe('Create Deliveryman', () => {
   })
   it('should be able to create a new deliveryman', async () => {
     const result = await sut.execute({
-      addressId: 'address-01',
       cpf: '000.000.000-41',
       password: '123456',
       name: 'deliveryman name',
@@ -27,9 +26,6 @@ describe('Create Deliveryman', () => {
     expect(result.isRight()).toBe(true)
     expect(inMemoryDeliverymanRepository.items[0].id).toBeTruthy()
     expect(inMemoryDeliverymanRepository.items[0].cpf).toBe('000.000.000-41')
-    expect(inMemoryDeliverymanRepository.items[0].addressId).toEqual(
-      new UniqueEntityID('address-01'),
-    )
     expect(inMemoryDeliverymanRepository.items[0].hash_password).toBe(
       '123456-hashed',
     )

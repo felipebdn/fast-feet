@@ -27,10 +27,7 @@ model Deliveryman {
   password_hash String
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime? @updatedAt
-
-  address   Address @relation(fields: [addressId], references: [id])
-  addressId String  @unique @map("address_id")
-  Order     Order[]
+  Order         Order[]
 
   @@map("delivery_mens")
 }
@@ -81,9 +78,8 @@ model Address {
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime? @updatedAt
 
-  deliveryman Deliveryman?
-  recipient   Recipient?
-  order       Order[]
+  recipient Recipient?
+  order     Order[]
 
   @@map("addresses")
 }

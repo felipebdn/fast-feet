@@ -6,6 +6,7 @@ import { Recipient } from '../../enterprise/entities/recipient'
 import { Address } from '../../enterprise/entities/address'
 import { Either, left, right } from '@/core/either'
 import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
+import { Injectable } from '@nestjs/common'
 
 interface CreateOrderUseCaseRequest {
   order: {
@@ -29,6 +30,7 @@ interface CreateOrderUseCaseRequest {
 }
 type CreateOrderUseCaseResponse = Either<ValueAlreadyExistsError, unknown>
 
+@Injectable()
 export class CreateOrderUseCase {
   constructor(
     private orderRespository: OrderRespository,

@@ -20,10 +20,24 @@ describe('Create delivery man (E2E)', () => {
   })
 
   test('[POST] /accounts/deliveryman', async () => {
+    await prisma.deliveryman
+
     const response = await request(app.getHttpServer())
       .post('/accounts/deliveryman')
-      .send({})
+      .send({
+        name: 'Jon Doe',
+        cpf: '12345678',
+        password: '123456',
+      })
 
-    expect(response.statusCode).toBe(401)
+    expect(response.statusCode).toBe(201)
+
+    const userOnDatabase = await prisma.deliveryman.findUnique({
+      where: {
+        cpf: '12345678',
+      },
+    })
+
+    expect(userOnDatabase).toBeTruthy()
   })
 })

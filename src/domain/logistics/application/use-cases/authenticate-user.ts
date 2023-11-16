@@ -3,13 +3,20 @@ import { DeliverymanRepository } from '../repositories/deliveryman-repository'
 import { HashCompare } from '../cryptography/hash-compare'
 import { Encrypter } from '../cryptography/encrypter'
 import { WrongCredentialsError } from './errors/wrong-credentials-error'
+import { Injectable } from '@nestjs/common'
 
 interface AuthenticateUserUseCaseRequest {
   cpf: string
   password: string
 }
-type AuthenticateUserUseCaseResponse = Either<WrongCredentialsError, unknown>
+type AuthenticateUserUseCaseResponse = Either<
+  WrongCredentialsError,
+  {
+    accessToken: string
+  }
+>
 
+@Injectable()
 export class AuthenticateUserUseCase {
   constructor(
     private deliveryRepository: DeliverymanRepository,

@@ -6,6 +6,7 @@ import { DatabaseModule } from '../database/database.module'
 import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cases/create-deliveryman'
 import { FetchOrderSameCityUseCase } from '@/domain/logistics/application/use-cases/fetch-orders-same-city'
 import { CryptographyModule } from '../cryptography/cryptography.module'
+import { AuthenticateUserUseCase } from '@/domain/logistics/application/use-cases/authenticate-user'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -14,6 +15,10 @@ import { CryptographyModule } from '../cryptography/cryptography.module'
     AuthenticateController,
     FetchOrdersFromLocationController,
   ],
-  providers: [CreateDeliverymanUseCase, FetchOrderSameCityUseCase],
+  providers: [
+    CreateDeliverymanUseCase,
+    FetchOrderSameCityUseCase,
+    AuthenticateUserUseCase,
+  ],
 })
 export class HttpModule {}

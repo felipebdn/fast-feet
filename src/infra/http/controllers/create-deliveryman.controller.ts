@@ -6,7 +6,6 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common'
-import { hash } from 'bcryptjs'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
@@ -27,8 +26,8 @@ const createDeliverymanBodySchema = z.object({
 
 type CreateDeliverymanBodyType = z.infer<typeof createDeliverymanBodySchema>
 
+// @UseGuards(JwtAuthGuard)
 @Controller('/accounts/deliveryman')
-@UseGuards(JwtAuthGuard)
 export class CreateDeliverymanController {
   constructor(private createDeliveryman: CreateDeliverymanUseCase) {}
 
@@ -38,13 +37,14 @@ export class CreateDeliverymanController {
   async handle(@Body() body: CreateDeliverymanBodyType) {
     const { name, cpf, password } = createDeliverymanBodySchema.parse(body)
 
-    const hashPassword = await hash(password, 8)
-
-    await this.createDeliveryman.execute({
-      addressId: 'teste-1',
+    const result = await this.createDeliveryman.execute({
       cpf,
-      hash_password: hashPassword,
+      password,
       name,
     })
+
+    if (result.isLeft()) {
+      throw new Error()
+    }
   }
 }

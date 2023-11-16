@@ -3,7 +3,6 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 
 export interface DeliverymanProps {
-  addressId: UniqueEntityID
   name: string
   cpf: string
   hash_password: string
@@ -12,10 +11,6 @@ export interface DeliverymanProps {
 }
 
 export class Deliveryman extends Entity<DeliverymanProps> {
-  get addressId() {
-    return this.props.addressId
-  }
-
   get name() {
     return this.props.name
   }
@@ -34,10 +29,6 @@ export class Deliveryman extends Entity<DeliverymanProps> {
 
   get createdAt(): Date {
     return this.props.createdAt
-  }
-
-  set addressId(id: UniqueEntityID) {
-    this.props.addressId = id
   }
 
   set name(name: string) {

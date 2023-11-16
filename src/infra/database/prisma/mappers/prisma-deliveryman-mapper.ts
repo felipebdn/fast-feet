@@ -6,7 +6,6 @@ export class PrismaDeliverymanMapper {
   static toDomain(raw: PrismaDeliveryman) {
     return Deliveryman.create(
       {
-        addressId: new UniqueEntityID(raw.addressId),
         cpf: raw.cpf,
         hash_password: raw.password_hash,
         name: raw.name,
@@ -22,7 +21,6 @@ export class PrismaDeliverymanMapper {
   ): Prisma.DeliverymanUncheckedCreateInput {
     return {
       id: deliveryman.id.toString(),
-      addressId: deliveryman.addressId.toString(),
       cpf: deliveryman.cpf,
       name: deliveryman.name,
       password_hash: deliveryman.hash_password,

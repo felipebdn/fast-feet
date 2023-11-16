@@ -2,6 +2,7 @@ import { Either, left, right } from '@/core/either'
 import { DeliverymanRepository } from '../repositories/deliveryman-repository'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { PasswordAlreadyUsedError } from './errors/password-already-used-error'
+import { Injectable } from '@nestjs/common'
 
 interface ChangePasswordUseCaseRequest {
   deliverymanId: string
@@ -12,6 +13,7 @@ type ChangePasswordUseCaseResponse = Either<
   unknown
 >
 
+@Injectable()
 export class ChangePasswordUseCase {
   constructor(private deliverymanRepository: DeliverymanRepository) {}
 

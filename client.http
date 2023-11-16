@@ -6,7 +6,7 @@ POST {{baseUrl}}/sessions/login
 Content-Type: application/json
 
 {
-  "cpf": "04547808260",
+  "cpf": "00000000001",
   "password": "123456"
 }
 
@@ -18,7 +18,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "addressId": "address-01",
+  "addressId": "d6319d6f-90b7-4374-b52a-245c43b8456a",
   "name": "John Doe",
   "cpf": "00000000002",
   "password": "123456",
