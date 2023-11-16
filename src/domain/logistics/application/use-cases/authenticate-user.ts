@@ -1,19 +1,19 @@
-import { Either, right } from '@/core/either'
-import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
+import { Either, left, right } from '@/core/either'
 import { DeliverymanRepository } from '../repositories/deliveryman-repository'
 import { HashCompare } from '../cryptography/hash-compare'
 import { Encrypter } from '../cryptography/encrypter'
+import { WrongCredentialsError } from './errors/wrong-credentials-error'
 
 interface AuthenticateUserUseCaseRequest {
   cpf: string
   password: string
 }
-type AuthenticateUserUseCaseResponse = Either<ValueAlreadyExistsError, unknown>
+type AuthenticateUserUseCaseResponse = Either<WrongCredentialsError, unknown>
 
 export class AuthenticateUserUseCase {
   constructor(
     private deliveryRepository: DeliverymanRepository,
-    private compare: HashCompare,
+    private hashCompare: HashCompare,
     private encrypter: Encrypter,
   ) {}
 
@@ -21,8 +21,25 @@ export class AuthenticateUserUseCase {
     cpf,
     password,
   }: AuthenticateUserUseCaseRequest): Promise<AuthenticateUserUseCaseResponse> {
-    const isCPFAlreadExists = await this.deliveryRepository.findByCPF(cpf)
+    const deliveryman = await this.deliveryRepository.findByCPF(cpf)
 
-    return right({ isCPFAlreadExists, password })
+    if (!deliveryman) {
+      return left(new WrongCredentialsError())
+    }
+
+    const isPasswordValid = await this.hashCompare.compare(
+      password,
+      deliveryman.hash_password,
+    )
+
+    if (!isPasswordValid) {
+      return left(new WrongCredentialsError())
+    }
+
+    const accessToken = await this.encrypter.encrypt({
+      sub: deliveryman.id.toString(),
+    })
+
+    return right({ accessToken })
   }
 }

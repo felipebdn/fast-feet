@@ -5,9 +5,10 @@ import { FetchOrdersFromLocationController } from './controllers/fetch-recent-or
 import { DatabaseModule } from '../database/database.module'
 import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cases/create-deliveryman'
 import { FetchOrderSameCityUseCase } from '@/domain/logistics/application/use-cases/fetch-orders-same-city'
+import { CryptographyModule } from '../cryptography/cryptography.module'
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, CryptographyModule],
   controllers: [
     CreateDeliverymanController,
     AuthenticateController,
