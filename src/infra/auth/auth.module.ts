@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { JwtStrategy } from './jwt.strategy'
 import { Env } from '../env'
+import { RolesGlobalGuard } from './roles-global.guard'
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { Env } from '../env'
         return {
           signOptions: {
             algorithm: 'RS256',
+            expiresIn: '7d',
           },
           privateKey: Buffer.from(privateKey, 'base64'),
           publicKey: Buffer.from(publicKey, 'base64'),
@@ -27,4 +29,8 @@ import { Env } from '../env'
   ],
   providers: [JwtStrategy],
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RolesGlobalGuard).exclude('/sessions/login').forRoutes('*')
+  }
+}

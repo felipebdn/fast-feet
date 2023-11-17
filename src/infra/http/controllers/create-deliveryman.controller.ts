@@ -6,10 +6,10 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common'
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cases/create-deliveryman'
+import { AdminGuard } from '@/infra/auth/admin.guard'
 
 const createDeliverymanBodySchema = z.object({
   name: z.string(),
@@ -26,7 +26,6 @@ const createDeliverymanBodySchema = z.object({
 
 type CreateDeliverymanBodyType = z.infer<typeof createDeliverymanBodySchema>
 
-@UseGuards(JwtAuthGuard)
 @Controller('/accounts/deliveryman')
 export class CreateDeliverymanController {
   constructor(private createDeliveryman: CreateDeliverymanUseCase) {}
@@ -34,6 +33,7 @@ export class CreateDeliverymanController {
   @Post()
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createDeliverymanBodySchema))
+  @UseGuards(AdminGuard)
   async handle(@Body() body: CreateDeliverymanBodyType) {
     const { name, cpf, password } = createDeliverymanBodySchema.parse(body)
 
