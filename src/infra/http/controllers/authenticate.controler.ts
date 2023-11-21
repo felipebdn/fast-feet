@@ -6,6 +6,7 @@ import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 const authenticateBodySchema = z.object({
   cpf: z.string(),
   password: z.string(),
+  isAdmin: z.boolean(),
 })
 
 type AuthenticateBodyType = z.infer<typeof authenticateBodySchema>
@@ -17,9 +18,9 @@ export class AuthenticateController {
   @Post()
   @UsePipes(new ZodValidationPipe(authenticateBodySchema))
   async handle(@Body() body: AuthenticateBodyType) {
-    const { cpf, password } = authenticateBodySchema.parse(body)
+    const { cpf, password, isAdmin } = authenticateBodySchema.parse(body)
 
-    const result = await this.authenticate.execute({ cpf, password })
+    const result = await this.authenticate.execute({ cpf, password, isAdmin })
 
     if (result.isLeft()) {
       throw new Error()

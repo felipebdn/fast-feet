@@ -3,11 +3,13 @@ import { makeDeliveryman } from 'test/factories/make-deliveryman'
 import { FakeHasher } from 'test/cryptography/fake-hasher'
 import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
 import { AuthenticateUserUseCase } from './authenticate-user'
+import { JwtService } from '@nestjs/jwt'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository
 let fakeHash: FakeHasher
 let fakeEncryter: FakeEncrypter
 let sut: AuthenticateUserUseCase
+let jwtService: JwtService
 
 describe('Authenticate User', () => {
   beforeEach(() => {
@@ -24,6 +26,7 @@ describe('Authenticate User', () => {
     const deliveryman = makeDeliveryman({
       cpf: '12345678',
       hash_password: await fakeHash.hash('123456'),
+      role: 'MEMBER',
     })
 
     await inMemoryDeliverymanRepository.items.push(deliveryman)
@@ -32,6 +35,12 @@ describe('Authenticate User', () => {
       cpf: '12345678',
       password: '123456',
     })
+
+    if(result.value.accessToken){
+    const {accessToken} = result.value
+
+      const fas  = jwtService.decode(result.value.)
+    }
 
     expect(result.isRight()).toBe(true)
     expect(result.value).toEqual({
