@@ -30,8 +30,6 @@ describe('Create delivery man (E2E)', () => {
       },
     })
 
-    console.log(await prisma.deliveryman.findFirst())
-
     const response = await request(app.getHttpServer())
       .post('/sessions/login')
       .send({
