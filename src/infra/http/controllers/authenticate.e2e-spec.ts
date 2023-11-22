@@ -2,6 +2,7 @@ import { AppModule } from '@/infra/app.module'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
+import { hash } from 'bcryptjs'
 import request from 'supertest'
 
 describe('Create delivery man (E2E)', () => {
@@ -19,25 +20,29 @@ describe('Create delivery man (E2E)', () => {
     await app.init()
   })
 
-  test.skip('[POST] /accounts/deliveryman', async () => {
-    await prisma.deliveryman
+  test('[POST] /accounts/deliveryman', async () => {
+    await prisma.deliveryman.create({
+      data: {
+        cpf: '12345678',
+        name: 'Jon Doe',
+        role: 'ADMIN',
+        password_hash: await hash('123456', 8),
+      },
+    })
+
+    console.log(await prisma.deliveryman.findFirst())
 
     const response = await request(app.getHttpServer())
-      .post('/accounts/deliveryman')
+      .post('/sessions/login')
       .send({
-        name: 'Jon Doe',
         cpf: '12345678',
         password: '123456',
       })
 
-    expect(response.statusCode).toBe(201)
-
-    const userOnDatabase = await prisma.deliveryman.findUnique({
-      where: {
-        cpf: '12345678',
-      },
-    })
-
-    expect(userOnDatabase).toBeTruthy()
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        access_token: expect.any(String),
+      }),
+    )
   })
 })

@@ -36,12 +36,6 @@ describe('Authenticate User', () => {
       password: '123456',
     })
 
-    if(result.value.accessToken){
-    const {accessToken} = result.value
-
-      const fas  = jwtService.decode(result.value.)
-    }
-
     expect(result.isRight()).toBe(true)
     expect(result.value).toEqual({
       accessToken: expect.any(String),
