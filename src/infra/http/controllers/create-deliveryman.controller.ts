@@ -9,38 +9,37 @@ import {
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cases/create-deliveryman'
-import { AdminGuard } from '@/infra/auth/admin.guard'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { RolesGuard } from '@/infra/auth/roles.guard'
+import { Admin } from '@/infra/auth/roles.decorator'
 
 const createDeliverymanBodySchema = z.object({
   name: z.string(),
   cpf: z.string(),
   password: z.string(),
-  city: z.string(),
-  code: z.string(),
-  complement: z.string().optional(),
-  county: z.string(),
-  state: z.string(),
-  street: z.string(),
-  number: z.coerce.number().optional(),
+  role: z.enum(['ADMIN', 'MEMBER']),
 })
 
 type CreateDeliverymanBodyType = z.infer<typeof createDeliverymanBodySchema>
 
 @Controller('/accounts/deliveryman')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class CreateDeliverymanController {
   constructor(private createDeliveryman: CreateDeliverymanUseCase) {}
 
   @Post()
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createDeliverymanBodySchema))
-  @UseGuards(AdminGuard)
+  @Admin()
   async handle(@Body() body: CreateDeliverymanBodyType) {
-    const { name, cpf, password } = createDeliverymanBodySchema.parse(body)
+    const { name, cpf, password, role } =
+      createDeliverymanBodySchema.parse(body)
 
     const result = await this.createDeliveryman.execute({
       cpf,
       password,
       name,
+      role,
     })
 
     if (result.isLeft()) {

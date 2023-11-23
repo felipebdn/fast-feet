@@ -10,7 +10,6 @@ import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { FetchOrderSameCityUseCase } from '@/domain/logistics/application/use-cases/fetch-orders-same-city'
 import { HTTPOrderPresenter } from '../presenters/http-order-presenter'
-import { AdminGuard } from '@/infra/auth/admin.guard'
 
 const fetchOrdersQuerySchema = z.object({
   city: z.string(),
@@ -28,7 +27,6 @@ export class FetchOrdersFromLocationController {
   @Get()
   @HttpCode(200)
   @UsePipes(new ZodValidationPipe(fetchOrdersQuerySchema))
-  @UseGuards(AdminGuard)
   async handle(@Query() query: FetchOrdersQueryType) {
     const { amount, city, page, state } = fetchOrdersQuerySchema.parse(query)
 

@@ -45,8 +45,7 @@ export class AuthenticateUserUseCase {
 
     const accessToken = await this.encrypter.encrypt({
       sub: deliveryman.id.toString(),
-      role: deliveryman.role === 'ADMIN' ? 'ADMIN' : 'MEMBER',
-      // role: isAdmin ? 'ADMIN' : 'MEMBER',
+      role: deliveryman.role,
     })
 
     return right({ accessToken })

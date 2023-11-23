@@ -1,10 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { JwtStrategy } from './jwt.strategy'
 import { Env } from '../env'
-import { RolesGlobalGuard } from './roles-global.guard'
 
 @Module({
   imports: [
@@ -29,8 +28,4 @@ import { RolesGlobalGuard } from './roles-global.guard'
   ],
   providers: [JwtStrategy],
 })
-export class AuthModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RolesGlobalGuard).exclude('/sessions/login').forRoutes('*')
-  }
-}
+export class AuthModule {}
