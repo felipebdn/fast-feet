@@ -10,7 +10,6 @@ import { z } from 'zod'
 import { AuthenticateUserUseCase } from '@/domain/logistics/application/use-cases/authenticate-user'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { WrongCredentialsError } from '@/domain/logistics/application/use-cases/errors/wrong-credentials-error'
-import { Public } from '@/infra/auth/public'
 
 const authenticateBodySchema = z.object({
   cpf: z.string(),
@@ -20,7 +19,6 @@ const authenticateBodySchema = z.object({
 type AuthenticateBodyType = z.infer<typeof authenticateBodySchema>
 
 @Controller('/sessions/login')
-@Public()
 export class AuthenticateController {
   constructor(private authenticate: AuthenticateUserUseCase) {}
 
