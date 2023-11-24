@@ -43,4 +43,24 @@ describe('Create delivery man (E2E)', () => {
       }),
     )
   })
+
+  test('[POST] /accounts/deliveryman error-authenticate', async () => {
+    await prisma.deliveryman.create({
+      data: {
+        cpf: '123456789',
+        name: 'Jon Doe',
+        role: 'ADMIN',
+        password_hash: await hash('123456', 8),
+      },
+    })
+
+    const response = await request(app.getHttpServer())
+      .post('/sessions/login')
+      .send({
+        cpf: '123456789',
+        password: '12345',
+      })
+
+    expect(response.status).toBe(401)
+  })
 })

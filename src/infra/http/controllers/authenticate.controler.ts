@@ -1,7 +1,15 @@
-import { Body, Controller, Post, UsePipes } from '@nestjs/common'
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  UnauthorizedException,
+  UsePipes,
+} from '@nestjs/common'
 import { z } from 'zod'
 import { AuthenticateUserUseCase } from '@/domain/logistics/application/use-cases/authenticate-user'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+import { WrongCredentialsError } from '@/domain/logistics/application/use-cases/errors/wrong-credentials-error'
 
 const authenticateBodySchema = z.object({
   cpf: z.string(),
@@ -22,7 +30,14 @@ export class AuthenticateController {
     const result = await this.authenticate.execute({ cpf, password })
 
     if (result.isLeft()) {
-      throw new Error()
+      const error = result.value
+
+      switch (error.constructor) {
+        case WrongCredentialsError:
+          throw new UnauthorizedException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
     }
 
     const { accessToken } = result.value

@@ -1,5 +1,7 @@
 import {
+  BadRequestException,
   Body,
+  ConflictException,
   Controller,
   HttpCode,
   Post,
@@ -12,6 +14,7 @@ import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cas
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { RolesGuard } from '@/infra/auth/roles.guard'
 import { Admin } from '@/infra/auth/roles.decorator'
+import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
 
 const createDeliverymanBodySchema = z.object({
   name: z.string(),
@@ -43,7 +46,14 @@ export class CreateDeliverymanController {
     })
 
     if (result.isLeft()) {
-      throw new Error()
+      const error = result.value
+
+      switch (error.constructor) {
+        case ValueAlreadyExistsError:
+          throw new ConflictException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
     }
   }
 }

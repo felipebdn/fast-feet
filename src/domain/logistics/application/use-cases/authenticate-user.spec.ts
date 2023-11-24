@@ -3,13 +3,12 @@ import { makeDeliveryman } from 'test/factories/make-deliveryman'
 import { FakeHasher } from 'test/cryptography/fake-hasher'
 import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
 import { AuthenticateUserUseCase } from './authenticate-user'
-import { JwtService } from '@nestjs/jwt'
+import { WrongCredentialsError } from './errors/wrong-credentials-error'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository
 let fakeHash: FakeHasher
 let fakeEncryter: FakeEncrypter
 let sut: AuthenticateUserUseCase
-let jwtService: JwtService
 
 describe('Authenticate User', () => {
   beforeEach(() => {
@@ -29,7 +28,7 @@ describe('Authenticate User', () => {
       role: 'MEMBER',
     })
 
-    await inMemoryDeliverymanRepository.items.push(deliveryman)
+    inMemoryDeliverymanRepository.items.push(deliveryman)
 
     const result = await sut.execute({
       cpf: '12345678',
@@ -40,5 +39,23 @@ describe('Authenticate User', () => {
     expect(result.value).toEqual({
       accessToken: expect.any(String),
     })
+  })
+
+  it('should not be possible to authenticate the user with wrong credentials', async () => {
+    const deliveryman = makeDeliveryman({
+      cpf: '12345678',
+      hash_password: await fakeHash.hash('123456'),
+      role: 'MEMBER',
+    })
+
+    inMemoryDeliverymanRepository.items.push(deliveryman)
+
+    const result = await sut.execute({
+      cpf: '12345678',
+      password: '1234567',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(WrongCredentialsError)
   })
 })

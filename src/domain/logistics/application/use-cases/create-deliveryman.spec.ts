@@ -23,14 +23,12 @@ describe('Create Deliveryman', () => {
     })
 
     expect(result.isRight()).toBe(true)
-    expect(inMemoryDeliverymanRepository.items[0].id).toBeTruthy()
-    expect(inMemoryDeliverymanRepository.items[0].cpf).toBe('000.000.000-41')
-    expect(inMemoryDeliverymanRepository.items[0].hash_password).toBe(
-      '123456-hashed',
-    )
+    expect(result.value).toEqual({
+      deliveryman: inMemoryDeliverymanRepository.items[0],
+    })
   })
 
-  it('should be able to create a adm', async () => {
+  it('should hash student password upon registration', async () => {
     const result = await sut.execute({
       cpf: '000.000.000-41',
       password: '123456',
@@ -38,7 +36,11 @@ describe('Create Deliveryman', () => {
       role: 'ADMIN',
     })
 
+    const hashedPassword = await fakeHasher.hash('123456')
+
     expect(result.isRight()).toBe(true)
-    expect(inMemoryDeliverymanRepository.items[0].role).toBe('ADMIN')
+    expect(inMemoryDeliverymanRepository.items[0].hash_password).toBe(
+      hashedPassword,
+    )
   })
 })

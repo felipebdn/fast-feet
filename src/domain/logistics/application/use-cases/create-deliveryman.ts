@@ -11,7 +11,12 @@ interface CreateDeliverymanUseCaseRequest {
   password: string
   role?: 'MEMBER' | 'ADMIN'
 }
-type CreateDeliverymanUseCaseResponse = Either<ValueAlreadyExistsError, unknown>
+type CreateDeliverymanUseCaseResponse = Either<
+  ValueAlreadyExistsError,
+  {
+    deliveryman: Deliveryman
+  }
+>
 
 @Injectable()
 export class CreateDeliverymanUseCase {
@@ -43,6 +48,6 @@ export class CreateDeliverymanUseCase {
 
     await this.deliverymanRepository.create(deliveryman)
 
-    return right({})
+    return right({ deliveryman })
   }
 }
