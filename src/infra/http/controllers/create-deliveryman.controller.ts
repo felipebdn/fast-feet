@@ -11,9 +11,7 @@ import {
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cases/create-deliveryman'
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { RolesGuard } from '@/infra/auth/roles.guard'
-import { Admin } from '@/infra/auth/roles.decorator'
+import { Authorize, JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
 
 const createDeliverymanBodySchema = z.object({
@@ -26,14 +24,14 @@ const createDeliverymanBodySchema = z.object({
 type CreateDeliverymanBodyType = z.infer<typeof createDeliverymanBodySchema>
 
 @Controller('/accounts/deliveryman')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard)
 export class CreateDeliverymanController {
   constructor(private createDeliveryman: CreateDeliverymanUseCase) {}
 
   @Post()
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createDeliverymanBodySchema))
-  @Admin()
+  @Authorize('ADMIN')
   async handle(@Body() body: CreateDeliverymanBodyType) {
     const { name, cpf, password, role } =
       createDeliverymanBodySchema.parse(body)

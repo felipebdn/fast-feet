@@ -1,11 +1,20 @@
 import {
   ExecutionContext,
   Injectable,
+  SetMetadata,
   UnauthorizedException,
+  applyDecorators,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
-import { Observable } from 'rxjs'
+import { Role } from '@prisma/client'
+import { UserPayload } from './jwt.strategy'
+import { IS_PUBLIC_KEY } from './public'
+
+export const ROLES_KEY = 'roles'
+export function Authorize(...roles: Role[]): MethodDecorator {
+  return applyDecorators(SetMetadata(ROLES_KEY, roles))
+}
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -13,22 +22,38 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super()
   }
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler())
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ])
 
-    if (!roles) {
-      return true // Se não houver restrições de função, permita o acesso (membros padrão)
+    if (isPublic) {
+      return true
     }
 
-    const request = context.switchToHttp().getRequest()
-    const user = request.user
+    await super.canActivate(context)
 
-    if (!user || !user.role) {
-      throw new UnauthorizedException('Unauthorized access.')
+    const { user } = context.switchToHttp().getRequest()
+
+    const payload = user as UserPayload
+
+    const declaredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ])
+
+    if (
+      (!declaredRoles && payload.role === 'MEMBER') ||
+      (!declaredRoles && payload.role === 'ADMIN')
+    ) {
+      return true
     }
 
-    return roles.includes(user.role)
+    if (declaredRoles && !declaredRoles.includes(payload.role)) {
+      throw new UnauthorizedException('Unauthorized access')
+    }
+
+    return true
   }
 }
