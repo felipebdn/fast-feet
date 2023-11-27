@@ -4,7 +4,7 @@ import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
-import { compare, hash } from 'bcryptjs'
+import { hash } from 'bcryptjs'
 import request from 'supertest'
 import { DeliverymanFatory } from 'test/factories/make-deliveryman'
 

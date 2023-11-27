@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common'
-import { AuthenticateController } from './controllers/authenticate.controler'
 import { CreateDeliverymanController } from './controllers/create-deliveryman.controller'
 import { FetchOrdersFromLocationController } from './controllers/fetch-recent-order.controller'
 import { DatabaseModule } from '../database/database.module'
@@ -11,6 +10,7 @@ import { ChangePasswordController } from './controllers/change-password.controll
 import { ChangePasswordUseCase } from '@/domain/logistics/application/use-cases/change-password'
 import { DeleteDeliverymanController } from './controllers/delete-deliveryman.controller'
 import { DeleteDeliverymanUseCase } from '@/domain/logistics/application/use-cases/delete-deliveryman'
+import { AuthenticateController } from './controllers/authenticate.controller'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
