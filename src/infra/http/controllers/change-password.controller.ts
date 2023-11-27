@@ -2,9 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
-  ForbiddenException,
   HttpCode,
   Put,
+  UnprocessableEntityException,
   UsePipes,
 } from '@nestjs/common'
 import { z } from 'zod'
@@ -21,7 +21,7 @@ const changePasswordBodySchema = z.object({
 type ChangePasswordBodySchema = z.infer<typeof changePasswordBodySchema>
 
 @Controller('/sessions/reset')
-export class AuthenticateController {
+export class ChangePasswordController {
   constructor(private changePassword: ChangePasswordUseCase) {}
 
   @Put()
@@ -29,7 +29,7 @@ export class AuthenticateController {
   @UsePipes(new ZodValidationPipe(changePasswordBodySchema))
   @Authorize('ADMIN')
   async handle(@Body() body: ChangePasswordBodySchema) {
-    const { deliverymanId, password } = changePasswordBodySchema.parse(body)
+    const { deliverymanId, password } = body
 
     const result = await this.changePassword.execute({
       deliverymanId,
@@ -41,7 +41,7 @@ export class AuthenticateController {
 
       switch (error.constructor) {
         case PasswordAlreadyUsedError:
-          throw new ForbiddenException(error.message)
+          throw new UnprocessableEntityException(error.message)
         default:
           throw new BadRequestException(error.message)
       }
