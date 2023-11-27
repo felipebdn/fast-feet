@@ -39,7 +39,7 @@ describe('Create Deliveryman', () => {
     const hashedPassword = await fakeHasher.hash('123456')
 
     expect(result.isRight()).toBe(true)
-    expect(inMemoryDeliverymanRepository.items[0].hash_password).toBe(
+    expect(inMemoryDeliverymanRepository.items[0].password_hash).toBe(
       hashedPassword,
     )
   })

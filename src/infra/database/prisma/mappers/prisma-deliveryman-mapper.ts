@@ -7,7 +7,7 @@ export class PrismaDeliverymanMapper {
     return Deliveryman.create(
       {
         cpf: raw.cpf,
-        hash_password: raw.password_hash,
+        password_hash: raw.password_hash,
         name: raw.name,
         role: raw.role,
         createdAt: raw.createdAt,
@@ -25,7 +25,7 @@ export class PrismaDeliverymanMapper {
       cpf: deliveryman.cpf,
       name: deliveryman.name,
       role: deliveryman.role,
-      password_hash: deliveryman.hash_password,
+      password_hash: deliveryman.password_hash,
       createdAt: deliveryman.createdAt,
       updatedAt: deliveryman.updatedAt,
     }

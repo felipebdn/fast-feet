@@ -6,7 +6,7 @@ interface EditDeliverymanUseCaseRequest {
   deliverymanId: string
   name: string
   cpf: string
-  hash_password: string
+  password_hash: string
   role: 'MEMBER' | 'ADMIN'
 }
 
@@ -18,7 +18,7 @@ export class EditDeliverymanUseCase {
   async execute({
     deliverymanId,
     cpf,
-    hash_password,
+    password_hash,
     name,
     role,
   }: EditDeliverymanUseCaseRequest): Promise<EditDeliverymanUseCaseResponse> {
@@ -30,7 +30,7 @@ export class EditDeliverymanUseCase {
 
     deliveryman.name = name
     deliveryman.cpf = cpf
-    deliveryman.hash_password = hash_password
+    deliveryman.password_hash = password_hash
     deliveryman.role = role
     deliveryman.touch()
 

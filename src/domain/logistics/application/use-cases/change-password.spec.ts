@@ -3,36 +3,45 @@ import { makeDeliveryman } from 'test/factories/make-deliveryman'
 import { ChangePasswordUseCase } from './change-password'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { PasswordAlreadyUsedError } from './errors/password-already-used-error'
+import { FakeHasher } from 'test/cryptography/fake-hasher'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository
+let fakeHasher: FakeHasher
 let sut: ChangePasswordUseCase
 
 describe('Change Password', () => {
   beforeEach(() => {
     inMemoryDeliverymanRepository = new InMemoryDeliverymanRepository()
-    sut = new ChangePasswordUseCase(inMemoryDeliverymanRepository)
+    fakeHasher = new FakeHasher()
+    sut = new ChangePasswordUseCase(
+      inMemoryDeliverymanRepository,
+      fakeHasher,
+      fakeHasher,
+    )
   })
   it('should be able to change password of deliveryman', async () => {
     const deliveryman = makeDeliveryman({
-      hash_password: 'password-01',
+      password_hash: await fakeHasher.hash('123456'),
     })
 
-    await inMemoryDeliverymanRepository.create(deliveryman)
+    inMemoryDeliverymanRepository.items.push(deliveryman)
 
     const result = await sut.execute({
       deliverymanId: deliveryman.id.toString(),
       password: 'password-02',
     })
 
+    const hashPassword = await fakeHasher.hash('password-02')
+
     expect(result.isRight()).toBe(true)
-    expect(inMemoryDeliverymanRepository.items[0].hash_password).toEqual(
-      'password-02',
+    expect(inMemoryDeliverymanRepository.items[0].password_hash).toEqual(
+      hashPassword,
     )
   })
 
   it('should not be able to change the password because this deliveryman not exist', async () => {
     const deliveryman = makeDeliveryman({
-      hash_password: 'password-01',
+      password_hash: 'password-01',
     })
 
     const result = await sut.execute({
@@ -47,13 +56,13 @@ describe('Change Password', () => {
 
   it('should not be able to change the password because the password has already been used before', async () => {
     const deliveryman = makeDeliveryman({
-      hash_password: 'password-01',
+      password_hash: await fakeHasher.hash('123456'),
     })
     await inMemoryDeliverymanRepository.create(deliveryman)
 
     const result = await sut.execute({
       deliverymanId: deliveryman.id.toString(),
-      password: 'password-01',
+      password: '123456',
     })
 
     expect(result.isLeft()).toBe(true)

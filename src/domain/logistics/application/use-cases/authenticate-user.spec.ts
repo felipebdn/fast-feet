@@ -24,7 +24,7 @@ describe('Authenticate User', () => {
   it('should be able to authenticate a user', async () => {
     const deliveryman = makeDeliveryman({
       cpf: '12345678',
-      hash_password: await fakeHash.hash('123456'),
+      password_hash: await fakeHash.hash('123456'),
       role: 'MEMBER',
     })
 
@@ -44,7 +44,7 @@ describe('Authenticate User', () => {
   it('should not be possible to authenticate the user with wrong credentials', async () => {
     const deliveryman = makeDeliveryman({
       cpf: '12345678',
-      hash_password: await fakeHash.hash('123456'),
+      password_hash: await fakeHash.hash('123456'),
       role: 'MEMBER',
     })
 

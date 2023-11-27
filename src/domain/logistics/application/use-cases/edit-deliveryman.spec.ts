@@ -16,7 +16,7 @@ describe('Edit Deliveryman', () => {
       {
         cpf: '000.000.000-00',
         name: 'name example',
-        hash_password: '123456',
+        password_hash: '123456',
       },
       new UniqueEntityID('deliveryman-01'),
     )
@@ -27,7 +27,7 @@ describe('Edit Deliveryman', () => {
       deliverymanId: 'deliveryman-01',
       role: 'ADMIN',
       cpf: '111.111.111-11',
-      hash_password: '654321',
+      password_hash: '654321',
       name: 'example name',
     })
 
@@ -37,7 +37,7 @@ describe('Edit Deliveryman', () => {
         id: new UniqueEntityID('deliveryman-01'),
         role: 'ADMIN',
         cpf: '111.111.111-11',
-        hash_password: '654321',
+        password_hash: '654321',
         name: 'example name',
       }),
     )

@@ -1,67 +1,75 @@
 import { AppModule } from '@/infra/app.module'
-import { BcryptHasher } from '@/infra/cryptography/bcrypt-hasher'
-import { DatabaseModule } from '@/infra/database/database.module'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
+import { hash } from 'bcryptjs'
 import request from 'supertest'
 import { DeliverymanFatory } from 'test/factories/make-deliveryman'
 
 describe('Create delivery man (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let deliverymanFatory: DeliverymanFatory
   let jwt: JwtService
-  let bcryptHasher: BcryptHasher
+  let deliverymanFatory: DeliverymanFatory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule, DatabaseModule],
-      providers: [DeliverymanFatory],
+      imports: [AppModule],
     }).compile()
 
     app = moduleRef.createNestApplication()
-
     prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
     deliverymanFatory = moduleRef.get(DeliverymanFatory)
-    bcryptHasher = new BcryptHasher()
 
     await app.init()
   })
 
   test('[POST] /accounts/deliveryman', async () => {
-    const delivery = await deliverymanFatory.makePrismaDeliveryman({
-      cpf: '000000001',
-      name: 'administrator',
-      password_hash: await bcryptHasher.hash('123456'),
+    const deliveryman = await deliverymanFatory.makePrismaDeliveryman({
+      cpf: '12345678',
+      name: 'Jon Doe',
       role: 'ADMIN',
+      password_hash: await hash('123456', 8),
     })
 
     const accessToken = jwt.sign({
-      sub: delivery.id.toString(),
-      role: delivery.role,
+      sub: deliveryman.id,
+      role: deliveryman.role,
     })
 
     const response = await request(app.getHttpServer())
-      .post('/accounts/deliveryman')
-      .set('Authorization', `Bearer ${accessToken}`)
+      .post('/sessions/login')
       .send({
-        name: 'Jon Doe',
         cpf: '12345678',
         password: '123456',
-        role: 'MEMBER',
       })
 
-    expect(response.statusCode).toBe(201)
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        access_token: expect.any(String),
+      }),
+    )
+  })
 
-    const userOnDatabase = await prisma.deliveryman.findUnique({
-      where: {
-        cpf: '12345678',
+  test('[POST] /accounts/deliveryman error-authenticate', async () => {
+    await prisma.deliveryman.create({
+      data: {
+        cpf: '123456789',
+        name: 'Jon Doe',
+        role: 'ADMIN',
+        password_hash: await hash('123456', 8),
       },
     })
 
-    expect(userOnDatabase).toBeTruthy()
+    const response = await request(app.getHttpServer())
+      .post('/sessions/login')
+      .send({
+        cpf: '123456789',
+        password: '12345',
+      })
+
+    expect(response.status).toBe(401)
   })
 })

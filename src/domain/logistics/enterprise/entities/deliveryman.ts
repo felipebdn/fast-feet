@@ -5,7 +5,7 @@ import { Optional } from '@/core/types/optional'
 export interface DeliverymanProps {
   name: string
   cpf: string
-  hash_password: string
+  password_hash: string
   createdAt: Date
   updatedAt?: Date | null
   role: 'MEMBER' | 'ADMIN'
@@ -20,8 +20,8 @@ export class Deliveryman extends Entity<DeliverymanProps> {
     return this.props.cpf
   }
 
-  get hash_password() {
-    return this.props.hash_password
+  get password_hash() {
+    return this.props.password_hash
   }
 
   get updatedAt(): Date | undefined | null {
@@ -48,8 +48,8 @@ export class Deliveryman extends Entity<DeliverymanProps> {
     this.props.role = role
   }
 
-  set hash_password(hashPassword: string) {
-    this.props.hash_password = hashPassword
+  set password_hash(hashPassword: string) {
+    this.props.password_hash = hashPassword
   }
 
   set updatedAt(date: Date) {

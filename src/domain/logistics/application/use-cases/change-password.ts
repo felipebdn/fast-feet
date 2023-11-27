@@ -3,6 +3,8 @@ import { DeliverymanRepository } from '../repositories/deliveryman-repository'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { PasswordAlreadyUsedError } from './errors/password-already-used-error'
 import { Injectable } from '@nestjs/common'
+import { HashGenerator } from '../cryptography/hash-generator'
+import { HashCompare } from '../cryptography/hash-compare'
 
 interface ChangePasswordUseCaseRequest {
   deliverymanId: string
@@ -15,7 +17,11 @@ type ChangePasswordUseCaseResponse = Either<
 
 @Injectable()
 export class ChangePasswordUseCase {
-  constructor(private deliverymanRepository: DeliverymanRepository) {}
+  constructor(
+    private deliverymanRepository: DeliverymanRepository,
+    private hashCompare: HashCompare,
+    private hashGenerator: HashGenerator,
+  ) {}
 
   async execute({
     password,
@@ -27,11 +33,16 @@ export class ChangePasswordUseCase {
       return left(new ResourceNotFoundError())
     }
 
-    if (deliveryman.hash_password === password) {
+    const isMatchPassword = await this.hashCompare.compare(
+      password,
+      deliveryman.password_hash,
+    )
+
+    if (isMatchPassword) {
       return left(new PasswordAlreadyUsedError())
     }
 
-    deliveryman.hash_password = password
+    deliveryman.password_hash = await this.hashGenerator.hash(password)
 
     await this.deliverymanRepository.save(deliveryman)
 

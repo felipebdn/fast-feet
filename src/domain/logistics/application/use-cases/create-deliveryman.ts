@@ -37,11 +37,11 @@ export class CreateDeliverymanUseCase {
       return left(new ValueAlreadyExistsError('CPF'))
     }
 
-    const hash_password = await this.hashGenerator.hash(password)
+    const password_hash = await this.hashGenerator.hash(password)
 
     const deliveryman = Deliveryman.create({
       cpf,
-      hash_password,
+      password_hash,
       name,
       role,
     })

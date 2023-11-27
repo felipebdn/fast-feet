@@ -15,7 +15,7 @@ export function makeDeliveryman(
   const deliveryman = Deliveryman.create(
     {
       cpf: faker.phone.number(),
-      hash_password: faker.internet.password(),
+      password_hash: faker.internet.password(),
       name: faker.person.fullName(),
       updatedAt: undefined,
       ...override,
