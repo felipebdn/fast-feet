@@ -9,6 +9,8 @@ import { CryptographyModule } from '../cryptography/cryptography.module'
 import { AuthenticateUserUseCase } from '@/domain/logistics/application/use-cases/authenticate-user'
 import { ChangePasswordController } from './controllers/change-password.controller'
 import { ChangePasswordUseCase } from '@/domain/logistics/application/use-cases/change-password'
+import { DeleteDeliverymanController } from './controllers/delete-deliveryman.controller'
+import { DeleteDeliverymanUseCase } from '@/domain/logistics/application/use-cases/delete-deliveryman'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -17,12 +19,14 @@ import { ChangePasswordUseCase } from '@/domain/logistics/application/use-cases/
     AuthenticateController,
     FetchOrdersFromLocationController,
     ChangePasswordController,
+    DeleteDeliverymanController,
   ],
   providers: [
     CreateDeliverymanUseCase,
     FetchOrderSameCityUseCase,
     AuthenticateUserUseCase,
     ChangePasswordUseCase,
+    DeleteDeliverymanUseCase,
   ],
 })
 export class HttpModule {}
