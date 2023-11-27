@@ -5,6 +5,7 @@ import { Optional } from '@/core/types/optional'
 export interface AddressProps {
   street: string
   complement?: string | null
+  orderId?: UniqueEntityID
   code: string
   city: string
   state: string
@@ -25,6 +26,10 @@ export class Address extends Entity<AddressProps> {
 
   get code() {
     return this.props.code
+  }
+
+  get orderId(): UniqueEntityID | undefined {
+    return this.props.orderId
   }
 
   get city() {
@@ -57,6 +62,10 @@ export class Address extends Entity<AddressProps> {
 
   set complement(complement: string) {
     this.props.complement = complement
+  }
+
+  set orderId(id: UniqueEntityID) {
+    this.props.orderId = id
   }
 
   set code(code: string) {
