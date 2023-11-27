@@ -1,76 +1,53 @@
 import { Order } from '../../enterprise/entities/order'
 import { OrderRespository } from '../repositories/orders-repository'
-import { RecipientRepository } from '../repositories/recipient-repository'
-import { AddressRepository } from '../repositories/address-repository'
-import { Recipient } from '../../enterprise/entities/recipient'
-import { Address } from '../../enterprise/entities/address'
 import { Either, left, right } from '@/core/either'
 import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
 import { Injectable } from '@nestjs/common'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 interface CreateOrderUseCaseRequest {
-  order: {
-    bulk: number
-    rotule: string
-    weight: number
-    code: string
-  }
-  recipient: {
-    name: string
-  }
-  address: {
-    street: string
-    complement: string
-    code: string
-    city: string
-    state: string
-    county: string
-    number?: number
-  }
+  addressId: string
+  recipientId: string
+  bulk: number
+  rotule: string
+  weight: number
+  code: string
 }
-type CreateOrderUseCaseResponse = Either<ValueAlreadyExistsError, unknown>
+type CreateOrderUseCaseResponse = Either<
+  ValueAlreadyExistsError,
+  { order: Order }
+>
 
 @Injectable()
 export class CreateOrderUseCase {
-  constructor(
-    private orderRespository: OrderRespository,
-    private recipientRepository: RecipientRepository,
-    private addressRepository: AddressRepository,
-  ) {}
+  constructor(private orderRespository: OrderRespository) {}
 
   async execute({
-    address,
-    order,
-    recipient,
+    addressId,
+    bulk,
+    code,
+    recipientId,
+    rotule,
+    weight,
   }: CreateOrderUseCaseRequest): Promise<CreateOrderUseCaseResponse> {
-    const isCodeAlreadyExistsOnOrder = await this.orderRespository.findByCode(
-      order.code,
-    )
+    const isCodeAlreadyExistsOnOrder =
+      await this.orderRespository.findByCode(code)
 
     if (isCodeAlreadyExistsOnOrder) {
       return left(new ValueAlreadyExistsError('code'))
     }
 
-    const createAddress = Address.create(address)
-    await this.addressRepository.create(createAddress)
-
-    const createRecipient = Recipient.create({
-      addressId: createAddress.id,
-      name: recipient.name,
-    })
-    await this.recipientRepository.create(createRecipient)
-
-    const createOrder = Order.create({
-      code: order.code,
-      recipientId: createRecipient.id,
-      addressId: createAddress.id,
-      bulk: order.bulk,
-      rotule: order.rotule,
-      weight: order.weight,
+    const order = Order.create({
+      code,
+      recipientId: new UniqueEntityID(recipientId),
+      addressId: new UniqueEntityID(addressId),
+      bulk,
+      rotule,
+      weight,
     })
 
-    await this.orderRespository.create(createOrder)
+    await this.orderRespository.create(order)
 
-    return right({})
+    return right({ order })
   }
 }
