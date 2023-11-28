@@ -1,6 +1,6 @@
 import { Either, left, right } from '@/core/either'
 import { AddressRepository } from '../repositories/address-repository'
-import { OrderRespository } from '../repositories/orders-repository'
+import { OrderRepository } from '../repositories/orders-repository'
 import { RecipientRepository } from '../repositories/recipient-repository'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 
@@ -11,7 +11,7 @@ type DeleteOrderUseCaseResponse = Either<ResourceNotFoundError, unknown>
 
 export class DeleteOrderUseCase {
   constructor(
-    private orderRespository: OrderRespository,
+    private orderRepository: OrderRepository,
     private addressRepository: AddressRepository,
     private recipientRepository: RecipientRepository,
   ) {}
@@ -19,7 +19,7 @@ export class DeleteOrderUseCase {
   async execute({
     orderId,
   }: DeleteOrderUseCaseRequest): Promise<DeleteOrderUseCaseResponse> {
-    const order = await this.orderRespository.findById(orderId)
+    const order = await this.orderRepository.findById(orderId)
 
     if (!order) {
       return left(new ResourceNotFoundError())
@@ -42,7 +42,7 @@ export class DeleteOrderUseCase {
     await Promise.all([
       this.addressRepository.delete(address.id.toString()),
       this.recipientRepository.delete(recipient.id.toString()),
-      this.orderRespository.delete(order.id.toString()),
+      this.orderRepository.delete(order.id.toString()),
     ])
 
     return right({})

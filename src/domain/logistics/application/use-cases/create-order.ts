@@ -1,5 +1,5 @@
 import { Order } from '../../enterprise/entities/order'
-import { OrderRespository } from '../repositories/orders-repository'
+import { OrderRepository } from '../repositories/orders-repository'
 import { Either, left, right } from '@/core/either'
 import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
 import { Injectable } from '@nestjs/common'
@@ -20,7 +20,7 @@ type CreateOrderUseCaseResponse = Either<
 
 @Injectable()
 export class CreateOrderUseCase {
-  constructor(private orderRespository: OrderRespository) {}
+  constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     addressId,
@@ -31,7 +31,7 @@ export class CreateOrderUseCase {
     weight,
   }: CreateOrderUseCaseRequest): Promise<CreateOrderUseCaseResponse> {
     const isCodeAlreadyExistsOnOrder =
-      await this.orderRespository.findByCode(code)
+      await this.orderRepository.findByCode(code)
 
     if (isCodeAlreadyExistsOnOrder) {
       return left(new ValueAlreadyExistsError('code'))
@@ -46,7 +46,7 @@ export class CreateOrderUseCase {
       weight,
     })
 
-    await this.orderRespository.create(order)
+    await this.orderRepository.create(order)
 
     return right({ order })
   }

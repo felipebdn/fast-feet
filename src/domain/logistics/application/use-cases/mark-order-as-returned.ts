@@ -1,5 +1,5 @@
 import { Either, left, right } from '@/core/either'
-import { OrderRespository } from '../repositories/orders-repository'
+import { OrderRepository } from '../repositories/orders-repository'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { OrderNotIsColectedError } from '@/core/errors/errors/order-not-is-colected-error'
 
@@ -12,7 +12,7 @@ type MarkOrderAsReturnedUseCaseResponse = Either<
 >
 
 export class MarkOrderAsReturnedUseCase {
-  constructor(private orderRepository: OrderRespository) {}
+  constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     orderId,

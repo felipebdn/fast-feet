@@ -1,6 +1,6 @@
 import { Either, right } from '@/core/either'
 import { Order } from '../../enterprise/entities/order'
-import { OrderRespository } from '../repositories/orders-repository'
+import { OrderRepository } from '../repositories/orders-repository'
 
 interface ListOrdersPendingByDeliveryIdUseCaseRequest {
   deliverymanId: string
@@ -13,7 +13,7 @@ type ListOrdersPendingByDeliveryIdUseCaseResponse = Either<
 >
 
 export class ListOrdersPendingByDeliveryIdUseCase {
-  constructor(private orderRepository: OrderRespository) {}
+  constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     deliverymanId,

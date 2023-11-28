@@ -1,12 +1,12 @@
 import { PaginationParams } from '@/core/repositories/pagination-params'
-import { OrderRespository } from '@/domain/logistics/application/repositories/orders-repository'
+import { OrderRepository } from '@/domain/logistics/application/repositories/orders-repository'
 import { Order } from '@/domain/logistics/enterprise/entities/order'
 import { PrismaOrderMapper } from '../mappers/prisma-order-mapper'
 import { PrismaService } from '../prisma.service'
 import { Injectable } from '@nestjs/common'
 
 @Injectable()
-export class PrismaOrdersRepository implements OrderRespository {
+export class PrismaOrdersRepository implements OrderRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(order: Order) {

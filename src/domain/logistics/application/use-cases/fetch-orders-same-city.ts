@@ -1,5 +1,5 @@
 import { Either, right } from '@/core/either'
-import { OrderRespository } from '../repositories/orders-repository'
+import { OrderRepository } from '../repositories/orders-repository'
 import { Order } from '../../enterprise/entities/order'
 import { Injectable } from '@nestjs/common'
 
@@ -14,7 +14,7 @@ type FetchOrderSameCityUseCaseResponse = Either<null, { orders: Order[] }>
 
 @Injectable()
 export class FetchOrderSameCityUseCase {
-  constructor(private orderRespository: OrderRespository) {}
+  constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     amount,
@@ -22,7 +22,7 @@ export class FetchOrderSameCityUseCase {
     page,
     state,
   }: FetchOrderSameCityUseCaseRequest): Promise<FetchOrderSameCityUseCaseResponse> {
-    const orders = await this.orderRespository.findManyByCityAndState(
+    const orders = await this.orderRepository.findManyByCityAndState(
       city,
       state,
       {

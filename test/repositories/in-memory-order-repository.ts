@@ -1,10 +1,10 @@
 import { DomainEvents } from '@/core/events/domain-events'
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { AddressRepository } from '@/domain/logistics/application/repositories/address-repository'
-import { OrderRespository } from '@/domain/logistics/application/repositories/orders-repository'
+import { OrderRepository } from '@/domain/logistics/application/repositories/orders-repository'
 import { Order } from '@/domain/logistics/enterprise/entities/order'
 
-export class InMemoryOrderRepository implements OrderRespository {
+export class InMemoryOrderRepository implements OrderRepository {
   constructor(private addressRepository: AddressRepository) {}
 
   public items: Order[] = []

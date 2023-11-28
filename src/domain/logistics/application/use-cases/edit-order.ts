@@ -1,5 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { OrderRespository } from '../repositories/orders-repository'
+import { OrderRepository } from '../repositories/orders-repository'
 import { Either, left, right } from '@/core/either'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 
@@ -15,7 +15,7 @@ interface EditOrderUseCaseRequest {
 type EditOrderUseCaseResponse = Either<ResourceNotFoundError, unknown>
 
 export class EditOrderUseCase {
-  constructor(private orderRespository: OrderRespository) {}
+  constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     orderId,
@@ -25,7 +25,7 @@ export class EditOrderUseCase {
     recipientId,
     deliverymanId,
   }: EditOrderUseCaseRequest): Promise<EditOrderUseCaseResponse> {
-    const order = await this.orderRespository.findById(orderId)
+    const order = await this.orderRepository.findById(orderId)
 
     if (!order) {
       return left(new ResourceNotFoundError())
@@ -37,7 +37,7 @@ export class EditOrderUseCase {
     order.deliveryId = new UniqueEntityID(deliverymanId) ?? undefined
     order.recipientId = new UniqueEntityID(recipientId) ?? undefined
 
-    this.orderRespository.save(order)
+    this.orderRepository.save(order)
 
     return right({})
   }

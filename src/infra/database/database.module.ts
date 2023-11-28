@@ -6,7 +6,7 @@ import { PrismaOrdersRepository } from './prisma/repositories/prisma-orders-repo
 import { PrismaRecipientRepository } from './prisma/repositories/prisma-recipient-repository'
 import { AddressRepository } from '@/domain/logistics/application/repositories/address-repository'
 import { DeliverymanRepository } from '@/domain/logistics/application/repositories/deliveryman-repository'
-import { OrderRespository } from '@/domain/logistics/application/repositories/orders-repository'
+import { OrderRepository } from '@/domain/logistics/application/repositories/orders-repository'
 import { RecipientRepository } from '@/domain/logistics/application/repositories/recipient-repository'
 
 @Module({
@@ -21,7 +21,7 @@ import { RecipientRepository } from '@/domain/logistics/application/repositories
       useClass: PrismaDeliverymanRepository,
     },
     {
-      provide: OrderRespository,
+      provide: OrderRepository,
       useClass: PrismaOrdersRepository,
     },
     {
@@ -33,7 +33,7 @@ import { RecipientRepository } from '@/domain/logistics/application/repositories
     PrismaService,
     AddressRepository,
     DeliverymanRepository,
-    OrderRespository,
+    OrderRepository,
     RecipientRepository,
   ],
 })

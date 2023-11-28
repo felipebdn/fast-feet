@@ -1,5 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { OrderRespository } from '../repositories/orders-repository'
+import { OrderRepository } from '../repositories/orders-repository'
 import { Either, left, right } from '@/core/either'
 import { ObjectAlreadyResponsibleDeliveryman } from '@/core/errors/errors/object-already-responsible-deliveryman-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
@@ -15,7 +15,7 @@ type OrderPuckupUseCaseResponse = Either<
 >
 
 export class OrderPuckupUseCase {
-  constructor(private orderRepository: OrderRespository) {}
+  constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     deliverymanId,
