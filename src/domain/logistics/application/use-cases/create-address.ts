@@ -13,10 +13,7 @@ interface createAddressUseCaseRequest {
   county: string
   number?: number
 }
-type CreateAddressUseCaseResponse = Either<
-  ValueAlreadyExistsError,
-  { address: Address }
->
+type CreateAddressUseCaseResponse = Either<unknown, { address: Address }>
 
 @Injectable()
 export class CreateAddressUseCase {
