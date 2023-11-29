@@ -10,10 +10,15 @@ import {
 } from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
-import { CreateAddressUseCase } from '@/domain/logistics/application/use-cases/create-address'
-import { CreateRecipientUseCase } from '@/domain/logistics/application/use-cases/create-recipient'
-import { Address } from '@/domain/logistics/enterprise/entities/address'
-import { Recipient } from '@/domain/logistics/enterprise/entities/recipient'
+import {
+  CreateAddressUseCase,
+  CreateAddressUseCaseResponse,
+} from '@/domain/logistics/application/use-cases/create-address'
+import {
+  CreateRecipientUseCase,
+  CreateRecipientUseCaseResponse,
+} from '@/domain/logistics/application/use-cases/create-recipient'
+import { DeleteOrderUseCase } from '@/domain/logistics/application/use-cases/delete-order'
 
 const createOrderBodySchema = z.object({
   name: z.string(),
@@ -39,6 +44,7 @@ export class CreateOrderController {
     private createOrderUseCase: CreateOrderUseCase,
     private createAddressUseCase: CreateAddressUseCase,
     private createRecipientUseCase: CreateRecipientUseCase,
+    private deleteAddress: DeleteOrderUseCase,
   ) {}
 
   @Post()
@@ -46,8 +52,8 @@ export class CreateOrderController {
   @Authorize('ADMIN')
   @UsePipes(new ZodValidationPipe(createOrderBodySchema))
   async handle(@Body() body: CreateOrderBodyType) {
-    let address: Address
-    let recipient: Recipient
+    let address: CreateAddressUseCaseResponse
+    let recipient: CreateRecipientUseCaseResponse
 
     try {
       const resultAddress = await this.createAddressUseCase.execute({
@@ -59,10 +65,33 @@ export class CreateOrderController {
         street: body.street,
         number: body.number,
       })
-      if (resultAddress.isRight()) {
-        address = resultAddress.value.address
+      address = resultAddress
+      if (!address.isRight()) {
+        throw new Error()
       }
-      const resultRecipient = await this.createRecipientUseCase.execute({})
-    } catch (error) {}
+
+      const resultRecipient = await this.createRecipientUseCase.execute({
+        addressId: address.value.address.id.toString(),
+        name: body.name,
+      })
+      recipient = resultRecipient
+      if (!recipient.isRight()) {
+        throw new Error()
+      }
+
+      const resultOrder = await this.createOrderUseCase.execute({
+        addressId: address.value.address.id.toString(),
+        recipientId: recipient.value.recipient.id.toString(),
+        bulk: body.bulk,
+        code: body.code,
+        rotule: body.rotule,
+        weight: body.weight,
+      })
+      if (resultOrder.isLeft()) {
+        throw new Error()
+      }
+    } catch (error) {
+      if()
+    }
   }
 }

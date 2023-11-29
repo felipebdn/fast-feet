@@ -1,7 +1,6 @@
 import { AddressRepository } from '../repositories/address-repository'
 import { Address } from '../../enterprise/entities/address'
 import { Either, right } from '@/core/either'
-import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
 import { Injectable } from '@nestjs/common'
 
 interface createAddressUseCaseRequest {
@@ -13,7 +12,7 @@ interface createAddressUseCaseRequest {
   county: string
   number?: number
 }
-type CreateAddressUseCaseResponse = Either<unknown, { address: Address }>
+export type CreateAddressUseCaseResponse = Either<unknown, { address: Address }>
 
 @Injectable()
 export class CreateAddressUseCase {

@@ -9,7 +9,7 @@ interface CreateRecipientUseCaseRequest {
   name: string
   addressId: string
 }
-type CreateRecipientUseCaseResponse = Either<
+export type CreateRecipientUseCaseResponse = Either<
   ValueAlreadyExistsError,
   { recipient: Recipient }
 >
