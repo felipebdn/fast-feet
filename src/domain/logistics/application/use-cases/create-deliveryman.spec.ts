@@ -1,18 +1,18 @@
 import { InMemoryDeliverymanRepository } from 'test/repositories/in-memeory-deliveryman-repository'
 import { CreateDeliverymanUseCase } from './create-deliveryman'
-import { FakeHasher } from 'test/cryptography/fake-hasher'
+import { FakeHarsher } from 'test/cryptography/fake-hasher'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository
-let fakeHasher: FakeHasher
+let fakeHarsher: FakeHarsher
 let sut: CreateDeliverymanUseCase
 
 describe('Create Deliveryman', () => {
   beforeEach(() => {
     inMemoryDeliverymanRepository = new InMemoryDeliverymanRepository()
-    fakeHasher = new FakeHasher()
+    fakeHarsher = new FakeHarsher()
     sut = new CreateDeliverymanUseCase(
       inMemoryDeliverymanRepository,
-      fakeHasher,
+      fakeHarsher,
     )
   })
   it('should be able to create a new deliveryman', async () => {
@@ -36,7 +36,7 @@ describe('Create Deliveryman', () => {
       role: 'ADMIN',
     })
 
-    const hashedPassword = await fakeHasher.hash('123456')
+    const hashedPassword = await fakeHarsher.hash('123456')
 
     expect(result.isRight()).toBe(true)
     expect(inMemoryDeliverymanRepository.items[0].password_hash).toBe(

@@ -7,6 +7,7 @@ import { Order } from '@/domain/logistics/enterprise/entities/order'
 export class InMemoryOrderRepository implements OrderRepository {
   constructor(private addressRepository: AddressRepository) {}
 
+  private transactions: Map<number, Order[]> = new Map()
   public items: Order[] = []
 
   async findManyByCityAndState(
@@ -71,24 +72,74 @@ export class InMemoryOrderRepository implements OrderRepository {
     return orders
   }
 
-  async create(order: Order) {
-    this.items.push(order)
-    // console.log('criando', this.items[0].collected)
+  async create(order: Order, transactionId?: number) {
+    if (transactionId !== undefined) {
+      if (!this.transactions.has(transactionId)) {
+        this.transactions.set(transactionId, [])
+      }
+      const transactionsArray = this.transactions.get(transactionId)
+      if (transactionsArray) {
+        transactionsArray.push(order)
+      }
+    } else {
+      this.items.push(order)
+    }
   }
 
-  async save(order: Order) {
-    const findIndex = this.items.findIndex(
-      (item) => item.id.toValue() === order.id.toValue(),
-    )
-    this.items[findIndex] = order
+  async save(order: Order, transactionId?: number) {
+    if (transactionId !== undefined) {
+      const transactionsArray = this.transactions.get(transactionId)
+      if (transactionsArray) {
+        const findIndex = transactionsArray.findIndex(
+          (item) => item.id.toValue() === order.id.toValue(),
+        )
+        transactionsArray[findIndex] = order
+        DomainEvents.dispatchEventsForEntity(order.id)
+      }
+    } else {
+      const findIndex = this.items.findIndex(
+        (item) => item.id.toValue() === order.id.toValue(),
+      )
+      this.items[findIndex] = order
 
-    DomainEvents.dispatchEventsForEntity(order.id)
+      DomainEvents.dispatchEventsForEntity(order.id)
+    }
   }
 
-  async delete(id: string) {
-    const currentIndex = this.items.findIndex(
-      (item) => item.id.toString() === id,
-    )
-    this.items.splice(currentIndex, 1)
+  async delete(id: string, transactionId?: number) {
+    if (transactionId !== undefined) {
+      const transactionsArray = this.transactions.get(transactionId)
+      if (transactionsArray) {
+        const currentIndex = transactionsArray.findIndex(
+          (item) => item.id.toString() === id,
+        )
+        transactionsArray.splice(currentIndex, 1)
+      }
+    } else {
+      const currentIndex = this.items.findIndex(
+        (item) => item.id.toString() === id,
+      )
+      this.items.splice(currentIndex, 1)
+    }
+  }
+
+  async createTransaction(transactionId: number): Promise<void> {
+    if (!this.transactions.has(transactionId)) {
+      this.transactions.set(transactionId, [])
+    }
+  }
+
+  async commitTransaction(transactionId: number): Promise<void> {
+    const transactionsArray = this.transactions.get(transactionId)
+    if (this.transactions.has(transactionId) && transactionsArray) {
+      this.items.push(...transactionsArray)
+      this.transactions.delete(transactionId)
+    }
+  }
+
+  async rollbackTransaction(transactionId: number): Promise<void> {
+    if (this.transactions.has(transactionId)) {
+      this.transactions.delete(transactionId)
+    }
   }
 }

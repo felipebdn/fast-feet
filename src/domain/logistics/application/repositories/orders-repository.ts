@@ -15,4 +15,8 @@ export abstract class OrderRepository {
   abstract findById(id: string): Promise<Order | null>
   abstract findByCode(code: string): Promise<Order | null>
   abstract delete(id: string): Promise<void>
+
+  abstract createTransaction(transactionId: number): Promise<void>
+  abstract commitTransaction(transactionId: number): Promise<void>
+  abstract rollbackTransaction(transactionId: number): Promise<void>
 }

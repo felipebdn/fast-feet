@@ -3,25 +3,25 @@ import { makeDeliveryman } from 'test/factories/make-deliveryman'
 import { ChangePasswordUseCase } from './change-password'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { PasswordAlreadyUsedError } from './errors/password-already-used-error'
-import { FakeHasher } from 'test/cryptography/fake-hasher'
+import { FakeHarsher } from 'test/cryptography/fake-hasher'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository
-let fakeHasher: FakeHasher
+let fakeHarsher: FakeHarsher
 let sut: ChangePasswordUseCase
 
 describe('Change Password', () => {
   beforeEach(() => {
     inMemoryDeliverymanRepository = new InMemoryDeliverymanRepository()
-    fakeHasher = new FakeHasher()
+    fakeHarsher = new FakeHarsher()
     sut = new ChangePasswordUseCase(
       inMemoryDeliverymanRepository,
-      fakeHasher,
-      fakeHasher,
+      fakeHarsher,
+      fakeHarsher,
     )
   })
   it('should be able to change password of deliveryman', async () => {
     const deliveryman = makeDeliveryman({
-      password_hash: await fakeHasher.hash('123456'),
+      password_hash: await fakeHarsher.hash('123456'),
     })
 
     inMemoryDeliverymanRepository.items.push(deliveryman)
@@ -31,7 +31,7 @@ describe('Change Password', () => {
       password: 'password-02',
     })
 
-    const hashPassword = await fakeHasher.hash('password-02')
+    const hashPassword = await fakeHarsher.hash('password-02')
 
     expect(result.isRight()).toBe(true)
     expect(inMemoryDeliverymanRepository.items[0].password_hash).toEqual(
@@ -56,7 +56,7 @@ describe('Change Password', () => {
 
   it('should not be able to change the password because the password has already been used before', async () => {
     const deliveryman = makeDeliveryman({
-      password_hash: await fakeHasher.hash('123456'),
+      password_hash: await fakeHarsher.hash('123456'),
     })
     await inMemoryDeliverymanRepository.create(deliveryman)
 

@@ -1,24 +1,24 @@
-import { InMemoryDeliverymanRepository } from 'test/repositories/in-memeory-deliveryman-repository'
 import { makeDeliveryman } from 'test/factories/make-deliveryman'
-import { FakeHasher } from 'test/cryptography/fake-hasher'
+import { FakeHarsher } from 'test/cryptography/fake-harsher'
 import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
 import { AuthenticateUserUseCase } from './authenticate-user'
 import { WrongCredentialsError } from './errors/wrong-credentials-error'
+import { InMemoryDeliverymanRepository } from 'test/repositories/in-memory-deliveryman-repository'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository
-let fakeHash: FakeHasher
-let fakeEncryter: FakeEncrypter
+let fakeHash: FakeHarsher
+let fakeEncrypter: FakeEncrypter
 let sut: AuthenticateUserUseCase
 
 describe('Authenticate User', () => {
   beforeEach(() => {
     inMemoryDeliverymanRepository = new InMemoryDeliverymanRepository()
-    fakeHash = new FakeHasher()
-    fakeEncryter = new FakeEncrypter()
+    fakeHash = new FakeHarsher()
+    fakeEncrypter = new FakeEncrypter()
     sut = new AuthenticateUserUseCase(
       inMemoryDeliverymanRepository,
       fakeHash,
-      fakeEncryter,
+      fakeEncrypter,
     )
   })
   it('should be able to authenticate a user', async () => {
