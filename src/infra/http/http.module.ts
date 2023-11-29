@@ -11,6 +11,8 @@ import { ChangePasswordUseCase } from '@/domain/logistics/application/use-cases/
 import { DeleteDeliverymanController } from './controllers/delete-deliveryman.controller'
 import { DeleteDeliverymanUseCase } from '@/domain/logistics/application/use-cases/delete-deliveryman'
 import { AuthenticateController } from './controllers/authenticate.controller'
+import { CreateOrderController } from './controllers/create-order.controller'
+import { CreateOrderUseCase } from '@/domain/logistics/application/use-cases/create-order'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -20,6 +22,7 @@ import { AuthenticateController } from './controllers/authenticate.controller'
     FetchOrdersFromLocationController,
     ChangePasswordController,
     DeleteDeliverymanController,
+    CreateOrderController,
   ],
   providers: [
     CreateDeliverymanUseCase,
@@ -27,6 +30,7 @@ import { AuthenticateController } from './controllers/authenticate.controller'
     AuthenticateUserUseCase,
     ChangePasswordUseCase,
     DeleteDeliverymanUseCase,
+    CreateOrderUseCase,
   ],
 })
 export class HttpModule {}

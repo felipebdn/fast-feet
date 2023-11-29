@@ -6,30 +6,30 @@ import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import { hash } from 'bcryptjs'
 import request from 'supertest'
-import { DeliverymanFatory } from 'test/factories/make-deliveryman'
+import { DeliverymanFactory } from 'test/factories/make-deliveryman'
 
 describe('Change Password (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
-  let deliverymanFatory: DeliverymanFatory
+  let deliverymanFactory: DeliverymanFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [DeliverymanFatory],
+      providers: [DeliverymanFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
     prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
-    deliverymanFatory = moduleRef.get(DeliverymanFatory)
+    deliverymanFactory = moduleRef.get(DeliverymanFactory)
 
     await app.init()
   })
 
   test('[POST] /sessions/reset', async () => {
-    const deliveryman = await deliverymanFatory.makePrismaDeliveryman({
+    const deliveryman = await deliverymanFactory.makePrismaDeliveryman({
       cpf: '12345678',
       name: 'Jon Doe',
       role: 'ADMIN',
@@ -49,14 +49,14 @@ describe('Change Password (E2E)', () => {
         password: '1234567',
       })
 
-    const deliverymandb = await prisma.deliveryman.findFirstOrThrow()
+    const deliverymanDb = await prisma.deliveryman.findFirstOrThrow()
 
     expect(response.statusCode).toEqual(204)
-    expect(deliverymandb).toBeTruthy()
+    expect(deliverymanDb).toBeTruthy()
   })
 
   test('[POST] /sessions/reset password has already been used before', async () => {
-    const deliveryman = await deliverymanFatory.makePrismaDeliveryman({
+    const deliveryman = await deliverymanFactory.makePrismaDeliveryman({
       cpf: '123456789',
       name: 'Jon Doe',
       role: 'ADMIN',

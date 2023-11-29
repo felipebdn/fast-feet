@@ -2,6 +2,7 @@ import { AppModule } from '@/infra/app.module'
 import { BcryptHarsher } from '@/infra/cryptography/bcrypt-harsher'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { faker } from '@faker-js/faker'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
@@ -31,7 +32,7 @@ describe('Create delivery man (E2E)', () => {
     await app.init()
   })
 
-  test('[POST] /accounts/deliveryman', async () => {
+  test('[POST] /orders', async () => {
     const delivery = await deliverymanFactory.makePrismaDeliveryman({
       cpf: '000000001',
       name: 'administrator',
@@ -45,20 +46,28 @@ describe('Create delivery man (E2E)', () => {
     })
 
     const response = await request(app.getHttpServer())
-      .post('/accounts/deliveryman')
+      .post('/orders')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        name: 'Jon Doe',
-        cpf: '12345678',
-        password: '123456',
-        role: 'MEMBER',
+        name: faker.person.fullName(),
+        street: faker.location.street(),
+        complement: faker.location.secondaryAddress(),
+        zipCode: faker.location.zipCode(),
+        city: faker.location.city(),
+        state: faker.location.state(),
+        county: faker.location.county(),
+        number: parseInt(faker.location.buildingNumber()),
+        bulk: faker.number.float({ min: 0 }),
+        rotule: faker.lorem.sentence(3),
+        weight: faker.number.float({ min: 0 }),
+        code: 'code-01',
       })
 
     expect(response.statusCode).toBe(201)
 
-    const userOnDatabase = await prisma.deliveryman.findUnique({
+    const userOnDatabase = await prisma.order.findUnique({
       where: {
-        cpf: '12345678',
+        code: 'code-01',
       },
     })
 

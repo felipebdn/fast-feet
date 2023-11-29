@@ -27,7 +27,7 @@ export class AuthenticateController {
   @UsePipes(new ZodValidationPipe(authenticateBodySchema))
   @Public()
   async handle(@Body() body: AuthenticateBodyType) {
-    const { cpf, password } = authenticateBodySchema.parse(body)
+    const { cpf, password } = body
 
     const result = await this.authenticate.execute({ cpf, password })
 

@@ -26,7 +26,7 @@ export function makeOrder(
 }
 
 @Injectable()
-export class OrderFatory {
+export class OrderFactory {
   constructor(private prismaService: PrismaService) {}
 
   async makePrismaOrder(data: Partial<OrderProps> = {}): Promise<Order> {

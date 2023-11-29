@@ -1,7 +1,9 @@
 import { CreateOrderUseCase } from '@/domain/logistics/application/use-cases/create-order'
 import { Authorize, JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import {
+  BadRequestException,
   Body,
+  ConflictException,
   Controller,
   HttpCode,
   Post,
@@ -10,15 +12,8 @@ import {
 } from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
-import {
-  CreateAddressUseCase,
-  CreateAddressUseCaseResponse,
-} from '@/domain/logistics/application/use-cases/create-address'
-import {
-  CreateRecipientUseCase,
-  CreateRecipientUseCaseResponse,
-} from '@/domain/logistics/application/use-cases/create-recipient'
-import { DeleteOrderUseCase } from '@/domain/logistics/application/use-cases/delete-order'
+import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
+import { CreateOrderError } from '@/domain/logistics/application/use-cases/errors/create-order-error'
 
 const createOrderBodySchema = z.object({
   name: z.string(),
@@ -40,23 +35,15 @@ type CreateOrderBodyType = z.infer<typeof createOrderBodySchema>
 @Controller('/orders')
 @UseGuards(JwtAuthGuard)
 export class CreateOrderController {
-  constructor(
-    private createOrderUseCase: CreateOrderUseCase,
-    private createAddressUseCase: CreateAddressUseCase,
-    private createRecipientUseCase: CreateRecipientUseCase,
-    private deleteAddress: DeleteOrderUseCase,
-  ) {}
+  constructor(private createOrderUseCase: CreateOrderUseCase) {}
 
   @Post()
   @HttpCode(201)
   @Authorize('ADMIN')
   @UsePipes(new ZodValidationPipe(createOrderBodySchema))
   async handle(@Body() body: CreateOrderBodyType) {
-    let address: CreateAddressUseCaseResponse
-    let recipient: CreateRecipientUseCaseResponse
-
-    try {
-      const resultAddress = await this.createAddressUseCase.execute({
+    const result = await this.createOrderUseCase.execute({
+      address: {
         city: body.city,
         code: body.zipCode,
         complement: body.complement,
@@ -64,34 +51,29 @@ export class CreateOrderController {
         state: body.state,
         street: body.street,
         number: body.number,
-      })
-      address = resultAddress
-      if (!address.isRight()) {
-        throw new Error()
-      }
-
-      const resultRecipient = await this.createRecipientUseCase.execute({
-        addressId: address.value.address.id.toString(),
-        name: body.name,
-      })
-      recipient = resultRecipient
-      if (!recipient.isRight()) {
-        throw new Error()
-      }
-
-      const resultOrder = await this.createOrderUseCase.execute({
-        addressId: address.value.address.id.toString(),
-        recipientId: recipient.value.recipient.id.toString(),
+      },
+      order: {
         bulk: body.bulk,
         code: body.code,
         rotule: body.rotule,
         weight: body.weight,
-      })
-      if (resultOrder.isLeft()) {
-        throw new Error()
+      },
+      recipient: {
+        name: body.name,
+      },
+    })
+
+    if (result.isLeft()) {
+      const error = result.value
+
+      switch (error.constructor) {
+        case ValueAlreadyExistsError:
+          throw new ConflictException(error.message)
+        case CreateOrderError:
+          throw new BadRequestException(error.message)
+        default:
+          throw new BadRequestException(error.message)
       }
-    } catch (error) {
-      if()
     }
   }
 }

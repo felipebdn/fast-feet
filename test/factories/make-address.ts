@@ -30,7 +30,7 @@ export function makeAddress(
 }
 
 @Injectable()
-export class AddressFatory {
+export class AddressFactory {
   constructor(private prismaService: PrismaService) {}
 
   async makePrismaAddress(data: Partial<AddressProps> = {}): Promise<Address> {

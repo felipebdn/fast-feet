@@ -25,7 +25,7 @@ export function makeRecipient(
 }
 
 @Injectable()
-export class RecipientFatory {
+export class RecipientFactory {
   constructor(private prismaService: PrismaService) {}
 
   async makePrismaRecipient(

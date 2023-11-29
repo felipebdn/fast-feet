@@ -27,7 +27,7 @@ export function makeDeliveryman(
 }
 
 @Injectable()
-export class DeliverymanFatory {
+export class DeliverymanFactory {
   constructor(private prismaService: PrismaService) {}
 
   async makePrismaDeliveryman(

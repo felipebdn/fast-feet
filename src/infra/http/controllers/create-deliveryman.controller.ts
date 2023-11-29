@@ -33,8 +33,7 @@ export class CreateDeliverymanController {
   @UsePipes(new ZodValidationPipe(createDeliverymanBodySchema))
   @Authorize('ADMIN')
   async handle(@Body() body: CreateDeliverymanBodyType) {
-    const { name, cpf, password, role } =
-      createDeliverymanBodySchema.parse(body)
+    const { name, cpf, password, role } = body
 
     const result = await this.createDeliveryman.execute({
       cpf,

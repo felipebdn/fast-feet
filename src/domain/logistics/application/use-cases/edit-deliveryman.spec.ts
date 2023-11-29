@@ -1,6 +1,6 @@
 import { makeDeliveryman } from 'test/factories/make-deliveryman'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { InMemoryDeliverymanRepository } from 'test/repositories/in-memeory-deliveryman-repository'
+import { InMemoryDeliverymanRepository } from 'test/repositories/in-memory-deliveryman-repository'
 import { EditDeliverymanUseCase } from './edit-deliveryman'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository

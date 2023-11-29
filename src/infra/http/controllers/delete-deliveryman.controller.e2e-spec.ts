@@ -6,35 +6,35 @@ import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
-import { DeliverymanFatory } from 'test/factories/make-deliveryman'
+import { DeliverymanFactory } from 'test/factories/make-deliveryman'
 
 describe('Delete Deliveryman (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let deliverymanFatory: DeliverymanFatory
+  let deliverymanFactory: DeliverymanFactory
   let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [DeliverymanFatory],
+      providers: [DeliverymanFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
     jwt = moduleRef.get(JwtService)
-    deliverymanFatory = moduleRef.get(DeliverymanFatory)
+    deliverymanFactory = moduleRef.get(DeliverymanFactory)
 
     await app.init()
   })
 
   test('[DELETE] /users/:id', async () => {
-    const deliverymanAdmin = await deliverymanFatory.makePrismaDeliveryman({
+    const deliverymanAdmin = await deliverymanFactory.makePrismaDeliveryman({
       role: 'ADMIN',
     })
 
-    const deliveryman = await deliverymanFatory.makePrismaDeliveryman()
+    const deliveryman = await deliverymanFactory.makePrismaDeliveryman()
 
     const accessToken = jwt.sign({
       sub: deliverymanAdmin.id.toString(),
