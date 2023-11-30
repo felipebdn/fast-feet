@@ -6,7 +6,7 @@ POST {{baseUrl}}/sessions/login
 Content-Type: application/json
 
 {
-  "cpf": "0000000001",
+  "cpf": "000000001",
   "password": "123456"
 }
 
@@ -22,6 +22,28 @@ Authorization: Bearer {{authToken}}
   "cpf": "00000000005",
   "password": "123456",
   "role": "MEMBER"
+}
+
+###
+
+# @name create_order
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "john doe",
+  "street": "z.string()",
+  "complement": "z.string()",
+  "zipCode": "z.string()",
+  "city": "z.string()",
+  "state": "z.string()",
+  "county": "z.string()",
+  "number": 43,
+  "bulk": 43,
+  "rotule": "z.string()",
+  "weight": 43,
+  "code": "z.string()"
 }
 
 ###

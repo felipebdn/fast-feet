@@ -53,8 +53,6 @@ export class CreateOrderUseCase {
       // Inicia a transação
       transactionId = Date.now()
       await this.orderRepository.createTransaction(transactionId)
-      await this.addressRepository.createTransaction(transactionId)
-      await this.recipientRepository.createTransaction(transactionId)
 
       const isCodeAlreadyExistsOnOrder = await this.orderRepository.findByCode(
         order.code,
@@ -106,8 +104,6 @@ export class CreateOrderUseCase {
       // Em caso de erro, desfaz a transação
       if (transactionId) {
         await this.orderRepository.rollbackTransaction(transactionId)
-        await this.addressRepository.rollbackTransaction(transactionId)
-        await this.recipientRepository.rollbackTransaction(transactionId)
       }
 
       return left(new CreateOrderError())

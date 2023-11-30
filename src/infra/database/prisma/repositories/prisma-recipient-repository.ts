@@ -44,4 +44,16 @@ export class PrismaRecipientRepository implements RecipientRepository {
       },
     })
   }
+
+  async createTransaction(transactionId: number): Promise<void> {
+    await this.prisma.$executeRaw`SAVEPOINT ${transactionId};`
+  }
+
+  async commitTransaction(transactionId: number): Promise<void> {
+    await this.prisma.$executeRaw`RELEASE SAVEPOINT ${transactionId};`
+  }
+
+  async rollbackTransaction(transactionId: number): Promise<void> {
+    await this.prisma.$executeRaw`ROLLBACK TO SAVEPOINT ${transactionId};`
+  }
 }

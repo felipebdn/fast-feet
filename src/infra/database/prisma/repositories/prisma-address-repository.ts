@@ -1,12 +1,13 @@
+import { Injectable } from '@nestjs/common'
 import { AddressRepository } from '@/domain/logistics/application/repositories/address-repository'
 import { Address } from '@/domain/logistics/enterprise/entities/address'
 import { PrismaService } from '../prisma.service'
-import { Injectable } from '@nestjs/common'
 import { PrismaAddressMapper } from '../mappers/prisma-address-mapper'
 
 @Injectable()
 export class PrismaAddressRepository implements AddressRepository {
   constructor(private prisma: PrismaService) {}
+
   async create(address: Address) {
     await this.prisma.address.create({
       data: PrismaAddressMapper.toPrisma(address),
@@ -54,5 +55,17 @@ export class PrismaAddressRepository implements AddressRepository {
       return null
     }
     return PrismaAddressMapper.toDomain(address)
+  }
+
+  async createTransaction(transactionId: number): Promise<void> {
+    await this.prisma.$executeRaw`SAVEPOINT ${transactionId};`
+  }
+
+  async commitTransaction(transactionId: number): Promise<void> {
+    await this.prisma.$executeRaw`RELEASE SAVEPOINT ${transactionId};`
+  }
+
+  async rollbackTransaction(transactionId: number): Promise<void> {
+    await this.prisma.$executeRaw`ROLLBACK TO SAVEPOINT ${transactionId};`
   }
 }
