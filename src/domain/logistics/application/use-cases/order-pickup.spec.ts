@@ -1,14 +1,14 @@
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { OrderPuckupUseCase } from './order-pickup'
 import { makeOrder } from 'test/factories/make-order'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { ObjectAlreadyResponsibleDeliveryman } from '@/core/errors/errors/object-already-responsible-deliveryman-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+import { OrderPickupUseCase } from './transactions-resolver'
 
 let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository
-let sut: OrderPuckupUseCase
+let sut: OrderPickupUseCase
 
 describe('Order Pickup', () => {
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe('Order Pickup', () => {
     inMemoryOrderRepository = new InMemoryOrderRepository(
       inMemoryAddressRepository,
     )
-    sut = new OrderPuckupUseCase(inMemoryOrderRepository)
+    sut = new OrderPickupUseCase(inMemoryOrderRepository)
   })
   it('should be able to collect a delivery', async () => {
     const order = makeOrder()

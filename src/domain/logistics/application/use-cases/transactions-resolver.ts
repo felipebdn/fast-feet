@@ -4,23 +4,23 @@ import { Either, left, right } from '@/core/either'
 import { ObjectAlreadyResponsibleDeliveryman } from '@/core/errors/errors/object-already-responsible-deliveryman-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 
-interface TransactionsResolverUseCaseRequest {
+interface OrderPickupUseCaseRequest {
   orderId: string
   deliverymanId: string
 }
 
-type TransactionsResolverUseCaseResponse = Either<
+type OrderPickupUseCaseResponse = Either<
   ResourceNotFoundError | ObjectAlreadyResponsibleDeliveryman,
   unknown
 >
 
-export class TransactionsResolverUseCase {
+export class OrderPickupUseCase {
   constructor(private orderRepository: OrderRepository) {}
 
   async execute({
     deliverymanId,
     orderId,
-  }: TransactionsResolverUseCaseRequest): Promise<TransactionsResolverUseCaseResponse> {
+  }: OrderPickupUseCaseRequest): Promise<OrderPickupUseCaseResponse> {
     const order = await this.orderRepository.findById(orderId)
 
     if (!order) {
