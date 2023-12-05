@@ -1,9 +1,23 @@
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { Order } from '../../enterprise/entities/order'
+import { Prisma } from '@prisma/client'
 
 export abstract class OrderRepository {
-  abstract create(order: Order): Promise<void>
-  abstract save(order: Order): Promise<void>
+  abstract create(
+    order: Order,
+    transactionScope: Prisma.TransactionClient,
+  ): Promise<void>
+
+  abstract save(
+    order: Order,
+    transactionScope: Prisma.TransactionClient,
+  ): Promise<void>
+
+  abstract delete(
+    id: string,
+    transactionScope: Prisma.TransactionClient,
+  ): Promise<void>
+
   abstract findManyByCityAndState(
     city: string,
     state: string,
@@ -14,5 +28,4 @@ export abstract class OrderRepository {
   abstract findManyCompletedById(deliveryId: string): Promise<Order[]>
   abstract findById(id: string): Promise<Order | null>
   abstract findByCode(code: string): Promise<Order | null>
-  abstract delete(id: string): Promise<void>
 }

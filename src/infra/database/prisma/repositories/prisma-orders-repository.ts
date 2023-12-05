@@ -11,9 +11,11 @@ export class PrismaOrdersRepository implements OrderRepository {
 
   async create(order: Order) {
     const data = PrismaOrderMapper.toPrisma(order)
-    await this.prisma.order.create({
-      data,
-    })
+    await this.prisma.$transaction([
+      this.prisma.order.create({
+        data,
+      }),
+    ])
   }
 
   async save(order: Order) {
