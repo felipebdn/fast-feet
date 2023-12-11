@@ -12,7 +12,7 @@ interface createAddressUseCaseRequest {
   county: string
   number?: number
 }
-export type CreateAddressUseCaseResponse = Either<unknown, { address: Address }>
+export type CreateAddressUseCaseResponse = Either<null, { address: Address }>
 
 @Injectable()
 export class CreateAddressUseCase {

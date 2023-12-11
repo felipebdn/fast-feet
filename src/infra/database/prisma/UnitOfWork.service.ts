@@ -17,22 +17,29 @@ type CreateHof = <FnParams, FnReturn>(
 
 export class UnitOfWork<T extends PrismaService> {
   private _databaseConnection: T
-  private _operations: any[] = []
+  private _hofs: Hof[] = []
 
   constructor(databaseConnection: T) {
     this._databaseConnection = databaseConnection
   }
 
-  public createTransaction(operations: any[]) {
-    this._operations = operations
+  public createTransaction(hofs: Hof[]) {
+    this._hofs = hofs
   }
+
+  public createHof =
+    <FnParams, FnReturn>(instruction: Instruction<FnParams, FnReturn>) =>
+    (callback) =>
+      callback(instruction)
 
   async commit(): Promise<boolean> {
     try {
       this._databaseConnection.$transaction(async (tx) => {
-        for (const operation of this._operations) {
-          await operation.fn(operation.params, tx)
-        }
+        this._hofs.forEach((hof) => {
+          hof(async (instruction) => {
+            await instruction.fn(instruction.params, tx)
+          })
+        })
       })
       return true
     } catch (error) {

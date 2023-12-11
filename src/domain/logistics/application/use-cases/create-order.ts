@@ -8,6 +8,7 @@ import { RecipientRepository } from '../repositories/recipient-repository'
 import { Address } from '../../enterprise/entities/address'
 import { Recipient } from '../../enterprise/entities/recipient'
 import { CreateOrderError } from './errors/create-order-error'
+import { Transaction } from '../transaction/transaction'
 
 interface CreateOrderUseCaseRequest {
   address: {
@@ -37,6 +38,7 @@ type CreateOrderUseCaseResponse = Either<
 @Injectable()
 export class CreateOrderUseCase {
   constructor(
+    private transaction: Transaction,
     private orderRepository: OrderRepository,
     private addressRepository: AddressRepository,
     private recipientRepository: RecipientRepository,
@@ -56,13 +58,11 @@ export class CreateOrderUseCase {
     }
 
     const addressCreate = Address.create(address)
-    await this.addressRepository.create(addressCreate)
 
     const recipientCreate = Recipient.create({
       addressId: addressCreate.id,
       name: recipient.name,
     })
-    await this.recipientRepository.create(recipientCreate)
 
     const orderCreate = Order.create({
       addressId: addressCreate.id,
@@ -75,8 +75,13 @@ export class CreateOrderUseCase {
     await this.orderRepository.create(orderCreate)
 
     addressCreate.orderId = orderCreate.id
-    await this.addressRepository.save(addressCreate)
     recipientCreate.orderId = orderCreate.id
+
+    this.transaction.createTransaction()
+
+    await this.addressRepository.create(addressCreate)
+    await this.recipientRepository.create(recipientCreate)
+    await this.addressRepository.save(addressCreate)
     await this.recipientRepository.save(recipientCreate)
 
     return right({

@@ -11,6 +11,10 @@ export class PrismaOrdersRepository implements OrderRepository {
 
   async create(order: Order) {
     const data = PrismaOrderMapper.toPrisma(order)
+    await this.prisma.$transaction(async (tx) => {
+      await tx.address.findFirst()
+    })
+
     await this.prisma.$transaction([
       this.prisma.order.create({
         data,
