@@ -3,6 +3,8 @@ import { Recipient } from '@/domain/logistics/enterprise/entities/recipient'
 import { PrismaService } from '../prisma.service'
 import { PrismaRecipientMapper } from '../mappers/prisma-recipient-mapper'
 import { Injectable } from '@nestjs/common'
+import * as runtime from '@prisma/client/runtime/library'
+import { PrismaClient } from '@prisma/client'
 
 @Injectable()
 export class PrismaRecipientRepository implements RecipientRepository {
@@ -20,16 +22,24 @@ export class PrismaRecipientRepository implements RecipientRepository {
     return PrismaRecipientMapper.toDomain(recipient)
   }
 
-  async create(recipient: Recipient): Promise<void> {
+  async create(
+    recipient: Recipient,
+    tx?: Omit<PrismaClient, runtime.ITXClientDenyList>,
+  ): Promise<void> {
+    const fn = tx ?? this.prisma
     const data = PrismaRecipientMapper.toPrisma(recipient)
-    await this.prisma.recipient.create({
+    await fn.recipient.create({
       data,
     })
   }
 
-  async save(recipient: Recipient): Promise<void> {
+  async save(
+    recipient: Recipient,
+    tx?: Omit<PrismaClient, runtime.ITXClientDenyList>,
+  ): Promise<void> {
+    const fn = tx ?? this.prisma
     const data = PrismaRecipientMapper.toPrisma(recipient)
-    await this.prisma.recipient.update({
+    await fn.recipient.update({
       data,
       where: {
         id: data.id,

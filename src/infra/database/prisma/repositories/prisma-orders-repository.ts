@@ -4,22 +4,23 @@ import { Order } from '@/domain/logistics/enterprise/entities/order'
 import { PrismaOrderMapper } from '../mappers/prisma-order-mapper'
 import { PrismaService } from '../prisma.service'
 import { Injectable } from '@nestjs/common'
+import * as runtime from '@prisma/client/runtime/library'
+import { PrismaClient } from '@prisma/client'
 
 @Injectable()
 export class PrismaOrdersRepository implements OrderRepository {
   constructor(private prisma: PrismaService) {}
 
-  async create(order: Order) {
+  async create(
+    order: Order,
+    tx?: Omit<PrismaClient, runtime.ITXClientDenyList>,
+  ) {
+    const fn = tx ?? this.prisma
     const data = PrismaOrderMapper.toPrisma(order)
-    await this.prisma.$transaction(async (tx) => {
-      await tx.address.findFirst()
-    })
 
-    await this.prisma.$transaction([
-      this.prisma.order.create({
-        data,
-      }),
-    ])
+    await fn.order.create({
+      data,
+    })
   }
 
   async save(order: Order) {

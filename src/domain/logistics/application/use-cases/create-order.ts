@@ -7,7 +7,6 @@ import { AddressRepository } from '../repositories/address-repository'
 import { RecipientRepository } from '../repositories/recipient-repository'
 import { Address } from '../../enterprise/entities/address'
 import { Recipient } from '../../enterprise/entities/recipient'
-import { CreateOrderError } from './errors/create-order-error'
 import { Transaction } from '../transaction/transaction'
 
 interface CreateOrderUseCaseRequest {
@@ -31,7 +30,7 @@ interface CreateOrderUseCaseRequest {
   }
 }
 type CreateOrderUseCaseResponse = Either<
-  ValueAlreadyExistsError | CreateOrderError,
+  ValueAlreadyExistsError,
   { order: Order; address: Address; recipient: Recipient }
 >
 
@@ -72,17 +71,17 @@ export class CreateOrderUseCase {
       rotule: order.rotule,
       weight: order.weight,
     })
-    await this.orderRepository.create(orderCreate)
 
     addressCreate.orderId = orderCreate.id
     recipientCreate.orderId = orderCreate.id
 
-    this.transaction.createTransaction()
-
-    await this.addressRepository.create(addressCreate)
-    await this.recipientRepository.create(recipientCreate)
-    await this.addressRepository.save(addressCreate)
-    await this.recipientRepository.save(recipientCreate)
+    this.transaction.createTransaction([
+      this.addressRepository.create(addressCreate),
+      this.recipientRepository.create(recipientCreate),
+      this.orderRepository.create(orderCreate),
+      this.addressRepository.save(addressCreate),
+      this.recipientRepository.save(recipientCreate),
+    ])
 
     return right({
       order: orderCreate,

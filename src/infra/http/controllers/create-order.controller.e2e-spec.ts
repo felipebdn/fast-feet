@@ -63,6 +63,10 @@ describe('Create delivery man (E2E)', () => {
         code: 'code-01',
       })
 
+    console.log(await prisma.address.findFirst())
+    console.log(await prisma.recipient.findFirst())
+    console.log(await prisma.order.findFirst())
+
     expect(response.statusCode).toBe(201)
 
     const userOnDatabase = await prisma.order.findUnique({

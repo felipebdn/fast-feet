@@ -3,13 +3,33 @@ import { AddressRepository } from '@/domain/logistics/application/repositories/a
 import { Address } from '@/domain/logistics/enterprise/entities/address'
 import { PrismaService } from '../prisma.service'
 import { PrismaAddressMapper } from '../mappers/prisma-address-mapper'
+import { PrismaClient } from '@prisma/client'
+import * as runtime from '@prisma/client/runtime/library'
 
 @Injectable()
 export class PrismaAddressRepository implements AddressRepository {
   constructor(private prisma: PrismaService) {}
 
-  async create(address: Address) {
-    await this.prisma.address.create({
+  async save(
+    address: Address,
+    tx?: Omit<PrismaClient, runtime.ITXClientDenyList>,
+  ): Promise<void> {
+    const fn = tx ?? this.prisma
+    const data = PrismaAddressMapper.toPrisma(address)
+    await fn.address.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
+  }
+
+  async create(
+    address: Address,
+    tx?: Omit<PrismaClient, runtime.ITXClientDenyList>,
+  ) {
+    const fn = tx ?? this.prisma
+    await fn.address.create({
       data: PrismaAddressMapper.toPrisma(address),
     })
   }
@@ -25,16 +45,6 @@ export class PrismaAddressRepository implements AddressRepository {
       },
     })
     return locals.map(PrismaAddressMapper.toDomain)
-  }
-
-  async save(address: Address): Promise<void> {
-    const data = PrismaAddressMapper.toPrisma(address)
-    await this.prisma.address.update({
-      where: {
-        id: data.id,
-      },
-      data,
-    })
   }
 
   async delete(id: string): Promise<void> {
