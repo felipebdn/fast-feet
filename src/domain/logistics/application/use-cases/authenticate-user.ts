@@ -1,9 +1,11 @@
-import { Either, left, right } from '@/core/either'
-import { DeliverymanRepository } from '../repositories/deliveryman-repository'
-import { HashCompare } from '../cryptography/hash-compare'
-import { Encrypter } from '../cryptography/encrypter'
-import { WrongCredentialsError } from './errors/wrong-credentials-error'
 import { Injectable } from '@nestjs/common'
+
+import { Either, left, right } from '@/core/either'
+
+import { Encrypter } from '../cryptography/encrypter'
+import { HashCompare } from '../cryptography/hash-compare'
+import { DeliverymanRepository } from '../repositories/deliveryman-repository'
+import { WrongCredentialsError } from './errors/wrong-credentials-error'
 
 interface AuthenticateUserUseCaseRequest {
   cpf: string

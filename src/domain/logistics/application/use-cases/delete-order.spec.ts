@@ -1,10 +1,11 @@
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
-import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
-import { DeleteOrderUseCase } from './delete-order'
 import { makeAddress } from 'test/factories/make-address'
-import { makeRecipient } from 'test/factories/make-recipient'
 import { makeOrder } from 'test/factories/make-order'
+import { makeRecipient } from 'test/factories/make-recipient'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+
+import { DeleteOrderUseCase } from './delete-order'
 
 let inMemoryOrderRepository: InMemoryOrderRepository
 let inMemoryAddressRepository: InMemoryAddressRepository

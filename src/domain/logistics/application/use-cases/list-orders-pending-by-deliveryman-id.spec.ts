@@ -1,8 +1,10 @@
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { ListOrdersPendingByDeliveryIdUseCase } from './list-orders-pending-by-deliveryman-id'
 import { makeOrder } from 'test/factories/make-order'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+
+import { ListOrdersPendingByDeliveryIdUseCase } from './list-orders-pending-by-deliveryman-id'
 
 let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository

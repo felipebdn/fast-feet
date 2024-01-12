@@ -1,6 +1,7 @@
 import { DomainEvents } from '@/core/events/domain-events'
 import { EventHandler } from '@/core/events/event-handler'
 import { UpdateStateOrderEvent } from '@/domain/logistics/enterprise/events/mark-order-colected-event'
+
 import { SendNotificationUseCase } from '../use-cases/send-notification'
 
 export class OnMarkOrderColected implements EventHandler {

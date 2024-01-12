@@ -1,9 +1,11 @@
-import { InMemoryDeliverymanRepository } from 'test/repositories/in-memory-deliveryman-repository'
-import { makeDeliveryman } from 'test/factories/make-deliveryman'
-import { ChangePasswordUseCase } from './change-password'
-import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
-import { PasswordAlreadyUsedError } from './errors/password-already-used-error'
 import { FakeHarsher } from 'test/cryptography/fake-harsher'
+import { makeDeliveryman } from 'test/factories/make-deliveryman'
+import { InMemoryDeliverymanRepository } from 'test/repositories/in-memory-deliveryman-repository'
+
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+
+import { ChangePasswordUseCase } from './change-password'
+import { PasswordAlreadyUsedError } from './errors/password-already-used-error'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository
 let fakeHarsher: FakeHarsher

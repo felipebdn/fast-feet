@@ -1,12 +1,13 @@
+import { faker } from '@faker-js/faker'
+import { Injectable } from '@nestjs/common'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
   Deliveryman,
   DeliverymanProps,
 } from '@/domain/logistics/enterprise/entities/deliveryman'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
-import { faker } from '@faker-js/faker'
-import { Injectable } from '@nestjs/common'
 import { PrismaDeliverymanMapper } from '@/infra/database/prisma/mappers/prisma-deliveryman-mapper'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
 
 export function makeDeliveryman(
   override: Partial<DeliverymanProps> = {},

@@ -1,7 +1,9 @@
-import { Either, right } from '@/core/either'
-import { OrderRepository } from '../repositories/orders-repository'
-import { Order } from '../../enterprise/entities/order'
 import { Injectable } from '@nestjs/common'
+
+import { Either, right } from '@/core/either'
+
+import { Order } from '../../enterprise/entities/order'
+import { OrderRepository } from '../repositories/orders-repository'
 
 interface FetchOrderSameCityUseCaseRequest {
   city: string

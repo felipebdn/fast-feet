@@ -1,9 +1,11 @@
-import { RecipientRepository } from '../repositories/recipient-repository'
-import { Recipient } from '../../enterprise/entities/recipient'
-import { Either, right } from '@/core/either'
-import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
 import { Injectable } from '@nestjs/common'
+
+import { Either, right } from '@/core/either'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
+
+import { Recipient } from '../../enterprise/entities/recipient'
+import { RecipientRepository } from '../repositories/recipient-repository'
 
 interface CreateRecipientUseCaseRequest {
   name: string

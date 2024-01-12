@@ -1,7 +1,9 @@
 import { Controller, Get, HttpCode, Query, UsePipes } from '@nestjs/common'
-import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
+
 import { FetchOrderSameCityUseCase } from '@/domain/logistics/application/use-cases/fetch-orders-same-city'
+import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
+
 import { HTTPOrderPresenter } from '../presenters/http-order-presenter'
 
 const fetchOrdersQuerySchema = z.object({

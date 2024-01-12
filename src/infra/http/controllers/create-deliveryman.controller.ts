@@ -8,11 +8,12 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common'
-import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
+
+import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
 import { CreateDeliverymanUseCase } from '@/domain/logistics/application/use-cases/create-deliveryman'
 import { Authorize, JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
+import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 
 const createDeliverymanBodySchema = z.object({
   name: z.string(),

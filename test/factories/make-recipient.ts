@@ -1,3 +1,6 @@
+import { faker } from '@faker-js/faker'
+import { Injectable } from '@nestjs/common'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
   Recipient,
@@ -5,8 +8,6 @@ import {
 } from '@/domain/logistics/enterprise/entities/recipient'
 import { PrismaRecipientMapper } from '@/infra/database/prisma/mappers/prisma-recipient-mapper'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
-import { faker } from '@faker-js/faker'
-import { Injectable } from '@nestjs/common'
 
 export function makeRecipient(
   override: Partial<RecipientProps> = {},

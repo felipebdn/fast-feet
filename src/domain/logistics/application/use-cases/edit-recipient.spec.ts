@@ -1,7 +1,9 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { EditRecipientUseCase } from './edit-recipient'
-import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
 import { makeRecipient } from 'test/factories/make-recipient'
+import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+
+import { EditRecipientUseCase } from './edit-recipient'
 
 let inMemoryRecipientRepository: InMemoryRecipientRepository
 let sut: EditRecipientUseCase

@@ -1,13 +1,14 @@
-import { AppModule } from '@/infra/app.module'
-import { BcryptHarsher } from '@/infra/cryptography/bcrypt-harsher'
-import { DatabaseModule } from '@/infra/database/database.module'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { faker } from '@faker-js/faker'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { DeliverymanFactory } from 'test/factories/make-deliveryman'
+
+import { AppModule } from '@/infra/app.module'
+import { BcryptHarsher } from '@/infra/cryptography/bcrypt-harsher'
+import { DatabaseModule } from '@/infra/database/database.module'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
 
 describe('Create delivery man (E2E)', () => {
   let app: INestApplication

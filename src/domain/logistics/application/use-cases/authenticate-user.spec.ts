@@ -1,9 +1,10 @@
-import { makeDeliveryman } from 'test/factories/make-deliveryman'
-import { FakeHarsher } from 'test/cryptography/fake-harsher'
 import { FakeEncrypter } from 'test/cryptography/fake-encrypter'
+import { FakeHarsher } from 'test/cryptography/fake-harsher'
+import { makeDeliveryman } from 'test/factories/make-deliveryman'
+import { InMemoryDeliverymanRepository } from 'test/repositories/in-memory-deliveryman-repository'
+
 import { AuthenticateUserUseCase } from './authenticate-user'
 import { WrongCredentialsError } from './errors/wrong-credentials-error'
-import { InMemoryDeliverymanRepository } from 'test/repositories/in-memory-deliveryman-repository'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository
 let fakeHash: FakeHarsher

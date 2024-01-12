@@ -8,10 +8,12 @@ import {
   UsePipes,
 } from '@nestjs/common'
 import { z } from 'zod'
-import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+
 import { ChangePasswordUseCase } from '@/domain/logistics/application/use-cases/change-password'
-import { Authorize } from '@/infra/auth/jwt-auth.guard'
 import { PasswordAlreadyUsedError } from '@/domain/logistics/application/use-cases/errors/password-already-used-error'
+import { Authorize } from '@/infra/auth/jwt-auth.guard'
+
+import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const changePasswordBodySchema = z.object({
   deliverymanId: z.string(),

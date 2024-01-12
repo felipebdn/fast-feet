@@ -1,11 +1,13 @@
-import { expect } from 'vitest'
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { MarkOrderAsReturnedUseCase } from './mark-order-as-returned'
 import { makeOrder } from 'test/factories/make-order'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { expect } from 'vitest'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { OrderNotIsColectedError } from '@/core/errors/errors/order-not-is-colected-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
-import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+
+import { MarkOrderAsReturnedUseCase } from './mark-order-as-returned'
 
 let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository

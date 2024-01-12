@@ -6,7 +6,7 @@ POST {{baseUrl}}/sessions/login
 Content-Type: application/json
 
 {
-  "cpf": "0000000001",
+  "cpf": "04547808260",
   "password": "123456"
 }
 

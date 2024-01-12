@@ -1,5 +1,3 @@
-import { CreateOrderUseCase } from '@/domain/logistics/application/use-cases/create-order'
-import { Authorize, JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import {
   BadRequestException,
   Body,
@@ -11,9 +9,13 @@ import {
   UsePipes,
 } from '@nestjs/common'
 import { z } from 'zod'
-import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+
 import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
+import { CreateOrderUseCase } from '@/domain/logistics/application/use-cases/create-order'
 import { CreateOrderError } from '@/domain/logistics/application/use-cases/errors/create-order-error'
+import { Authorize, JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+
+import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const createOrderBodySchema = z.object({
   name: z.string(),

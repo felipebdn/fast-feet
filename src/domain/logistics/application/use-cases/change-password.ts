@@ -1,10 +1,12 @@
-import { Either, left, right } from '@/core/either'
-import { DeliverymanRepository } from '../repositories/deliveryman-repository'
-import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
-import { PasswordAlreadyUsedError } from './errors/password-already-used-error'
 import { Injectable } from '@nestjs/common'
-import { HashGenerator } from '../cryptography/hash-generator'
+
+import { Either, left, right } from '@/core/either'
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+
 import { HashCompare } from '../cryptography/hash-compare'
+import { HashGenerator } from '../cryptography/hash-generator'
+import { DeliverymanRepository } from '../repositories/deliveryman-repository'
+import { PasswordAlreadyUsedError } from './errors/password-already-used-error'
 
 interface ChangePasswordUseCaseRequest {
   deliverymanId: string

@@ -1,8 +1,10 @@
+import { Injectable } from '@nestjs/common'
+
 import { RecipientRepository } from '@/domain/logistics/application/repositories/recipient-repository'
 import { Recipient } from '@/domain/logistics/enterprise/entities/recipient'
-import { PrismaService } from '../prisma.service'
+
 import { PrismaRecipientMapper } from '../mappers/prisma-recipient-mapper'
-import { Injectable } from '@nestjs/common'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaRecipientRepository implements RecipientRepository {

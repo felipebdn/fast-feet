@@ -1,11 +1,13 @@
-import { expect } from 'vitest'
 import { faker } from '@faker-js/faker'
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { CreateOrderUseCase } from './create-order'
-import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
-import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
 import { makeOrder } from 'test/factories/make-order'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+import { expect } from 'vitest'
+
 import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
+
+import { CreateOrderUseCase } from './create-order'
 
 let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryRecipientRepository: InMemoryRecipientRepository

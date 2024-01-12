@@ -1,4 +1,5 @@
 import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+
 import { CreateAddressUseCase } from './create-address'
 
 let inMemoryAddressRepository: InMemoryAddressRepository

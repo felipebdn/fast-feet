@@ -1,7 +1,9 @@
-import { AddressRepository } from '../repositories/address-repository'
-import { Address } from '../../enterprise/entities/address'
-import { Either, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
+
+import { Either, right } from '@/core/either'
+
+import { Address } from '../../enterprise/entities/address'
+import { AddressRepository } from '../repositories/address-repository'
 
 interface createAddressUseCaseRequest {
   street: string

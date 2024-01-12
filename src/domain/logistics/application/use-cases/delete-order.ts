@@ -1,8 +1,9 @@
 import { Either, left, right } from '@/core/either'
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+
 import { AddressRepository } from '../repositories/address-repository'
 import { OrderRepository } from '../repositories/orders-repository'
 import { RecipientRepository } from '../repositories/recipient-repository'
-import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 
 interface DeleteOrderUseCaseRequest {
   orderId: string

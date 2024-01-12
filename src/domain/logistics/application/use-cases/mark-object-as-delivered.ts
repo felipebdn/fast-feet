@@ -1,7 +1,8 @@
 import { Either, left, right } from '@/core/either'
-import { OrderRepository } from '../repositories/orders-repository'
-import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { OrderNotIsColectedError } from '@/core/errors/errors/order-not-is-colected-error'
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+
+import { OrderRepository } from '../repositories/orders-repository'
 
 interface MarkObjectAsDeliveredUseCaseRequest {
   orderId: string

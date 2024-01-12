@@ -1,7 +1,8 @@
 import { Either, left, right } from '@/core/either'
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+
 import { Order } from '../../enterprise/entities/order'
 import { OrderRepository } from '../repositories/orders-repository'
-import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
 import { OrderNotIsReturnedError } from './errors/order-not-returned-error'
 
 interface MarkOrderIsAvailablePickupUseCaseRequest {

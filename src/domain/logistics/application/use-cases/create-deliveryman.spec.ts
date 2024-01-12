@@ -1,18 +1,23 @@
-import { InMemoryDeliverymanRepository } from 'test/repositories/in-memory-deliveryman-repository'
-import { CreateDeliverymanUseCase } from './create-deliveryman'
 import { FakeHarsher } from 'test/cryptography/fake-harsher'
+import { InMemoryDeliverymanRepository } from 'test/repositories/in-memory-deliveryman-repository'
+import { InMemoryTransactionScope } from 'test/transactions/in-memory-transaction-scope'
+
+import { CreateDeliverymanUseCase } from './create-deliveryman'
 
 let inMemoryDeliverymanRepository: InMemoryDeliverymanRepository
+let inMemoryTransactionScope: InMemoryTransactionScope
 let fakeHarsher: FakeHarsher
 let sut: CreateDeliverymanUseCase
 
 describe('Create Deliveryman', () => {
   beforeEach(() => {
     inMemoryDeliverymanRepository = new InMemoryDeliverymanRepository()
+    inMemoryTransactionScope = new InMemoryTransactionScope()
     fakeHarsher = new FakeHarsher()
     sut = new CreateDeliverymanUseCase(
       inMemoryDeliverymanRepository,
       fakeHarsher,
+      inMemoryTransactionScope,
     )
   })
   it('should be able to create a new deliveryman', async () => {

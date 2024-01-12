@@ -1,8 +1,10 @@
+import { Injectable } from '@nestjs/common'
+
 import { AddressRepository } from '@/domain/logistics/application/repositories/address-repository'
 import { Address } from '@/domain/logistics/enterprise/entities/address'
-import { PrismaService } from '../prisma.service'
-import { Injectable } from '@nestjs/common'
+
 import { PrismaAddressMapper } from '../mappers/prisma-address-mapper'
+import { PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaAddressRepository implements AddressRepository {

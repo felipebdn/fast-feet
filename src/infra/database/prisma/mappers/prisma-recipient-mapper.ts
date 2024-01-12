@@ -1,6 +1,7 @@
+import { Prisma, Recipient as PrismaRecipient } from '@prisma/client'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Recipient } from '@/domain/logistics/enterprise/entities/recipient'
-import { Prisma, Recipient as PrismaRecipient } from '@prisma/client'
 export class PrismaRecipientMapper {
   static toDomain(raw: PrismaRecipient) {
     return Recipient.create(

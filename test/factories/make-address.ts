@@ -1,3 +1,6 @@
+import { faker } from '@faker-js/faker'
+import { Injectable } from '@nestjs/common'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
   Address,
@@ -5,8 +8,6 @@ import {
 } from '@/domain/logistics/enterprise/entities/address'
 import { PrismaAddressMapper } from '@/infra/database/prisma/mappers/prisma-address-mapper'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
-import { faker } from '@faker-js/faker'
-import { Injectable } from '@nestjs/common'
 
 export function makeAddress(
   override: Partial<AddressProps> = {},

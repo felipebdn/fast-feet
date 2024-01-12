@@ -1,7 +1,9 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { makeOrder } from 'test/factories/make-order'
 import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+
 import { ListOrdersCompletedByDeliveryIdUseCase } from './list-orders-completed-by-deliveryman-id'
 
 let inMemoryAddressRepository: InMemoryAddressRepository

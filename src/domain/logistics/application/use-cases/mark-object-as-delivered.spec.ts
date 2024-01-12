@@ -1,10 +1,12 @@
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { MarkObjectAsDeliveredUseCase } from './mark-object-as-delivered'
 import { makeOrder } from 'test/factories/make-order'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { OrderNotIsColectedError } from '@/core/errors/errors/order-not-is-colected-error'
 import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+
+import { MarkObjectAsDeliveredUseCase } from './mark-object-as-delivered'
 
 let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository

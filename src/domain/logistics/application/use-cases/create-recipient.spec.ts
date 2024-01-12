@@ -1,5 +1,6 @@
-import { CreateRecipientUseCase } from './create-recipient'
 import { InMemoryRecipientRepository } from 'test/repositories/in-memory-recipient-repository'
+
+import { CreateRecipientUseCase } from './create-recipient'
 
 let inMemoryRecipientRepository: InMemoryRecipientRepository
 let sut: CreateRecipientUseCase

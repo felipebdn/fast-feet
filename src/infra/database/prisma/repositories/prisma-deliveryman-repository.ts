@@ -1,12 +1,17 @@
+import { Injectable } from '@nestjs/common'
+
 import { DeliverymanRepository } from '@/domain/logistics/application/repositories/deliveryman-repository'
 import { Deliveryman } from '@/domain/logistics/enterprise/entities/deliveryman'
-import { PrismaService } from '../prisma.service'
+
 import { PrismaDeliverymanMapper } from '../mappers/prisma-deliveryman-mapper'
-import { Injectable } from '@nestjs/common'
+import { PrismaClientManager, PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaDeliverymanRepository implements DeliverymanRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private clientManager: PrismaClientManager,
+  ) {}
 
   async findById(id: string) {
     const deliveryman = await this.prisma.deliveryman.findUnique({
@@ -33,9 +38,12 @@ export class PrismaDeliverymanRepository implements DeliverymanRepository {
   }
 
   async create(deliveryman: Deliveryman) {
-    const data = PrismaDeliverymanMapper.toPrisma(deliveryman)
-    await this.prisma.deliveryman.create({
-      data,
+    this.prisma.run(async () => {
+      const prisma = this.clientManager.getClient()
+      const data = PrismaDeliverymanMapper.toPrisma(deliveryman)
+      await prisma.deliveryman.create({
+        data,
+      })
     })
   }
 

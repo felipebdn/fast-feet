@@ -1,5 +1,6 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { DomainEvent } from '@/core/events/domain-event'
+
 import { Order } from '../entities/order'
 
 export class UpdateStateOrderEvent implements DomainEvent {

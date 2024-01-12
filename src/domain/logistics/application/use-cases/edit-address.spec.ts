@@ -1,7 +1,9 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { EditAddressUseCase } from './edit-address'
-import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 import { makeAddress } from 'test/factories/make-address'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+
+import { EditAddressUseCase } from './edit-address'
 
 let inMemoryAddressRepository: InMemoryAddressRepository
 let sut: EditAddressUseCase

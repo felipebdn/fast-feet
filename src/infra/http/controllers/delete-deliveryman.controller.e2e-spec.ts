@@ -1,12 +1,12 @@
-import { AppModule } from '@/infra/app.module'
-import { BcryptHasher } from '@/infra/cryptography/bcrypt-hasher'
-import { DatabaseModule } from '@/infra/database/database.module'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
 import { DeliverymanFactory } from 'test/factories/make-deliveryman'
+
+import { AppModule } from '@/infra/app.module'
+import { DatabaseModule } from '@/infra/database/database.module'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
 
 describe('Delete Deliveryman (E2E)', () => {
   let app: INestApplication

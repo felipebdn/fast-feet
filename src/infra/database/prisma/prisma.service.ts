@@ -2,18 +2,17 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
 import { Prisma, PrismaClient } from '@prisma/client'
 import { ClsService } from 'nestjs-cls'
 
+import { TransactionScope } from '@/domain/logistics/application/transaction/transaction-scope'
+
 @Injectable()
 export class PrismaService
   extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy
+  implements OnModuleInit, OnModuleDestroy, TransactionScope
 {
-  private readonly transactionContext: ClsService
-
-  constructor(transactionContext: ClsService) {
+  constructor(private transactionContext: ClsService) {
     super({
       log: ['warn', 'error'],
     })
-    this.transactionContext = transactionContext
   }
 
   onModuleInit() {
@@ -53,14 +52,12 @@ export class PrismaService
   }
 }
 
+@Injectable()
 export class PrismaClientManager {
-  private prisma: PrismaClient
-  private transactionContext: ClsService
-
-  constructor(prisma: PrismaClient, transactionContext: ClsService) {
-    this.prisma = prisma
-    this.transactionContext = transactionContext
-  }
+  constructor(
+    private prisma: PrismaClient,
+    private transactionContext: ClsService,
+  ) {}
 
   getClient(): Prisma.TransactionClient {
     const prisma = this.transactionContext.get(

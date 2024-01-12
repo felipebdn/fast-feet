@@ -1,9 +1,11 @@
-import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
-import { FetchOrderSameCityUseCase } from './fetch-orders-same-city'
-import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
 import { makeAddress } from 'test/factories/make-address'
 import { makeOrder } from 'test/factories/make-order'
+import { InMemoryAddressRepository } from 'test/repositories/in-memory-address-repository'
+import { InMemoryOrderRepository } from 'test/repositories/in-memory-order-repository'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+
+import { FetchOrderSameCityUseCase } from './fetch-orders-same-city'
 
 let inMemoryAddressRepository: InMemoryAddressRepository
 let inMemoryOrderRepository: InMemoryOrderRepository

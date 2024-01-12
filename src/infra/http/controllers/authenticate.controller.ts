@@ -7,10 +7,12 @@ import {
   UsePipes,
 } from '@nestjs/common'
 import { z } from 'zod'
+
 import { AuthenticateUserUseCase } from '@/domain/logistics/application/use-cases/authenticate-user'
-import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { WrongCredentialsError } from '@/domain/logistics/application/use-cases/errors/wrong-credentials-error'
 import { Public } from '@/infra/auth/public'
+
+import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 
 const authenticateBodySchema = z.object({
   cpf: z.string(),

@@ -1,6 +1,7 @@
+import { Order as PrismaOrder, Prisma } from '@prisma/client'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Order } from '@/domain/logistics/enterprise/entities/order'
-import { Prisma, Order as PrismaOrder } from '@prisma/client'
 export class PrismaOrderMapper {
   static toDomain(raw: PrismaOrder) {
     return Order.create(

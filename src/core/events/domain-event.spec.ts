@@ -1,8 +1,9 @@
+import { vi } from 'vitest'
+
 import { Entity } from '../entities/entity'
 import { UniqueEntityID } from '../entities/unique-entity-id'
 import { DomainEvent } from './domain-event'
 import { DomainEvents } from './domain-events'
-import { vi } from 'vitest'
 
 class CustomEntityCreated implements DomainEvent {
   public ocurredAt: Date

@@ -1,9 +1,12 @@
-import { Either, left, right } from '@/core/either'
-import { Deliveryman } from '../../enterprise/entities/deliveryman'
-import { DeliverymanRepository } from '../repositories/deliveryman-repository'
-import { ValueAlreadyExistsError } from '../../../../core/errors/errors/value-already-exists-error'
 import { Injectable } from '@nestjs/common'
+
+import { Either, left, right } from '@/core/either'
+
+import { ValueAlreadyExistsError } from '../../../../core/errors/errors/value-already-exists-error'
+import { Deliveryman } from '../../enterprise/entities/deliveryman'
 import { HashGenerator } from '../cryptography/hash-generator'
+import { DeliverymanRepository } from '../repositories/deliveryman-repository'
+import { TransactionScope } from '../transaction/transaction-scope'
 
 interface CreateDeliverymanUseCaseRequest {
   name: string
@@ -23,6 +26,7 @@ export class CreateDeliverymanUseCase {
   constructor(
     private deliverymanRepository: DeliverymanRepository,
     private hashGenerator: HashGenerator,
+    private transactionScope: TransactionScope,
   ) {}
 
   async execute({
@@ -31,9 +35,9 @@ export class CreateDeliverymanUseCase {
     name,
     role,
   }: CreateDeliverymanUseCaseRequest): Promise<CreateDeliverymanUseCaseResponse> {
-    const isCPFAlreadExists = await this.deliverymanRepository.findByCPF(cpf)
+    const isCPFAlreadyExists = await this.deliverymanRepository.findByCPF(cpf)
 
-    if (isCPFAlreadExists) {
+    if (isCPFAlreadyExists) {
       return left(new ValueAlreadyExistsError('CPF'))
     }
 
@@ -46,7 +50,9 @@ export class CreateDeliverymanUseCase {
       role,
     })
 
-    await this.deliverymanRepository.create(deliveryman)
+    await this.transactionScope.run(async () => {
+      await this.deliverymanRepository.create(deliveryman)
+    })
 
     return right({ deliveryman })
   }
