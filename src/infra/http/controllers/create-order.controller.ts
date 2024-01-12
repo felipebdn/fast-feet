@@ -75,5 +75,7 @@ export class CreateOrderController {
           throw new BadRequestException(error.message)
       }
     }
+
+    return { result }
   }
 }

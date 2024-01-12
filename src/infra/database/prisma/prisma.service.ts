@@ -1,15 +1,19 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
+import { ClsService } from 'nestjs-cls'
 
 @Injectable()
 export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  constructor() {
+  private readonly transactionContext: ClsService
+
+  constructor(transactionContext: ClsService) {
     super({
       log: ['warn', 'error'],
     })
+    this.transactionContext = transactionContext
   }
 
   onModuleInit() {
@@ -18,5 +22,54 @@ export class PrismaService
 
   onModuleDestroy() {
     return this.$disconnect()
+  }
+
+  async run(fn: () => Promise<void>): Promise<void> {
+    // tente obter o Transaction Client
+    const prisma = this.transactionContext.get(
+      'PRISMA_CLIENT__KEY',
+    ) as Prisma.TransactionClient
+
+    // se o Cliente de Transação
+    if (prisma) {
+      // existe, não há necessidade de criar uma transação e você apenas executa o retorno de chamada
+      await fn()
+    } else {
+      // se não existe, cria o prisma transaction
+      await this.$transaction(async (prisma) => {
+        // e salve o Transaction Client dentro do namespace CLS para ser recuperado posteriormente
+        this.transactionContext.set('PRISMA_CLIENT__KEY', prisma)
+
+        try {
+          // execute o retorno de chamada da transação
+          await fn()
+        } catch (error) {
+          // desconfigurar o cliente de transação quando algo der errado
+          this.transactionContext.set('PRISMA_CLIENT__KEY', null)
+          throw error
+        }
+      })
+    }
+  }
+}
+
+export class PrismaClientManager {
+  private prisma: PrismaClient
+  private transactionContext: ClsService
+
+  constructor(prisma: PrismaClient, transactionContext: ClsService) {
+    this.prisma = prisma
+    this.transactionContext = transactionContext
+  }
+
+  getClient(): Prisma.TransactionClient {
+    const prisma = this.transactionContext.get(
+      'PRISMA_CLIENT_KEY',
+    ) as Prisma.TransactionClient
+    if (prisma) {
+      return prisma
+    } else {
+      return this.prisma
+    }
   }
 }
