@@ -15,7 +15,7 @@ describe('Change Password (E2E)', () => {
   let jwt: JwtService
   let deliverymanFactory: DeliverymanFactory
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
       providers: [DeliverymanFactory],

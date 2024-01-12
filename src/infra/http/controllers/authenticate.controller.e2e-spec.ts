@@ -10,7 +10,7 @@ describe('Create delivery man (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     }).compile()

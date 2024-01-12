@@ -16,7 +16,7 @@ describe('Create delivery man (E2E)', () => {
   let jwt: JwtService
   let bcryptHarsher: BcryptHarsher
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
       providers: [DeliverymanFactory],

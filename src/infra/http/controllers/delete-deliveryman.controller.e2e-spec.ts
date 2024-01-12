@@ -14,7 +14,7 @@ describe('Delete Deliveryman (E2E)', () => {
   let deliverymanFactory: DeliverymanFactory
   let jwt: JwtService
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
       providers: [DeliverymanFactory],
