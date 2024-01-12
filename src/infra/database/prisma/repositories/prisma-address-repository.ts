@@ -4,13 +4,18 @@ import { AddressRepository } from '@/domain/logistics/application/repositories/a
 import { Address } from '@/domain/logistics/enterprise/entities/address'
 
 import { PrismaAddressMapper } from '../mappers/prisma-address-mapper'
-import { PrismaService } from '../prisma.service'
+import { PrismaClientManager, PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaAddressRepository implements AddressRepository {
-  constructor(private prisma: PrismaService) {}
-  async create(address: Address) {
-    await this.prisma.address.create({
+  constructor(
+    private prisma: PrismaService,
+    private clientManager: PrismaClientManager,
+  ) {}
+
+  async create(address: Address, transactionKey?: string) {
+    const prisma = this.clientManager.getClient(transactionKey)
+    await prisma.address.create({
       data: PrismaAddressMapper.toPrisma(address),
     })
   }

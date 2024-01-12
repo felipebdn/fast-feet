@@ -23,10 +23,10 @@ export class PrismaService
     return this.$disconnect()
   }
 
-  async run(fn: () => Promise<void>): Promise<void> {
+  async run(fn: () => Promise<void>, transactionKey: string): Promise<void> {
     // tente obter o Transaction Client
     const prisma = this.transactionContext.get(
-      'PRISMA_CLIENT__KEY',
+      `PRISMA_CLIENT__KEY_${transactionKey}`,
     ) as Prisma.TransactionClient
 
     // se o Cliente de Transação
@@ -37,14 +37,20 @@ export class PrismaService
       // se não existe, cria o prisma transaction
       await this.$transaction(async (prisma) => {
         // e salve o Transaction Client dentro do namespace CLS para ser recuperado posteriormente
-        this.transactionContext.set('PRISMA_CLIENT__KEY', prisma)
+        this.transactionContext.set(
+          `PRISMA_CLIENT__KEY_${transactionKey}`,
+          prisma,
+        )
 
         try {
           // execute o retorno de chamada da transação
           await fn()
         } catch (error) {
           // desconfigurar o cliente de transação quando algo der errado
-          this.transactionContext.set('PRISMA_CLIENT__KEY', null)
+          this.transactionContext.set(
+            `PRISMA_CLIENT__KEY_${transactionKey}`,
+            null,
+          )
           throw error
         }
       })
@@ -59,9 +65,9 @@ export class PrismaClientManager {
     private transactionContext: ClsService,
   ) {}
 
-  getClient(): Prisma.TransactionClient {
+  getClient(transactionKey?: string): Prisma.TransactionClient {
     const prisma = this.transactionContext.get(
-      'PRISMA_CLIENT_KEY',
+      `PRISMA_CLIENT_KEY_${transactionKey}`,
     ) as Prisma.TransactionClient
     if (prisma) {
       return prisma

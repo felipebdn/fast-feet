@@ -5,15 +5,19 @@ import { OrderRepository } from '@/domain/logistics/application/repositories/ord
 import { Order } from '@/domain/logistics/enterprise/entities/order'
 
 import { PrismaOrderMapper } from '../mappers/prisma-order-mapper'
-import { PrismaService } from '../prisma.service'
+import { PrismaClientManager, PrismaService } from '../prisma.service'
 
 @Injectable()
 export class PrismaOrdersRepository implements OrderRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private clientManager: PrismaClientManager,
+  ) {}
 
-  async create(order: Order) {
+  async create(order: Order, transactionKey?: string) {
+    const prisma = this.clientManager.getClient(transactionKey)
     const data = PrismaOrderMapper.toPrisma(order)
-    await this.prisma.order.create({
+    await prisma.order.create({
       data,
     })
   }

@@ -37,13 +37,11 @@ export class PrismaDeliverymanRepository implements DeliverymanRepository {
     return PrismaDeliverymanMapper.toDomain(deliveryman)
   }
 
-  async create(deliveryman: Deliveryman) {
-    this.prisma.run(async () => {
-      const prisma = this.clientManager.getClient()
-      const data = PrismaDeliverymanMapper.toPrisma(deliveryman)
-      await prisma.deliveryman.create({
-        data,
-      })
+  async create(deliveryman: Deliveryman, transactionKey?: string) {
+    const prisma = this.clientManager.getClient(transactionKey)
+    const data = PrismaDeliverymanMapper.toPrisma(deliveryman)
+    await prisma.deliveryman.create({
+      data,
     })
   }
 

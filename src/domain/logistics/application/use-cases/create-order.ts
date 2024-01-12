@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { randomUUID } from 'crypto'
 
 import { Either, left, right } from '@/core/either'
 import { ValueAlreadyExistsError } from '@/core/errors/errors/value-already-exists-error'
@@ -9,6 +10,7 @@ import { Recipient } from '../../enterprise/entities/recipient'
 import { AddressRepository } from '../repositories/address-repository'
 import { OrderRepository } from '../repositories/orders-repository'
 import { RecipientRepository } from '../repositories/recipient-repository'
+import { TransactionScope } from '../transaction/transaction-scope'
 import { CreateOrderError } from './errors/create-order-error'
 
 interface CreateOrderUseCaseRequest {
@@ -42,6 +44,7 @@ export class CreateOrderUseCase {
     private orderRepository: OrderRepository,
     private addressRepository: AddressRepository,
     private recipientRepository: RecipientRepository,
+    private transactionScope: TransactionScope,
   ) {}
 
   async execute({
@@ -79,11 +82,13 @@ export class CreateOrderUseCase {
     addressCreate.orderId = orderCreate.id
     recipientCreate.orderId = orderCreate.id
 
-    await Promise.all([
-      this.addressRepository.create(addressCreate),
-      this.recipientRepository.create(recipientCreate),
-      this.orderRepository.create(orderCreate),
-    ])
+    const transactionKey = randomUUID()
+
+    await this.transactionScope.run(async () => {
+      await this.addressRepository.create(addressCreate, transactionKey)
+      await this.recipientRepository.create(recipientCreate, transactionKey)
+      await this.orderRepository.create(orderCreate, transactionKey)
+    }, transactionKey)
 
     return right({
       order: orderCreate,

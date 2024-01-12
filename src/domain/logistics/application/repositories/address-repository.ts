@@ -7,7 +7,7 @@ export abstract class AddressRepository {
     state: string,
   ): Promise<Address[]>
 
-  abstract create(address: Address): Promise<void>
+  abstract create(address: Address, transactionKey?: string): Promise<void>
   abstract save(address: Address): Promise<void>
   abstract delete(id: string): Promise<void>
 }
